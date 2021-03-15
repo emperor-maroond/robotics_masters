@@ -1,0 +1,41 @@
+# .yaml config file
+#
+# The PID gains and controller settings must be saved in a yaml file that gets loaded
+# to the param server via the roslaunch file (biped_control.launch).
+
+biped:
+  # Publish all joint states -----------------------------------
+  # Creates the /joint_states topic necessary in ROS
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 1000
+
+  # Effort Controllers ---------------------------------------
+  L_haa_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: L_haa_joint
+    #pid: {p: 10.0, i: 0.0, d: 0.5}
+    pid: {p: 50.0, i: 0.1, d: 0.0}
+  L_hfe_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: L_hfe_joint
+    #pid: {p: 10.0, i: 0.0, d: 0.5}
+    pid: {p: 50.0, i: 0.1, d: 0.0}
+  L_kfe_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: L_kfe_joint
+    pid: {p: 10.0, i: 0.0, d: 0.5}
+  R_haa_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: R_haa_joint
+    #pid: {p: 10.0, i: 0.0, d: 0.5}
+    pid: {p: 50.0, i: 0.1, d: 0.0}
+  R_hfe_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: R_hfe_joint
+    #pid: {p: 10.0, i: 0.0, d: 0.5}
+    pid: {p: 50.0, i: 0.1, d: 0.0}
+  R_kfe_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: R_kfe_joint
+    pid: {p: 10.0, i: 0.0, d: 0.5}
