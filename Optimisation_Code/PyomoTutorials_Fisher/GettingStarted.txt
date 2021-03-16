@@ -1,0 +1,21 @@
+The tutorial that I am following:
+	https://jckantor.github.io/ND-Pyomo-Cookbook/
+
+Install Anaconda: https://www.anaconda.com/products/individual
+	I used the 64 bit graphical installer for Python 3.7
+
+Install any available package updates. Open a Anaconda Prompt command line, and execute the following two commands on separate lines.
+	conda update conda
+	conda update anaconda
+
+Install Pyomo
+	conda install -c conda-forge pyomo
+	conda install -c conda-forge pyomo.extras
+
+Install solvers
+	conda install -c conda-forge coincbc            This didnt work.... only need IPOPT so dont worry
+	conda install -c conda-forge ipopt
+
+Open up Jupyter notebooks
+	find the correct path, then: new-python 3
+	or open the SS_mono file and run it 
