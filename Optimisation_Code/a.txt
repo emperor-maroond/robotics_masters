@@ -1,0 +1,45 @@
+def EOM_thl_R(m,n,c):
+    F_in_L   = S*(m.F_a_L[n])
+    tau_in_L = S*(m.tau_a_L[n])
+    Gx_in_L  = S*(m.GRF_L[n,c,'X','ps'] - m.GRF_L[n,c,'X','ng'])
+    Gz_in_L  = S*(m.GRF_L[n,c,'Z','ps'])
+    
+    F_in_R   = S*(m.F_a_R[n])
+    tau_in_R = S*(m.tau_a_R[n])
+    Gx_in_R  = S*(m.GRF_R[n,c,'X','ps'] - m.GRF_R[n,c,'X','ng'])
+    Gz_in_R  = S*(m.GRF_R[n,c,'Z','ps'])
+    
+    var_list = [m.g, m.mb, m.ml1, m.ml2,
+                m.lb, m.ll1, m.ll2,
+                m.Inb, m.Inl1, m.Inl2,
+                m.q[n,c,'x'], m.q[n,c,'z'], m.q[n,c,'theta_b'], m.q[n,c,'theta_l_L'], m.q[n,c,'r_L'], m.q[n,c,'theta_l_R'], m.q[n,c,'r_R'],
+                m.dq[n,c,'x'], m.dq[n,c,'z'], m.dq[n,c,'theta_b'], m.dq[n,c,'theta_l_L'], m.dq[n,c,'r_L'], m.dq[n,c,'theta_l_R'], m.dq[n,c,'r_R'],
+                m.ddq[n,c,'x'], m.ddq[n,c,'z'], m.ddq[n,c,'theta_b'], m.ddq[n,c,'theta_l_L'], m.ddq[n,c,'r_L'], m.ddq[n,c,'theta_l_R'], m.ddq[n,c,'r_R'],
+                F_in_L, tau_in_L, Gx_in_L, Gz_in_L,
+                F_in_R, tau_in_R, Gx_in_R, Gz_in_R]
+ 
+    return lambEOM_thl_R(*var_list) == 0
+m.EOM_thl_R = Constraint(m.N, m.cN, rule = EOM_thl_R)
+
+def EOM_r_R(m,n,c):
+    F_in_L   = S*(m.F_a_L[n])
+    tau_in_L = S*(m.tau_a_L[n])
+    Gx_in_L  = S*(m.GRF_L[n,c,'X','ps'] - m.GRF_L[n,c,'X','ng'])
+    Gz_in_L  = S*(m.GRF_L[n,c,'Z','ps'])
+    
+    F_in_R   = S*(m.F_a_R[n])
+    tau_in_R = S*(m.tau_a_R[n])
+    Gx_in_R  = S*(m.GRF_R[n,c,'X','ps'] - m.GRF_R[n,c,'X','ng'])
+    Gz_in_R  = S*(m.GRF_R[n,c,'Z','ps'])
+    
+    var_list = [m.g, m.mb, m.ml1, m.ml2,
+                m.lb, m.ll1, m.ll2,
+                m.Inb, m.Inl1, m.Inl2,
+                m.q[n,c,'x'], m.q[n,c,'z'], m.q[n,c,'theta_b'], m.q[n,c,'theta_l_L'], m.q[n,c,'r_L'], m.q[n,c,'theta_l_R'], m.q[n,c,'r_R'],
+                m.dq[n,c,'x'], m.dq[n,c,'z'], m.dq[n,c,'theta_b'], m.dq[n,c,'theta_l_L'], m.dq[n,c,'r_L'], m.dq[n,c,'theta_l_R'], m.dq[n,c,'r_R'],
+                m.ddq[n,c,'x'], m.ddq[n,c,'z'], m.ddq[n,c,'theta_b'], m.ddq[n,c,'theta_l_L'], m.ddq[n,c,'r_L'], m.ddq[n,c,'theta_l_R'], m.ddq[n,c,'r_R'],
+                F_in_L, tau_in_L, Gx_in_L, Gz_in_L,
+                F_in_R, tau_in_R, Gx_in_R, Gz_in_R]
+ 
+    return lambEOM_r_R(*var_list) == 0
+m.EOM_r_R = Constraint(m.N, m.cN, rule = EOM_r_R)
