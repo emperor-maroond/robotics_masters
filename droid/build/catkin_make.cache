@@ -1,0 +1,2 @@
+bot_description
+-DCATKIN_DEVEL_PREFIX=/home/devlon/robotics_masters/droid/devel -DCMAKE_INSTALL_PREFIX=/home/devlon/robotics_masters/droid/install -G Unix Makefiles
