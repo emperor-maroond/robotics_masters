@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import rospy as rp
 
@@ -38,6 +40,13 @@ data = np.load('data.npy', allow_pickle=True)
 N = data[0][0]
 
 if __name__ == '__main__': 
+    for n in range(1, 5):
+        pub[0].publish(0.0)
+        pub[1].publish(0.0)
+        pub[2].publish(0.0)
+        pub[3].publish(0.0)
+        rp.sleep(0.1)
+
     for n in range(1, N):
         pub[0].publish(data[8][n])
         pub[1].publish(data[1][n])
