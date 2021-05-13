@@ -4,6 +4,7 @@
 <xacro:include filename="$(find bot_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find bot_description)/urdf/bot.trans" />
 <xacro:include filename="$(find bot_description)/urdf/bot.gazebo" />
+
 <link name="base_link">
   <inertial>
     <origin rpy="0 0 0" xyz="-0.273515310417399 0.0641923281592633 0.549094606768639"/>
@@ -69,7 +70,7 @@
 
 <link name="dsnu-20-200-pps-a_03_1_1_1">
   <inertial>
-    <origin rpy="0 0 0" xyz="0.019645702220741745 1.374704084221301e-05 -0.07233661753710188"/>
+    <origin rpy="0 0 0" xyz="0.019645702220741745 1.374704084221301e-05 0.09233661753710188"/>
     <mass value="0.3040090766287068"/>
     <inertia ixx="0.006662" ixy="-0.0" ixz="-0.000264" iyy="0.006701" iyz="-0.0" izz="4.6e-05"/>
   </inertial>
@@ -90,7 +91,7 @@
 
 <link name="dsnu-20-200-pps-a_03_1_1_Mirror__1">
   <inertial>
-    <origin rpy="0 0 0" xyz="-0.019645323075704824 1.374704085707612e-05 -0.07233661739654718"/>
+    <origin rpy="0 0 0" xyz="-0.019645323075704824 1.374704085707612e-05 0.09233661739654718"/>
     <mass value="0.3040090763168277"/>
     <inertia ixx="0.006662" ixy="0.0" ixz="0.000264" iyy="0.006701" iyz="-0.0" izz="4.6e-05"/>
   </inertial>
@@ -105,6 +106,48 @@
     <origin rpy="0 0 0" xyz="0.368028 -0.064193 -0.296678"/>
     <geometry>
       <mesh filename="package://bot_description/meshes/dsnu-20-200-pps-a_03_1_1_Mirror__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="link_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <mass value="0.248729"/>
+    <inertia ixx="9.47642e-06" ixy="0.0" ixz="0.0" iyy="7.18841e-06" iyz="0.0" izz="1.43358e-05"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0.913755 0.200777 1.00283"/>
+    <geometry>
+      <box size="0.169512 0.199119 0.07453"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0.913755 0.200777 1.00283"/>
+    <geometry>
+      <box size="0.169512 0.199119 0.07453"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="link_0">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <mass value="0.001"/>
+    <inertia ixx="0.103131" ixy="0.0" ixz="0.0" iyy="0.0827265" iyz="0.0" izz="0.02105"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0.305699 0.154252 0.5"/>
+    <geometry>
+      <box size="0.124747 1 1.99389"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0.305699 0.154252 0.5"/>
+    <geometry>
+      <box size="0.124747 1 1.99389"/>
     </geometry>
   </collision>
 </link>
@@ -139,6 +182,22 @@
   <child link="dsnu-20-200-pps-a_03_1_1_Mirror__1"/>
   <axis xyz="0.0 0.0 -1.0"/>
   <limit effort="100" lower="0.0" upper="0.19" velocity="100"/>
+</joint>
+
+<joint name="link_0_JOINT_0" type="prismatic">
+  <origin rpy="0 0 0" xyz="0 0 0"/>
+  <parent link="link_0"/>
+  <child link="link_1"/>
+  <axis xyz="0.0 0.0 1.0"/>
+  <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="100"/>
+</joint>
+
+<joint name="link_1_JOINT_1" type="prismatic">
+  <origin rpy="0 0 0" xyz="0 0 0"/>
+  <parent link="link_1"/>
+  <child link="base_link"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="100"/>
 </joint>
 
 </robot>
