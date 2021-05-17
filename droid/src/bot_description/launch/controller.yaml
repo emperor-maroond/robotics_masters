@@ -6,18 +6,18 @@ bot:
 
   # Position Controllers --------------------------------------
   RevR_position_controller:
-    type: effort_controllers/JointEffortController
+    type: effort_controllers/JointPositionController
     joint: RevR
-    pid: {p: 50.0, i: 0.1, d: 0.0}
+    pid: {p: 30.0, i: 0.0, d: 1.0}
   RevL_position_controller:
-    type: effort_controllers/JointEffortController
+    type: effort_controllers/JointPositionController
     joint: RevL
-    pid: {p: 50.0, i: 0.1, d: 0.0}
+    pid: {p: 30.0, i: 0.1, d: 1.0}
   SliderL_position_controller:
     type: effort_controllers/JointEffortController
     joint: SliderL
-    pid: {p: 50.0, i: 0.1, d: 0.0}
+    #pid: {p: 50.0, i: 0.1, d: 0.0}
   SliderR_position_controller:
     type: effort_controllers/JointEffortController
     joint: SliderR
-    pid: {p: 50.0, i: 0.1, d: 0.0}    
+    #pid: {p: 50.0, i: 0.1, d: 0.0}    
