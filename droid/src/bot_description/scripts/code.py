@@ -32,22 +32,25 @@ with open("decel.pkl", "rb") as f:
 
 N = data[1].N[-1]
 if __name__ == '__main__': 
-    pub[0].publish(data[0].tau_a_R[1].value)
-    pub[1].publish(data[0].tau_a_L[1].value)
+    reset_simulation()
+
+    pub[0].publish(data[0].q0[1, 'theta_l_R'].value)
+    pub[1].publish(data[0].q0[1, 'theta_l_L'].value)
     pub[2].publish(-data[0].F_max)
     pub[3].publish(-data[0].F_max)
 
-    reset_simulation()
     time.sleep(1)
 
     for i in range(0, len(data)):
         for n in range(1, N+1):
-            pub[0].publish(data[i].tau_a_R[n].value)
-            pub[1].publish(data[i].tau_a_L[n].value)
-            Fnet = data[i].F_max*(data[i].Fbang_pos_R[n].value - data[i].Fbang_neg_R[n].value)\
-                    - data[i].dq0[n,'r_R'].value*data[i].damping - data[i].FhardStop_ext_R[n].value + data[i].FhardStop_rtn_R[n].value
-            pub[2].publish(Fnet)
-            Fnet = data[i].F_max*(data[i].Fbang_pos_L[n].value - data[i].Fbang_neg_L[n].value)\
-                    - data[i].dq0[n,'r_L'].value*data[i].damping - data[i].FhardStop_ext_L[n].value + data[i].FhardStop_rtn_L[n].value
-            pub[3].publish(Fnet)
-            #rp.sleep(0.1)
+            pub[0].publish(data[i].q0[n, 'theta_l_R'].value)
+            pub[1].publish(data[i].q0[n, 'theta_l_L'].value)
+            Fnet = data[i].F_max*(data[i].Fbang_pos_R[n].value - data[i].Fbang_neg_R[n].value) - data[i].dq0[n,'r_R'].value*data[i].damping - data[i].FhardStop_ext_R[n].value + data[i].FhardStop_rtn_R[n].value
+            if(Fnet>=data[0].F_max or Fnet<=-data[0].F_max):
+                pub[2].publish(Fnet)
+            Fnet = data[i].F_max*(data[i].Fbang_pos_L[n].value - data[i].Fbang_neg_L[n].value) - data[i].dq0[n,'r_L'].value*data[i].damping - data[i].FhardStop_ext_L[n].value + data[i].FhardStop_rtn_L[n].value
+            if(Fnet>=data[0].F_max or Fnet<=-data[0].F_max):
+                pub[3].publish(Fnet)
+            
+            sleep = data[i].h[n].value
+            time.sleep(sleep)

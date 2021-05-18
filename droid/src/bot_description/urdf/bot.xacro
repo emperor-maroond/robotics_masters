@@ -153,19 +153,19 @@
 </link>
 
 <joint name="RevR" type="revolute">
-  <origin rpy="0 0 0" xyz="-0.203153 0.064192 0.566678"/>
+  <origin rpy="-1.570796 0 0" xyz="-0.203153 0.064192 0.566678"/>
   <parent link="base_link"/>
   <child link="servo_arm_1_1_1"/>
   <axis xyz="1.0 0.0 0.0"/>
-  <limit effort="100" lower="-1.570796" upper="1.570796" velocity="100"/>
+  <limit effort="100" lower="0" upper="3.14159" velocity="100"/>
 </joint>
 
 <joint name="RevL" type="revolute">
-  <origin rpy="0 0 0" xyz="-0.343878 0.064192 0.566678"/>
+  <origin rpy="-1.570796 0 0" xyz="-0.343878 0.064192 0.566678"/>
   <parent link="base_link"/>
   <child link="servo_arm_1_1_Mirror__1"/>
   <axis xyz="1.0 0.0 0.0"/>
-  <limit effort="100" lower="-1.570796" upper="1.570796" velocity="100"/>
+  <limit effort="100" lower="0" upper="3.14159" velocity="100"/>
 </joint>
 
 <joint name="SliderR" type="prismatic">
