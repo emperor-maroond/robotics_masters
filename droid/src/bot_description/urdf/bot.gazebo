@@ -33,15 +33,15 @@
 
 <gazebo reference="dsnu-20-200-pps-a_03_1_1_Mirror__1">
     <material>${body_color}</material>
-    <mu1>0.8</mu1>
-    <mu2>0.8</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <selfCollide>true</selfCollide>
 </gazebo>
 
 <gazebo reference="dsnu-20-200-pps-a_03_1_1_1">
     <material>${body_color}</material>
-    <mu1>0.8</mu1>
-    <mu2>0.8</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <selfCollide>true</selfCollide>
 </gazebo>
 
