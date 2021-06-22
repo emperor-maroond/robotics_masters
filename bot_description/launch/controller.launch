@@ -4,8 +4,8 @@
 <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
         output="screen" args="--namespace=/bot
                               joint_state_controller
-                              Rev22_position_controller
-                              Rev23_position_controller
+                              RevR_position_controller
+                              RevL_position_controller
                               SliderL_position_controller
                               SliderR_position_controller">
 </node>

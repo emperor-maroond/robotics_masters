@@ -5,14 +5,14 @@ bot:
     publish_rate: 50
 
   # Position Controllers --------------------------------------
-  Rev22_position_controller:
-    type: effort_controllers/JointEffortController
-    joint: Rev22
-    #pid: {p: 50.0, i: 0.1, d: 0.0}
-  Rev23_position_controller:
-    type: effort_controllers/JointEffortController
-    joint: Rev23
-    #pid: {p: 50.0, i: 0.1, d: 0.0}
+  RevR_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: RevR
+    pid: {p: 30.0, i: 0.0, d: 1.0}
+  RevL_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: RevL
+    pid: {p: 30.0, i: 0.1, d: 1.0}
   SliderL_position_controller:
     type: effort_controllers/JointEffortController
     joint: SliderL
