@@ -43,3 +43,10 @@
 /home/devlon/robotics_masters/droid/build/bot_description/CMakeFiles/edit_cache.dir
 /home/devlon/robotics_masters/droid/build/bot_description/CMakeFiles/test.dir
 /home/devlon/robotics_masters/droid/build/bot_description/CMakeFiles/_catkin_empty_exported_target.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/install/strip.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/install/local.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/install.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/list_install_components.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/rebuild_cache.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/edit_cache.dir
+/home/devlon/robotics_masters/droid/build/model_description/CMakeFiles/test.dir

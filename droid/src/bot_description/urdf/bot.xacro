@@ -6,142 +6,142 @@
 <xacro:include filename="$(find bot_description)/urdf/bot.gazebo" />
 
 <link name="base_link">
-    <inertial>
-        <origin rpy="0 0 0" xyz="-0.273515310417399 0.0641923281592633 0.549094606768639"/>
-        <mass value="0.600"/>
-        <inertia ixx="5.9e-05" ixy="-0.0" ixz="-0.0" iyy="0.000497" iyz="0.0" izz="0.000496"/>
-    </inertial>
-    <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="silver"/>
-    </visual>
-    <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-    </collision>
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.4588235848773419 0.1475563890225032 0.4305536898213792"/>
+    <mass value="0.5858332813380499"/>
+    <inertia ixx="0.000843" ixy="-0.0" ixz="-0.0" iyy="0.002626" iyz="-1.6e-05" izz="0.002087"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
 </link>
 
-<link name="servo_arm_1_1_1">
-    <inertial>
-        <origin rpy="0 0 0" xyz="0.040123964751155816 2.284167705488005e-05 -0.13042234430764715"/>
-        <mass value="0.330"/>
-        <inertia ixx="0.002875" ixy="0.0" ixz="-2.3e-05" iyy="0.002924" iyz="-0.0" izz="0.000106"/>
-    </inertial>
-    <visual>
-        <origin rpy="0 0 0" xyz="0.203153 -0.064192 -0.566678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/servo_arm_1_1_1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="silver"/>
-    </visual>
-    <collision>
-        <origin rpy="0 0 0" xyz="0.203153 -0.064192 -0.566678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/servo_arm_1_1_1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-    </collision>
+<link name="left_foot_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.02304248360485034 -2.2504051277461024e-06 -0.05416915490409829"/>
+    <mass value="0.030773325878531002"/>
+    <inertia ixx="0.000436" ixy="0.0" ixz="2.6e-05" iyy="0.000444" iyz="-0.0" izz="8e-06"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.337324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/left_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.337324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/left_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
 </link>
 
-<link name="servo_arm_1_1_Mirror__1">
-    <inertial>
-        <origin rpy="0 0 0" xyz="-0.04012358502543206 2.284166630503459e-05 -0.13042234045956508"/>
-        <mass value="0.330"/>
-        <inertia ixx="0.002875" ixy="-0.0" ixz="2.3e-05" iyy="0.002924" iyz="-0.0" izz="0.000106"/>
-    </inertial>
-    <visual>
-        <origin rpy="0 0 0" xyz="0.343878 -0.064192 -0.566678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/servo_arm_1_1_Mirror__1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="silver"/>
-    </visual>
-    <collision>
-        <origin rpy="0 0 0" xyz="0.343878 -0.064192 -0.566678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/servo_arm_1_1_Mirror__1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-    </collision>
+<link name="right_foot_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.02304180933164246 -2.2504051263028124e-06 -0.05416915490391633"/>
+    <mass value="0.03077332587853075"/>
+    <inertia ixx="0.000436" ixy="-0.0" ixz="-2.6e-05" iyy="0.000444" iyz="-0.0" izz="8e-06"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.580324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/right_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.580324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/right_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
 </link>
 
-<link name="dsnu-20-200-pps-a_03_1_1_1">
-    <inertial>
-        <origin rpy="0 0 0" xyz="0.019645702220741745 1.374704084221301e-05 0.09233661753710188"/>
-        <mass value="0.120"/>
-        <inertia ixx="0.006662" ixy="-0.0" ixz="-0.000264" iyy="0.006701" iyz="-0.0" izz="4.6e-05"/>
-    </inertial>
-    <visual>
-        <origin rpy="0 0 0" xyz="0.179003 -0.064193 -0.296678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/dsnu-20-200-pps-a_03_1_1_1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="silver"/>
-    </visual>
-    <collision>
-        <origin rpy="0 0 0" xyz="0.179003 -0.064193 -0.296678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/dsnu-20-200-pps-a_03_1_1_1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-    </collision>
+<link name="right_hip_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.03683398034442853 6.65445204434123e-06 -0.09801652534820487"/>
+    <mass value="0.09901391268960115"/>
+    <inertia ixx="0.000498" ixy="0.0" ixz="9.3e-05" iyy="0.000527" iyz="-0.0" izz="4.7e-05"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.557324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/right_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.557324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/right_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
 </link>
 
-<link name="dsnu-20-200-pps-a_03_1_1_Mirror__1">
-    <inertial>
-        <origin rpy="0 0 0" xyz="-0.019645323075704824 1.374704085707612e-05 0.09233661739654718"/>
-        <mass value="0.120"/>
-        <inertia ixx="0.006662" ixy="0.0" ixz="0.000264" iyy="0.006701" iyz="-0.0" izz="4.6e-05"/>
-    </inertial>
-    <visual>
-        <origin rpy="0 0 0" xyz="0.368028 -0.064193 -0.296678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/dsnu-20-200-pps-a_03_1_1_Mirror__1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="silver"/>
-    </visual>
-    <collision>
-        <origin rpy="0 0 0" xyz="0.368028 -0.064193 -0.296678"/>
-        <geometry>
-            <mesh filename="package://bot_description/meshes/dsnu-20-200-pps-a_03_1_1_Mirror__1.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-    </collision>
+<link name="left_hip_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.03683526559391298 6.67699216827522e-06 -0.09801612191420034"/>
+    <mass value="0.0990142371956907"/>
+    <inertia ixx="0.000498" ixy="-0.0" ixz="-9.3e-05" iyy="0.000527" iyz="-0.0" izz="4.7e-05"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.360324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/left_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.360324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://bot_description/meshes/left_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
 </link>
 
 <!-- Joints -->
 <joint name="RevR" type="revolute">
-    <origin rpy="-1.570796 0 0" xyz="-0.203153 0.064192 0.566678"/>
+    <origin rpy="0 0 0" xyz="0.557324 0.147203 0.446863"/>
     <parent link="base_link"/>
-    <child link="servo_arm_1_1_1"/>
+    <child link="right_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="100" lower="0" upper="3.14159" velocity="100"/>
+    <limit effort="100" lower="3.14159" upper="3.14159" velocity="100"/>
 </joint>
 
 <joint name="RevL" type="revolute">
-    <origin rpy="-1.570796 0 0" xyz="-0.343878 0.064192 0.566678"/>
+    <origin rpy="0 0 0" xyz="0.360324 0.147203 0.446863"/>
     <parent link="base_link"/>
-    <child link="servo_arm_1_1_Mirror__1"/>
+    <child link="left_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="100" lower="0" upper="3.14159" velocity="100"/>
+    <limit effort="100" lower="3.14159" upper="3.14159" velocity="100"/>
 </joint>
 
 <joint name="SliderR" type="prismatic">
-    <origin rpy="0 0 0" xyz="0.02415 1e-06 -0.27"/>
-    <parent link="servo_arm_1_1_1"/>
-    <child link="dsnu-20-200-pps-a_03_1_1_1"/>
-    <axis xyz="0.0 0.0 -1.0"/>
-    <limit effort="200" lower="0.0" upper="0.19" velocity="500"/>
+    <origin rpy="0 0 0" xyz="0.023 0.0 -0.0068"/>
+    <parent link="right_hip_1"/>
+    <child link="right_foot_1"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <limit effort="100" lower="-0.125" upper="0.0" velocity="500"/>
     <dynamics damping="50"/>
 </joint>
 
 <joint name="SliderL" type="prismatic">
-    <origin rpy="0 0 0" xyz="-0.02415 1e-06 -0.27"/>
-    <parent link="servo_arm_1_1_Mirror__1"/>
-    <child link="dsnu-20-200-pps-a_03_1_1_Mirror__1"/>
-    <axis xyz="0.0 0.0 -1.0"/>
-    <limit effort="200" lower="0.0" upper="0.19" velocity="500"/>
+    <origin rpy="0 0 0" xyz="-0.023 0.0 -0.0068"/>
+    <parent link="left_hip_1"/>
+    <child link="left_foot_1"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <limit effort="100" lower="-0.125" upper="0.0" velocity="500"/>
     <dynamics damping="50"/>
 </joint>
 

@@ -14,9 +14,12 @@ set(CMAKE_MAKEFILE_DEPENDS
   "catkin/catkin_generated/version/package.cmake"
   "catkin_generated/installspace/_setup_util.py"
   "catkin_generated/order_packages.cmake"
+  "model_description/catkin_generated/package.cmake"
   "/home/devlon/robotics_masters/droid/src/CMakeLists.txt"
   "/home/devlon/robotics_masters/droid/src/bot_description/CMakeLists.txt"
   "/home/devlon/robotics_masters/droid/src/bot_description/package.xml"
+  "/home/devlon/robotics_masters/droid/src/model_description/CMakeLists.txt"
+  "/home/devlon/robotics_masters/droid/src/model_description/package.xml"
   "/opt/ros/noetic/share/catkin/cmake/all.cmake"
   "/opt/ros/noetic/share/catkin/cmake/assert.cmake"
   "/opt/ros/noetic/share/catkin/cmake/atomic_configure_file.cmake"
@@ -162,6 +165,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "gtest/googlemock/CMakeFiles/CMakeDirectoryInformation.cmake"
   "gtest/googletest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "bot_description/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "model_description/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
