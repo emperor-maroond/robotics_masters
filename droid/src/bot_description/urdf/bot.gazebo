@@ -15,7 +15,7 @@
     <mu2>0.2</mu2>
     <selfCollide>true</selfCollide>
     <gravity>true</gravity>
-    <kinematic>true</kinematic>
+    <kinematic>false</kinematic>
 </gazebo>
 
 <gazebo reference="right_hip_1">
