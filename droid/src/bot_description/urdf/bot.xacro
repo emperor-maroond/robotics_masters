@@ -116,7 +116,7 @@
     <parent link="base_link"/>
     <child link="right_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="100" lower="-3.14159" upper="3.14159" velocity="100"/>
+    <limit effort="300" lower="-3.14159" upper="3.14159" velocity="100"/>
 </joint>
 
 <joint name="RevL" type="revolute">
@@ -124,7 +124,7 @@
     <parent link="base_link"/>
     <child link="left_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="100" lower="-3.14159" upper="3.14159" velocity="100"/>
+    <limit effort="300" lower="-3.14159" upper="3.14159" velocity="100"/>
 </joint>
 
 <joint name="SliderR" type="prismatic">
@@ -132,7 +132,7 @@
     <parent link="right_hip_1"/>
     <child link="right_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
-    <limit effort="100" lower="0" upper="0.125" velocity="500"/>
+    <limit effort="300" lower="0" upper="0.125" velocity="500"/>
     <dynamics damping="50"/>
 </joint>
 
@@ -141,7 +141,7 @@
     <parent link="left_hip_1"/>
     <child link="left_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
-    <limit effort="100" lower="0" upper="0.125" velocity="500"/>
+    <limit effort="300" lower="0" upper="0.125" velocity="500"/>
     <dynamics damping="50"/>
 </joint>
 
