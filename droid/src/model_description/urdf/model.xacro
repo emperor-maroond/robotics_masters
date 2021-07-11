@@ -1,0 +1,142 @@
+<?xml version="1.0" ?>
+<robot name="model" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find model_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find model_description)/urdf/model.trans" />
+<xacro:include filename="$(find model_description)/urdf/model.gazebo" />
+<link name="base_link">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.4588235848773419 0.1475563890225032 0.4305536898213792"/>
+    <mass value="0.5858332813380499"/>
+    <inertia ixx="0.000843" ixy="-0.0" ixz="-0.0" iyy="0.002626" iyz="-1.6e-05" izz="0.002087"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="left_foot_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.02304248360485034 -2.2504051277461024e-06 -0.05416915490409829"/>
+    <mass value="0.030773325878531002"/>
+    <inertia ixx="0.000436" ixy="0.0" ixz="2.6e-05" iyy="0.000444" iyz="-0.0" izz="8e-06"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.337324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/left_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.337324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/left_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="right_foot_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.02304180933164246 -2.2504051263028124e-06 -0.05416915490391633"/>
+    <mass value="0.03077332587853075"/>
+    <inertia ixx="0.000436" ixy="-0.0" ixz="-2.6e-05" iyy="0.000444" iyz="-0.0" izz="8e-06"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.580324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/right_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.580324 -0.147203 -0.440063"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/right_foot_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="right_hip_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.03683398034442853 6.65445204434123e-06 -0.09801652534820487"/>
+    <mass value="0.09901391268960115"/>
+    <inertia ixx="0.000498" ixy="0.0" ixz="9.3e-05" iyy="0.000527" iyz="-0.0" izz="4.7e-05"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.557324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/right_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.557324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/right_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="left_hip_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.03683526559391298 6.67699216827522e-06 -0.09801612191420034"/>
+    <mass value="0.0990142371956907"/>
+    <inertia ixx="0.000498" ixy="-0.0" ixz="-9.3e-05" iyy="0.000527" iyz="-0.0" izz="4.7e-05"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.360324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/left_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver_default"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.360324 -0.147203 -0.446863"/>
+    <geometry>
+      <mesh filename="package://model_description/meshes/left_hip_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="left_slider" type="prismatic">
+  <origin rpy="0 0 0" xyz="-0.023 0.0 -0.0068"/>
+  <parent link="left_hip_1"/>
+  <child link="left_foot_1"/>
+  <axis xyz="-0.0 0.0 1.0"/>
+  <limit effort="100" lower="-0.125" upper="0.0" velocity="100"/>
+</joint>
+
+<joint name="right_slider" type="prismatic">
+  <origin rpy="0 0 0" xyz="0.023 0.0 -0.0068"/>
+  <parent link="right_hip_1"/>
+  <child link="right_foot_1"/>
+  <axis xyz="0.0 0.0 1.0"/>
+  <limit effort="100" lower="-0.125" upper="0.0" velocity="100"/>
+</joint>
+
+<joint name="revR" type="continuous">
+  <origin rpy="0 0 0" xyz="0.557324 0.147203 0.446863"/>
+  <parent link="base_link"/>
+  <child link="right_hip_1"/>
+  <axis xyz="1.0 0.0 -0.0"/>
+</joint>
+
+<joint name="revL" type="continuous">
+  <origin rpy="0 0 0" xyz="0.360324 0.147203 0.446863"/>
+  <parent link="base_link"/>
+  <child link="left_hip_1"/>
+  <axis xyz="-1.0 -0.0 -0.0"/>
+</joint>
+
+</robot>

@@ -1,0 +1,23 @@
+model_controller:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Position Controllers --------------------------------------
+  left_slider_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: left_slider
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  right_slider_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: right_slider
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  revR_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: revR
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  revL_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: revL
+    pid: {p: 100.0, i: 0.01, d: 10.0}
