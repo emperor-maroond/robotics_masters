@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/devlon/robotics_masters/droid/build
 include CMakeFiles/clean_test_results.dir/progress.make
 
 CMakeFiles/clean_test_results:
-	/home/devlon/miniconda3/bin/python3 /opt/ros/noetic/share/catkin/cmake/test/remove_test_results.py /home/devlon/robotics_masters/droid/build/test_results
+	/home/devlon/anaconda3/bin/python3 /opt/ros/noetic/share/catkin/cmake/test/remove_test_results.py /home/devlon/robotics_masters/droid/build/test_results
 
 clean_test_results: CMakeFiles/clean_test_results
 clean_test_results: CMakeFiles/clean_test_results.dir/build.make
