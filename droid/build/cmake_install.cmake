@@ -131,6 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/callen/Documents/robotics_masters/droid/build/gtest/cmake_install.cmake")
+  include("/home/callen/Documents/robotics_masters/droid/build/my_message/cmake_install.cmake")
   include("/home/callen/Documents/robotics_masters/droid/build/bot_description/cmake_install.cmake")
   include("/home/callen/Documents/robotics_masters/droid/build/model_description/cmake_install.cmake")
 
