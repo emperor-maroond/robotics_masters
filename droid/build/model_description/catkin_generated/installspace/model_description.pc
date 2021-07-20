@@ -1,4 +1,4 @@
-prefix=/home/devlon/robotics_masters/droid/install
+prefix=/home/callen/Documents/robotics_masters/droid/install
 
 Name: model_description
 Description: Description of model_description

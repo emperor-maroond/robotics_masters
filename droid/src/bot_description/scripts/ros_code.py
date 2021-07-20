@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 
 import numpy as np
-import rospy as rp
+import rospy
 
-from std_msgs.msg import String
+from std_msgs.msg import Float64MultiArray, MultiArrayDimension
 
-rp.init_node('master')
-
-pub = rp.Publisher('chatter', String, queue_size=10)
-rate = rp.Rate(10) # 10hz
+pub = rospy.Publisher('chatter', Float64MultiArray, queue_size=10)
+rospy.init_node('master')  
+rate = rospy.Rate(10) # 10hz
 
 def talker():
-    while not rp.is_shutdown():
-        hello_str = "hello world %s" % rp.get_time()
-        rp.loginfo(hello_str)
-        pub.publish(hello_str)
+    while not rospy.is_shutdown():
+        message = Float64MultiArray()
+        message.layout.data_offset = 0
+        dim = []
+        dim.append(MultiArrayDimension("length", 1, 1))
+        dim.append(MultiArrayDimension("Width", 1 , 1))
+        message.layout.dim = dim
+        rospy.loginfo(message)
+        pub.publish(message)
         rate.sleep()
 
 if __name__ == '__main__':
     try:
         talker()
-    except rp.ROSInterruptException:
+    except rospy.ROSInterruptException:
         pass

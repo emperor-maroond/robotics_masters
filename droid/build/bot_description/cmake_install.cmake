@@ -1,8 +1,8 @@
-# Install script for directory: /home/devlon/robotics_masters/droid/src/bot_description
+# Install script for directory: /home/callen/Documents/robotics_masters/droid/src/bot_description
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/devlon/robotics_masters/droid/install")
+  set(CMAKE_INSTALL_PREFIX "/home/callen/Documents/robotics_masters/droid/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/devlon/robotics_masters/droid/build/bot_description/catkin_generated/installspace/bot_description.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/callen/Documents/robotics_masters/droid/build/bot_description/catkin_generated/installspace/bot_description.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/bot_description/cmake" TYPE FILE FILES
-    "/home/devlon/robotics_masters/droid/build/bot_description/catkin_generated/installspace/bot_descriptionConfig.cmake"
-    "/home/devlon/robotics_masters/droid/build/bot_description/catkin_generated/installspace/bot_descriptionConfig-version.cmake"
+    "/home/callen/Documents/robotics_masters/droid/build/bot_description/catkin_generated/installspace/bot_descriptionConfig.cmake"
+    "/home/callen/Documents/robotics_masters/droid/build/bot_description/catkin_generated/installspace/bot_descriptionConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/bot_description" TYPE FILE FILES "/home/devlon/robotics_masters/droid/src/bot_description/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/bot_description" TYPE FILE FILES "/home/callen/Documents/robotics_masters/droid/src/bot_description/package.xml")
 endif()
 
