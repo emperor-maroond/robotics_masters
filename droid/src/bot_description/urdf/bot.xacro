@@ -112,7 +112,7 @@
 
 <!-- Joints -->
 <joint name="RevR" type="revolute">
-    <origin rpy="0 0 0" xyz="0.557324 0.147203 0.446863"/>
+    <origin rpy="-1.5708 0 0" xyz="0.557324 0.147203 0.446863"/>
     <parent link="base_link"/>
     <child link="right_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
@@ -120,7 +120,7 @@
 </joint>
 
 <joint name="RevL" type="revolute">
-    <origin rpy="0 0 0" xyz="0.360324 0.147203 0.446863"/>
+    <origin rpy="-1.5708 0 0" xyz="0.360324 0.147203 0.446863"/>
     <parent link="base_link"/>
     <child link="left_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
@@ -132,7 +132,7 @@
     <parent link="right_hip_1"/>
     <child link="right_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
-    <limit effort="300" lower="0" upper="0.125" velocity="500"/>
+    <limit effort="300" lower="0" upper="0.125" velocity="1000"/>
     <dynamics damping="50"/>
 </joint>
 
@@ -141,7 +141,7 @@
     <parent link="left_hip_1"/>
     <child link="left_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
-    <limit effort="300" lower="0" upper="0.125" velocity="500"/>
+    <limit effort="300" lower="0" upper="0.125" velocity="1000"/>
     <dynamics damping="50"/>
 </joint>
 
@@ -173,14 +173,14 @@
     <parent link="world"/>
     <child link="y_axis_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="100"/>
+    <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="1000"/>
 </joint>
 
 <joint name="z_direction" type="prismatic">
     <parent link="y_axis_link"/>
     <child link="base_link"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="100"/>
+    <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="1000"/>
 </joint>
 
 </robot>
