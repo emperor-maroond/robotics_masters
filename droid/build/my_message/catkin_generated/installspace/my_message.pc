@@ -1,0 +1,8 @@
+prefix=/home/devlon/robotics_masters/droid/install
+
+Name: my_message
+Description: Description of my_message
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime
