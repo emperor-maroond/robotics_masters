@@ -21,13 +21,13 @@ pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue
 
 data = [None]*3
 
-with open("Feasible_Solution/1/accel.pkl", "rb") as f:
+with open("Feasible_Solution/0/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/1/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/0/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)      
 
-with open("Feasible_Solution/1/decel.pkl", "rb") as f:
+with open("Feasible_Solution/0/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
 
@@ -36,9 +36,9 @@ def accel():
     for n in range(1, N+1):
         pub[0].publish(data[0].q0[n, 'theta_l_R'].value )
         pub[1].publish(data[0].q0[n, 'theta_l_L'].value )
-        F = data[0].F_max*(data[0].Fbang_pos_R[n].value - data[0].Fbang_neg_R[n].value)
+        F = data[0].F_max*(np.round(data[0].Fbang_pos_R[n].value) - np.round(data[0].Fbang_neg_R[n].value))
         pub[2].publish(F)
-        F = data[0].F_max*(data[0].Fbang_pos_L[n].value - data[0].Fbang_neg_L[n].value)
+        F = data[0].F_max*(np.round(data[0].Fbang_pos_L[n].value) - np.round(data[0].Fbang_neg_L[n].value))
         pub[3].publish(F)
 
         sleep = data[0].h[n].value
@@ -49,9 +49,9 @@ def steady_state():
     for n in range(1, N+1):
         pub[0].publish(data[1].q0[n, 'theta_l_R'].value )
         pub[1].publish(data[1].q0[n, 'theta_l_L'].value )
-        F = data[1].F_max*(data[1].Fbang_pos_R[n].value - data[1].Fbang_neg_R[n].value)
+        F = data[1].F_max*(np.round(data[1].Fbang_pos_R[n].value) - np.round(data[1].Fbang_neg_R[n].value))
         pub[2].publish(F)
-        F = data[1].F_max*(data[1].Fbang_pos_L[n].value - data[1].Fbang_neg_L[n].value)
+        F = data[1].F_max*(np.round(data[1].Fbang_pos_L[n].value) - np.round(data[1].Fbang_neg_L[n].value))
         pub[3].publish(F)
 
         sleep = data[1].h[n].value
@@ -62,9 +62,9 @@ def decel():
     for n in range(1, N+1):
         pub[0].publish(data[2].q0[n, 'theta_l_R'].value )
         pub[1].publish(data[2].q0[n, 'theta_l_L'].value )
-        F = data[2].F_max*(data[2].Fbang_pos_R[n].value - data[2].Fbang_neg_R[n].value)
+        F = data[2].F_max*(np.round(data[2].Fbang_pos_R[n].value) - np.round(data[2].Fbang_neg_R[n].value))
         pub[2].publish(F)
-        F = data[2].F_max*(data[2].Fbang_pos_L[n].value - data[2].Fbang_neg_L[n].value)
+        F = data[2].F_max*(np.round(data[2].Fbang_pos_L[n].value) - np.round(data[2].Fbang_neg_L[n].value))
         pub[3].publish(F)
 
         sleep = data[2].h[n].value

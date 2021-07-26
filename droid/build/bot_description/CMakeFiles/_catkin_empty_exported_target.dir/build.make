@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/callen/Documents/robotics_masters/droid/src
+CMAKE_SOURCE_DIR = /home/devlon/robotics_masters/droid/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/callen/Documents/robotics_masters/droid/build
+CMAKE_BINARY_DIR = /home/devlon/robotics_masters/droid/build
 
 # Utility rule file for _catkin_empty_exported_target.
 
@@ -63,10 +63,10 @@ bot_description/CMakeFiles/_catkin_empty_exported_target.dir/build: _catkin_empt
 .PHONY : bot_description/CMakeFiles/_catkin_empty_exported_target.dir/build
 
 bot_description/CMakeFiles/_catkin_empty_exported_target.dir/clean:
-	cd /home/callen/Documents/robotics_masters/droid/build/bot_description && $(CMAKE_COMMAND) -P CMakeFiles/_catkin_empty_exported_target.dir/cmake_clean.cmake
+	cd /home/devlon/robotics_masters/droid/build/bot_description && $(CMAKE_COMMAND) -P CMakeFiles/_catkin_empty_exported_target.dir/cmake_clean.cmake
 .PHONY : bot_description/CMakeFiles/_catkin_empty_exported_target.dir/clean
 
 bot_description/CMakeFiles/_catkin_empty_exported_target.dir/depend:
-	cd /home/callen/Documents/robotics_masters/droid/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/callen/Documents/robotics_masters/droid/src /home/callen/Documents/robotics_masters/droid/src/bot_description /home/callen/Documents/robotics_masters/droid/build /home/callen/Documents/robotics_masters/droid/build/bot_description /home/callen/Documents/robotics_masters/droid/build/bot_description/CMakeFiles/_catkin_empty_exported_target.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/devlon/robotics_masters/droid/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/devlon/robotics_masters/droid/src /home/devlon/robotics_masters/droid/src/bot_description /home/devlon/robotics_masters/droid/build /home/devlon/robotics_masters/droid/build/bot_description /home/devlon/robotics_masters/droid/build/bot_description/CMakeFiles/_catkin_empty_exported_target.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : bot_description/CMakeFiles/_catkin_empty_exported_target.dir/depend
 

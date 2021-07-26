@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "model_description"
-PROJECT_SPACE_DIR = "/home/callen/Documents/robotics_masters/droid/install"
+PROJECT_SPACE_DIR = "/home/devlon/robotics_masters/droid/install"
 PROJECT_VERSION = "0.0.0"
