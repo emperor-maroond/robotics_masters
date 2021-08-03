@@ -8,7 +8,12 @@ import time
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty
 
+# Set-up ROS and read in trajectory data_________________________________________________________
+
 rp.init_node('commander')
+
+pub_time = 5/1000
+rate = rp.Rate(1/pub_time)
 
 reset_simulation = rp.ServiceProxy('/gazebo/reset_simulation', Empty)
 
@@ -21,82 +26,90 @@ pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue
 
 data = [None]*3
 
-with open("Feasible_Solution/1/accel.pkl", "rb") as f:
+with open("Feasible_Solution/3/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/1/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/3/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)      
 
-with open("Feasible_Solution/1/decel.pkl", "rb") as f:
+with open("Feasible_Solution/3/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
-run_time = []
-adder = 0
-N = data[0].N[-1]
-cN = data[0].cN[-1]
-for i in range(0, 3):
-    if(i>0):
-        adder += (data[i-1].tt[N,cN].value - data[i-1].tt[1,1].value)
-    for n in range(1, N+1):
-        for c in range(1, cN+1):
-            run_time.append(data[i].tt[n,c].value - data[i].tt[1,1].value + adder)
+# Code__________________________________________________________________________________________
+
+# Var for data that will be interpolated
+F_max = data[0].F_max
+theta_L  = []
+theta_R  = []
+F_bang_L = []
+F_bang_R = []
+position_N = 0
+position_cN = 0
+
+# Var for data that will be published
+servo_R = []
+servo_L = []
+solenoid_R = []
+solenoid_L = []
+
+# Var that will hold run time
+run_time = 0
+N_time = []
+cN_time = []
+N_adder = 0
+cN_adder = 0
 
 def accel():
     N = data[0].N[-1]
     cN = data[0].cN[-1]
-    i = 0
     for n in range(1, N+1):
+        F_bang_R.append(data[0].Fbang_pos_R[n].value - data[0].Fbang_neg_R[n].value)
+        F_bang_L.append(data[0].Fbang_pos_L[n].value - data[0].Fbang_neg_L[n].value)
+        N_time.append(data[0].tt0[n].value - data[0].tt0[1].value)
         for c in range(1, cN+1):
-            pub[0].publish(data[0].q[n,c, 'theta_l_R'].value )
-            pub[1].publish(data[0].q[n,c, 'theta_l_L'].value )
-            if c == cN:
-                F = data[0].F_max*(np.round(data[0].Fbang_pos_R[n].value) - np.round(data[0].Fbang_neg_R[n].value))
-                pub[2].publish(F)
-                F = data[0].F_max*(np.round(data[0].Fbang_pos_L[n].value) - np.round(data[0].Fbang_neg_L[n].value))
-                pub[3].publish(F)
-
-            # sleep = data[0].h[n].value
-            sleep = run_time[i+1] - run_time[i]
-            rp.sleep(sleep)
-            i += 1
+            theta_R.append(data[0].q[n,c,'theta_l_R'].value)
+            theta_L.append(data[0].q[n,c,'theta_l_L'].value)
+            cN_time.append(data[0].tt[n,c].value - data[0].tt[1,1].value)
 
 def steady_state():
+    global N_adder, cN_adder
     N = data[1].N[-1]
     cN = data[1].cN[-1]
-    i = 0
+    N_adder += (data[0].tt0[N].value - data[0].tt0[1].value)
+    cN_adder += (data[0].tt[N,cN].value - data[0].tt[1,1].value)
     for n in range(1, N+1):
+        F_bang_R.append(data[1].Fbang_pos_R[n].value - data[1].Fbang_neg_R[n].value)
+        F_bang_L.append(data[1].Fbang_pos_L[n].value - data[1].Fbang_neg_L[n].value)
+        N_time.append(data[1].tt0[n].value - data[1].tt0[1].value + N_adder)
         for c in range(1, cN+1):
-            pub[0].publish(data[1].q[n,c, 'theta_l_R'].value )
-            pub[1].publish(data[1].q[n,c, 'theta_l_L'].value )
-            if c == cN:
-                F = data[1].F_max*(np.round(data[1].Fbang_pos_R[n].value) - np.round(data[1].Fbang_neg_R[n].value))
-                pub[2].publish(F)
-                F = data[1].F_max*(np.round(data[1].Fbang_pos_L[n].value) - np.round(data[1].Fbang_neg_L[n].value))
-                pub[3].publish(F)
-
-            # sleep = data[1].h[n].value
-            sleep = run_time[N+i+1] - run_time[N+i]
-            rp.sleep(sleep)
-            i += 1
+            theta_R.append(data[1].q[n,c,'theta_l_R'].value)
+            theta_L.append(data[1].q[n,c,'theta_l_L'].value)
+            cN_time.append(data[1].tt[n,c].value - data[1].tt[1,1].value + cN_adder)
 
 def decel():
+    global N_adder, cN_adder
     N = data[2].N[-1]
     cN = data[2].cN[-1]
-    i = 0
+    N_adder += (data[1].tt0[N].value - data[1].tt0[1].value)
+    cN_adder += (data[1].tt[N,cN].value - data[1].tt[1,1].value)
     for n in range(1, N+1):
+        F_bang_R.append(data[2].Fbang_pos_R[n].value - data[2].Fbang_neg_R[n].value)
+        F_bang_L.append(data[2].Fbang_pos_L[n].value - data[2].Fbang_neg_L[n].value)
+        N_time.append(data[2].tt0[n].value - data[2].tt0[1].value + N_adder)
         for c in range(1, cN+1):
-            pub[0].publish(data[2].q[n,c, 'theta_l_R'].value )
-            pub[1].publish(data[2].q[n,c, 'theta_l_L'].value )
-            if c == cN:
-                F = data[2].F_max*(np.round(data[2].Fbang_pos_R[n].value) - np.round(data[2].Fbang_neg_R[n].value))
-                pub[2].publish(F)
-                F = data[2].F_max*(np.round(data[2].Fbang_pos_L[n].value) - np.round(data[2].Fbang_neg_L[n].value))
-                pub[3].publish(F)
+            theta_R.append(data[2].q[n,c,'theta_l_R'].value)
+            theta_L.append(data[2].q[n,c,'theta_l_L'].value)
+            cN_time.append(data[2].tt[n,c].value - data[2].tt[1,1].value + cN_adder)
 
-            # sleep = data[2].h[n].value
-            sleep = run_time[2*N+i+1] - run_time[2*N+i]
-            rp.sleep(sleep)
-            i += 1
+def interpolate(y, cur_time, x, position):
+    # y = data
+    # x = time
+    ans = 0
+    for i in range(position, len(x)):
+        if(x[i]<=cur_time and cur_time<x[i+1]):
+            position = i
+            ans = y[i] + (cur_time - x[i])*(y[i+1] - y[i])/(x[i+1] - x[i])
+            return ans, position
 
 if __name__ == '__main__': 
     reset_simulation()
@@ -111,3 +124,31 @@ if __name__ == '__main__':
     accel()
     steady_state()
     decel()
+
+    while 1:
+        if(run_time>N_time[-1]):
+            break
+
+        tmp, position_cN = interpolate(theta_R, run_time, cN_time, position_cN)
+        servo_R.append(tmp)
+        tmp, position_cN = interpolate(theta_L, run_time, cN_time, position_cN)
+        servo_L.append(tmp)
+
+        tmp, position_N = interpolate(F_bang_R, run_time, N_time, position_N)
+        solenoid_R.append(F_max * np.round(tmp))
+        tmp, position_N = interpolate(F_bang_L, run_time, N_time, position_N)
+        solenoid_L.append(F_max * np.round(tmp))
+
+        run_time += pub_time
+
+    i = 0
+    while not rp.is_shutdown():
+        if(i>=len(servo_R)):
+            break
+
+        pub[0].publish(servo_R[i]) # theta_l_R
+        pub[1].publish(servo_L[i]) # theta_l_L)
+        pub[2].publish(solenoid_R[i]) # F_bang_R
+        pub[3].publish(solenoid_L[i]) # F_bang_L
+        i += 1
+        rate.sleep()
