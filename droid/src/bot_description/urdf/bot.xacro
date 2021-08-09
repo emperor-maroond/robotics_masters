@@ -133,7 +133,7 @@
     <child link="right_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <limit effort="300" lower="0" upper="0.125" velocity="1000"/>
-    <dynamics damping="50"/>
+    <dynamics damping="85"/>
 </joint>
 
 <joint name="SliderL" type="prismatic">
@@ -142,7 +142,7 @@
     <child link="left_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <limit effort="300" lower="0" upper="0.125" velocity="1000"/>
-    <dynamics damping="50"/>
+    <dynamics damping="85"/>
 </joint>
 
 <!-- Links to constrain to planar -->
