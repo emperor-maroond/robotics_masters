@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/devlon/robotics_masters/droid/devel/share/common-lisp/ros/my_message/msg/my_message.lisp"
+  "/home/callen/Documents/robotics_masters/droid/devel/share/common-lisp/ros/my_message/msg/my_message.lisp"
   "CMakeFiles/my_message_generate_messages_lisp"
 )
 
