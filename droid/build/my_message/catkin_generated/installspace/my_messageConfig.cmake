@@ -67,14 +67,14 @@ set(my_message_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(my_message_SOURCE_PREFIX /home/callen/Documents/robotics_masters/droid/src/my_message)
-  set(my_message_DEVEL_PREFIX /home/callen/Documents/robotics_masters/droid/devel)
+  set(my_message_SOURCE_PREFIX /home/devlon/robotics_masters/droid/src/my_message)
+  set(my_message_DEVEL_PREFIX /home/devlon/robotics_masters/droid/devel)
   set(my_message_INSTALL_PREFIX "")
   set(my_message_PREFIX ${my_message_DEVEL_PREFIX})
 else()
   set(my_message_SOURCE_PREFIX "")
   set(my_message_DEVEL_PREFIX "")
-  set(my_message_INSTALL_PREFIX /home/callen/Documents/robotics_masters/droid/install)
+  set(my_message_INSTALL_PREFIX /home/devlon/robotics_masters/droid/install)
   set(my_message_PREFIX ${my_message_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/callen/Documents/robotics_masters/droid/install/lib;/opt/ros/noetic/lib)
+    foreach(path /home/devlon/robotics_masters/droid/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
