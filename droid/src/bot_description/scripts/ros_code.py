@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-import rospy as rp
+import rospy
 import cloudpickle
 import time
 
@@ -9,12 +9,12 @@ from my_message.msg import my_message
 
 # Set-up ROS and read in trajectory data_________________________________________________________
 
-rp.init_node('master')
+rospy.init_node('master')
 
 pub_time = 10/1000
-rate = rp.Rate(1/pub_time)
+rate = rospy.Rate(1/pub_time)
 
-pub = rp.Publisher('chatter', my_message, queue_size=10)
+pub = rospy.Publisher('chatter', my_message, queue_size=10)
   
 message = my_message()
 message.some_floats = []
@@ -109,14 +109,14 @@ def interpolate(y, cur_time, x, position):
 
 def send_message():
     global message
-    rp.loginfo('send data')
+    rospy.loginfo('send data')
     for n in range(0, len(servo_R)):
         message.some_floats.append(servo_R[n])
         message.some_floats.append(servo_L[n])
         message.some_floats.append(solenoid_R[n])
         message.some_floats.append(solenoid_L[n])
 
-        rp.loginfo(message)
+        rospy.loginfo(message)
         pub.publish(message)
         message.some_floats.clear()
 
@@ -145,5 +145,5 @@ if __name__ == '__main__':
 
     try:
         send_message()
-    except rp.ROSInterruptException:
+    except rospy.ROSInterruptException:
         pass
