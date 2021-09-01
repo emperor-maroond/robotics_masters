@@ -3,7 +3,6 @@
 import numpy as np
 import rospy
 import cloudpickle
-import time
 
 from my_message.msg import my_message
 

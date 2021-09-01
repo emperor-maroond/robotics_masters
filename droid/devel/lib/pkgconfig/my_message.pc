@@ -1,8 +1,8 @@
-prefix=/home/devlon/robotics_masters/droid/devel
+prefix=/home/callen/Documents/robotics_masters/droid/devel
 
 Name: my_message
 Description: Description of my_message
 Version: 0.0.0
-Cflags: -I/home/devlon/robotics_masters/droid/devel/include
+Cflags: -I/home/callen/Documents/robotics_masters/droid/devel/include
 Libs: -L${prefix}/lib 
 Requires: message_runtime
