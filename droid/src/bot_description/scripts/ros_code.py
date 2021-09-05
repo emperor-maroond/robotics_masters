@@ -96,6 +96,12 @@ def decel():
             theta_L.append(data[2].q[n,c,'theta_l_L'].value)
             cN_time.append(data[2].tt[n,c].value - data[2].tt[1,1].value + cN_adder)
 
+def end():
+    servo_R.append(-10)
+    servo_L.append(-10)
+    solenoid_R.append(-10)
+    solenoid_L.append(-10)
+
 def interpolate(y, cur_time, x, position):
     # y = data
     # x = time
@@ -128,6 +134,7 @@ if __name__ == '__main__':
 
     while 1:
         if(run_time>N_time[-1]):
+            end()
             break
 
         tmp, position_cN = interpolate(theta_R, run_time, cN_time, position_cN)
