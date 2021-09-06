@@ -6,9 +6,15 @@ import rospy
 from my_message.msg import my_message
 
 def callback(data):
-    volt = data.some_floats[0]
+    servoFeed_R = data.some_floats[0]
+    servoFeed_L = data.some_floats[1]
+    encoder_1 = data.some_floats[2]
+    encoder_2 = data.some_floats[3]
 
-    print(volt)
+    print(servoFeed_R)
+    print(servoFeed_L)
+    print(encoder_1)
+    print(encoder_2)
 
 def listener():
     try:

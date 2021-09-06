@@ -11,7 +11,8 @@ from my_message.msg import my_message
 rospy.init_node('master')
 
 pub_time = 10/1000
-rate = rospy.Rate(1/pub_time)
+# rate = rospy.Rate(1/pub_time)
+rate = rospy.Rate(1000)
 
 pub = rospy.Publisher('chatter', my_message, queue_size=10)
   
