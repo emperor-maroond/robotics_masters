@@ -26,13 +26,13 @@ pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue
 
 data = [None]*3
 
-with open("Feasible_Solution/00/accel.pkl", "rb") as f:
+with open("Feasible_Solution/short3/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/00/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/short3/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)      
 
-with open("Feasible_Solution/00/decel.pkl", "rb") as f:
+with open("Feasible_Solution/short3/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
 # Code__________________________________________________________________________________________
