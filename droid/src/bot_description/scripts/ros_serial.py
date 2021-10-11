@@ -17,6 +17,8 @@ def callback(data):
     encoder_1 = data.some_floats[2]
     encoder_2 = data.some_floats[3]
 
+    # print(servoFeed_R)
+
     tmp1.append(servoFeed_R)
     tmp2.append(servoFeed_L)
     tmp3.append(encoder_1)
@@ -31,10 +33,10 @@ def listener():
             rospy.rostime.wallsleep(0.5)
     except KeyboardInterrupt:
         file = open('data.txt', 'w')
-        file.write('Servo Feedback Right:\n', tmp1)
-        file.write('Servo Feedback Left:\n', tmp2)
-        file.write('Encoder data 1:\n', tmp3)
-        file.write('Encoder data 2:\n', tmp4)
+        file.write('Servo Feedback Right:\n {}\n'.format(tmp1))
+        file.write('Servo Feedback Left:\n {}\n'.format(tmp2))
+        file.write('Encoder data 1:\n {}\n'.format(tmp3))
+        file.write('Encoder data 2:\n {}\n'.format(tmp4))
         file.close()
         print('Adios!')
 

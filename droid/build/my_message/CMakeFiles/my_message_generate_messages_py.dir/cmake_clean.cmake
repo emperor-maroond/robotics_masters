@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/__init__.py"
-  "/home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/_my_message.py"
+  "/home/callen/Documents/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/__init__.py"
+  "/home/callen/Documents/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/_my_message.py"
   "CMakeFiles/my_message_generate_messages_py"
 )
 
