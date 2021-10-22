@@ -12,7 +12,7 @@ from std_srvs.srv import Empty
 
 rp.init_node('commander')
 
-pub_time = 10/1000
+pub_time = 5/1000
 rate = rp.Rate(1/pub_time)
 
 reset_simulation = rp.ServiceProxy('/gazebo/reset_simulation', Empty)
@@ -26,13 +26,13 @@ pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue
 
 data = [None]*3
 
-with open("Feasible_Solution/short3/accel.pkl", "rb") as f:
+with open("Feasible_Solution/short2/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/short3/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/short2/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)      
 
-with open("Feasible_Solution/short3/decel.pkl", "rb") as f:
+with open("Feasible_Solution/short2/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
 # Code__________________________________________________________________________________________

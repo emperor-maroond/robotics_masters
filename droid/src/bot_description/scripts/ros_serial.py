@@ -17,7 +17,7 @@ def callback(data):
     encoder_1 = data.some_floats[2]
     encoder_2 = data.some_floats[3]
 
-    # print(servoFeed_R)
+    print(servoFeed_R, servoFeed_L, encoder_1, encoder_2)
 
     tmp1.append(servoFeed_R)
     tmp2.append(servoFeed_L)
