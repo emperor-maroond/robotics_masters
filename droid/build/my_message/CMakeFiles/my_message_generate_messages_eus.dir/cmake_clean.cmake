@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/manifest.l"
-  "/home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/msg/my_message.l"
+  "/home/callen/Documents/robotics_masters/droid/devel/share/roseus/ros/my_message/manifest.l"
+  "/home/callen/Documents/robotics_masters/droid/devel/share/roseus/ros/my_message/msg/my_message.l"
   "CMakeFiles/my_message_generate_messages_eus"
 )
 

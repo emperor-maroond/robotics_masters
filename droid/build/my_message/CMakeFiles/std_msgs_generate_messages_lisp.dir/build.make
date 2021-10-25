@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/devlon/robotics_masters/droid/src
+CMAKE_SOURCE_DIR = /home/callen/Documents/robotics_masters/droid/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/devlon/robotics_masters/droid/build
+CMAKE_BINARY_DIR = /home/callen/Documents/robotics_masters/droid/build
 
 # Utility rule file for std_msgs_generate_messages_lisp.
 
@@ -63,10 +63,10 @@ my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/build: std_msgs_genera
 .PHONY : my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
 
 my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean:
-	cd /home/devlon/robotics_masters/droid/build/my_message && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_lisp.dir/cmake_clean.cmake
+	cd /home/callen/Documents/robotics_masters/droid/build/my_message && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_lisp.dir/cmake_clean.cmake
 .PHONY : my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
 
 my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/depend:
-	cd /home/devlon/robotics_masters/droid/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/devlon/robotics_masters/droid/src /home/devlon/robotics_masters/droid/src/my_message /home/devlon/robotics_masters/droid/build /home/devlon/robotics_masters/droid/build/my_message /home/devlon/robotics_masters/droid/build/my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/callen/Documents/robotics_masters/droid/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/callen/Documents/robotics_masters/droid/src /home/callen/Documents/robotics_masters/droid/src/my_message /home/callen/Documents/robotics_masters/droid/build /home/callen/Documents/robotics_masters/droid/build/my_message /home/callen/Documents/robotics_masters/droid/build/my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : my_message/CMakeFiles/std_msgs_generate_messages_lisp.dir/depend
 
