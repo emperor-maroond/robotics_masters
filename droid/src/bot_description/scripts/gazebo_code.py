@@ -12,7 +12,7 @@ from std_srvs.srv import Empty
 
 rp.init_node('commander')
 
-pub_time = 20/1000
+pub_time = 10/1000
 rate = rp.Rate(1/pub_time)
 
 reset_simulation = rp.ServiceProxy('/gazebo/reset_simulation', Empty)
@@ -26,13 +26,13 @@ pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue
 
 data = [None]*3
 
-with open("Feasible_Solution/short1/accel.pkl", "rb") as f:
+with open("Feasible_Solution/short2/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/short1/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/short2/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)
 
-with open("Feasible_Solution/short1/decel.pkl", "rb") as f:
+with open("Feasible_Solution/short2/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
 # Code__________________________________________________________________________________________
@@ -135,9 +135,20 @@ if __name__ == '__main__':
         servo_L.append(tmp)
 
         tmp, position_N = interpolate(F_bang_R, run_time, N_time, position_N)
-        solenoid_R.append(F_max * np.round(tmp))
+        if tmp >= 0.08:
+            solenoid_R.append(F_max * np.ceil(tmp))
+        elif tmp <= -0.08:
+            solenoid_R.append(F_max * np.floor(tmp))   
+        else:
+            solenoid_R.append(F_max * np.round(tmp))
+        
         tmp, position_N = interpolate(F_bang_L, run_time, N_time, position_N)
-        solenoid_L.append(F_max * np.round(tmp))
+        if tmp >= 0.08:
+            solenoid_L.append(F_max * np.ceil(tmp))
+        elif tmp <= -0.08:
+            solenoid_L.append(F_max * np.floor(tmp))   
+        else:
+            solenoid_L.append(F_max * np.round(tmp))
 
         run_time += pub_time
 
