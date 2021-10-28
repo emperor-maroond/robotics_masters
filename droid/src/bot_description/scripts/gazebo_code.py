@@ -26,13 +26,13 @@ pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue
 
 data = [None]*3
 
-with open("Feasible_Solution/short2/accel.pkl", "rb") as f:
+with open("Feasible_Solution/short3/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/short2/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/short3/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)
 
-with open("Feasible_Solution/short2/decel.pkl", "rb") as f:
+with open("Feasible_Solution/short3/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
 # Code__________________________________________________________________________________________
@@ -135,17 +135,17 @@ if __name__ == '__main__':
         servo_L.append(tmp)
 
         tmp, position_N = interpolate(F_bang_R, run_time, N_time, position_N)
-        if tmp >= 0.08:
+        if tmp >= 0.13:
             solenoid_R.append(F_max * np.ceil(tmp))
-        elif tmp <= -0.08:
+        elif tmp <= -0.13:
             solenoid_R.append(F_max * np.floor(tmp))   
         else:
             solenoid_R.append(F_max * np.round(tmp))
         
         tmp, position_N = interpolate(F_bang_L, run_time, N_time, position_N)
-        if tmp >= 0.08:
+        if tmp >= 0.13:
             solenoid_L.append(F_max * np.ceil(tmp))
-        elif tmp <= -0.08:
+        elif tmp <= -0.13:
             solenoid_L.append(F_max * np.floor(tmp))   
         else:
             solenoid_L.append(F_max * np.round(tmp))
