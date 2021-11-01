@@ -144,16 +144,16 @@ if __name__ == '__main__':
         servo_L.append(tmp)
 
         tmp, position_N = interpolate(F_bang_R, run_time, N_time, position_N)
-        if tmp >= 0.08:
+        if tmp >= 0.13:
             solenoid_R.append(np.ceil(tmp))
-        elif tmp <= -0.08:
+        elif tmp <= -0.13:
             solenoid_R.append(np.floor(tmp))   
         else:
             solenoid_R.append(np.round(tmp))
         tmp, position_N = interpolate(F_bang_L, run_time, N_time, position_N)
-        if tmp >= 0.08:
+        if tmp >= 0.13:
             solenoid_L.append(np.ceil(tmp))
-        elif tmp <= -0.08:
+        elif tmp <= -0.13:
             solenoid_L.append(np.floor(tmp))   
         else:
             solenoid_L.append(np.round(tmp))
