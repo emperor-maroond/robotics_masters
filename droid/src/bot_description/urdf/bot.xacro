@@ -111,23 +111,23 @@
 </link>
 
 <!-- Joints -->
-<joint name="RevR" type="revolute">
+<joint name="RevL" type="revolute">
     <origin rpy="-1.5708 0 0" xyz="0.557324 0.147203 0.446863"/>
     <parent link="base_link"/>
     <child link="right_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="300" lower="-3.14159" upper="3.14159" velocity="100"/>
+    <limit effort="6" lower="-3.14159" upper="3.14159" velocity="8.05536"/>
 </joint>
 
-<joint name="RevL" type="revolute">
+<joint name="RevR" type="revolute">
     <origin rpy="-1.5708 0 0" xyz="0.360324 0.147203 0.446863"/>
     <parent link="base_link"/>
     <child link="left_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="300" lower="-3.14159" upper="3.14159" velocity="100"/>
+    <limit effort="6" lower="-3.14159" upper="3.14159" velocity="8.05536"/>
 </joint>
 
-<joint name="SliderR" type="prismatic">
+<joint name="SliderL" type="prismatic">
     <origin rpy="0 0 0" xyz="0.023 0.0 -0.0068"/>
     <parent link="right_hip_1"/>
     <child link="right_foot_1"/>
@@ -136,7 +136,7 @@
     <dynamics damping="85"/>
 </joint>
 
-<joint name="SliderL" type="prismatic">
+<joint name="SliderR" type="prismatic">
     <origin rpy="0 0 0" xyz="-0.023 0.0 -0.0068"/>
     <parent link="left_hip_1"/>
     <child link="left_foot_1"/>
