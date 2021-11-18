@@ -32,7 +32,10 @@ def r2d(rad):
 
 def move(start, stop, z):
     delta = stop - start
-    q = delta/300*z
+    if abs(delta)>d2r(17):
+        q = delta/250*z
+    else:
+        q = delta/150*z
     return start + q
 
 # States_____________________________________________________________________________________
