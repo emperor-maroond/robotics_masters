@@ -44,7 +44,6 @@ def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
     if delay<150:
-        # print(delay)
         firing = True
     else:
         firing = False
@@ -89,7 +88,6 @@ def state_1():
         if R!=end_R:
             R = move(start_R, end_R, z)
         if R==end_R and L==end_L:
-            # print("fuck 1")
             pub[2].publish(165)
             if not done:
                 boom = time.time()*1000
@@ -120,10 +118,8 @@ def state_2():
         if R!=end_R:
             R = move(start_R, end_R, z)
         if R==end_R and L==end_L:
-            # print("fuck 2")
             z = 0
             pub[3].publish(165)
-            print(r2d(L))
             if not done:
                 boom = time.time()*1000
             done = 1
@@ -155,7 +151,6 @@ def state_3():
             z = 0
             pub[3].publish(-165)
             done = 1
-            # print("done")
     pub[0].publish(R)
     pub[1].publish(L)
 
@@ -214,7 +209,6 @@ def state_5():
             if not done:
                 boom = time.time()*1000
             done = 1
-            # print("fuck 5")
     pub[0].publish(R)
     pub[1].publish(L)
 
@@ -245,17 +239,18 @@ def state_6():
     pub[0].publish(R)
     pub[1].publish(L)
 
+# Callback code_________________________________________________________________________
 i = 0
 ground = False
 apex = False
 run = True
+avg = -0.22
+devider = 0
 states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
 def callback(data):
-    global i, apex, flag, ground, run, done
+    global i, apex, flag, ground, run, done, avg, devider
     pose = data.pose[2]
     z = pose.position.z
-    # print(z)
-    # print(run)
     test_boom()
     if run:
         states[i]()
@@ -274,27 +269,25 @@ def callback(data):
             run = False
             i += 1
             flag = 1
-        if z<-0.22:
-            if i==0 and not ground:
-                flag = 1
-            elif not ground:
-                run = True
-                flag = 1
-        if z>-0.16 and not apex:
-            if not apex and ground and i>0:
-                run = True
-                flag = 1
-        if z>-0.22 and z and apex:
-            # print(ground, apex, done)
-            if ground and apex and i>0:
-                # print(i)
-                run = True
-                flag = 1
+        devider += 1
+        avg = avg + z
+        if devider == 10:
+            avg = avg/devider
+            devider = 0
+            if avg<-0.22:
+                if not ground:
+                    run = True
+                    flag = 1
+            if avg>-0.16 and not apex:
+                if not apex and ground and i>0:
+                    run = True
+                    flag = 1
+            if avg>-0.22 and apex:
+                if ground and apex and i>0:
+                    run = True
+                    flag = 1
     if i >= len(states)-1:
         i = len(states)-1
-        # print("NO", z)
-    # print(i)
-
 
 def listener():
     try:
@@ -304,6 +297,7 @@ def listener():
     except KeyboardInterrupt:
         pass
 
+# main code_____________________________________________________________________
 if __name__ == '__main__':
     reset_simulation()
     time.sleep(0.5)
