@@ -339,7 +339,7 @@ def callback(data):
 
 def listener():
     try:
-        rp.Subscriber('/gazebo/link_states', ModelStates, callback)
+        rp.Subscriber('sensor_data', ModelStates, callback)
         while not rp.core.is_shutdown():
             rp.rostime.wallsleep(0.5)
     except KeyboardInterrupt:
