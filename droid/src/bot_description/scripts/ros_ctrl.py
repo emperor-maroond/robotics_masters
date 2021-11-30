@@ -7,7 +7,6 @@ import time
 from math import isclose
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty
-from gazebo_msgs.msg import ModelStates
 from my_message.msg import my_message
 
 rp.init_node('master')
@@ -32,10 +31,10 @@ dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
 
 def d2r(deg):
-    return deg*np.pi/165
+    return deg*np.pi/180
 
 def r2d(rad):
-    return rad*165/np.pi
+    return rad*180/np.pi
 
 def move(start, stop, z):
     delta = stop - start
@@ -55,9 +54,9 @@ def test_boom():
 
 def send_message():
     global message
-    rp.loginfo('send data:')
+    # rp.loginfo('send data:')
     for n in range(0, len(dat)):
-        message.some_floats(dat[n])
+        message.some_floats.append(dat[n])
     
     rp.loginfo(message)
     pub.publish(message)
@@ -316,7 +315,8 @@ def callback(data):
         if devider == 10:
             avg = avg/devider
             devider = 0
-            if avg<0.0:                       # Check the correct height
+            # print(avg)
+            if avg<=0.2:                       # Check the correct height
                 if not ground:
                     run = True
                     flag = 1
@@ -339,15 +339,24 @@ def callback(data):
 
 def listener():
     try:
-        rp.Subscriber('sensor_data', ModelStates, callback)
+        rp.Subscriber('sensor_data', my_message, callback)
         while not rp.core.is_shutdown():
             rp.rostime.wallsleep(0.5)
     except KeyboardInterrupt:
-        rp.signal_shutdown("Dump data to txt")
+        # destroy()
+        rp.signal_shutdown("Adios")
+        print('Bye')
+        
+        # rp.signal_shutdown("Adios")
+        # file = open('data.txt', 'a')
+        # file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+        # file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+        # file.write('Encoder data 1:\n {}\n'.format(enc_1))
+        # file.write('Encoder data 2:\n {}\n'.format(enc_2))
+        # file.close()
+        # print('Adios!')
+
 
 # main code_____________________________________________________________________
 if __name__ == '__main__':
-    time.sleep(0.5)
-    states[0]()
-    rp.sleep(1)  
     listener()
