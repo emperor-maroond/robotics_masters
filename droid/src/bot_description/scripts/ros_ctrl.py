@@ -289,7 +289,9 @@ def callback(data):
         ref_height = encoder_1
         
     height = encoder_1 - ref_height
-
+    devider += 1
+    avg += height
+    
     if run:
         states[i]()
     
@@ -308,9 +310,6 @@ def callback(data):
             run = False
             i += 1
             flag = 1
-        
-        devider += 1
-        avg = avg + height
         
         if devider == 10:
             avg = avg/devider
