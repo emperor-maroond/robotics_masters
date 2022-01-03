@@ -47,7 +47,7 @@ def move(start, stop, z):
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<150:
+    if delay<120:
         firing = True
     else:
         firing = False
@@ -89,8 +89,8 @@ enc_2 = []
 
 def state_0():  # START state as well as STOP state
     global end_R, end_L, done
-    end_R = d2r(90+30)
-    end_L = d2r(90-30)
+    end_R = d2r(90)
+    end_L = d2r(90)
     dat[0] = end_R
     dat[1] = end_L
     dat[2] = -1
@@ -108,8 +108,8 @@ def state_1():
         flag = 0
         start_R = end_R
         start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-45)
+        end_R = d2r(90)
+        end_L = d2r(90)
         dat[2] = -1
         dat[3] = -1
     if not flag:
@@ -120,6 +120,7 @@ def state_1():
             R = move(start_R, end_R, z)
         if R==end_R and L==end_L:
             dat[2] = 1
+            dat[3] = 1
             if not done:
                 boom = time.time()*1000
             z = 0
@@ -138,8 +139,8 @@ def state_2():
         flag = 0
         start_R = end_R
         start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-0)
+        end_R = d2r(90)
+        end_L = d2r(90)
         dat[2] = -1
         dat[3] = -1        
     if not flag:
@@ -150,132 +151,17 @@ def state_2():
             R = move(start_R, end_R, z)
         if R==end_R and L==end_L:
             z = 0
+            dat[1] = 1
             dat[3] = 1
             if not done:
                 boom = time.time()*1000
-            done = 1
-    dat[0] = R + offset
-    dat[1] = L + offset
-    send_message()
-
-def state_3():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-30)
-        end_L = d2r(90+30)        
-        dat[2] = -1
-        dat[3] = 1        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            dat[3] = -1
-            done = 1
-    dat[0] = R + offset
-    dat[1] = L + offset
-    send_message()
-
-def state_4():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        done = 0
-        global R, L
-        R = end_R
-        L = end_L
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-45)
-        end_L = d2r(90+30)
-        dat[2] = -1
-        dat[3] = -1
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            dat[3] = 1
-            if not done:
-                boom = time.time()*1000
-            z = 0
-            done = 1
-    dat[0] = R + offset
-    dat[1] = L + offset
-    send_message()
-
-def state_5():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-30)
-        end_L = d2r(90+30)  
-        dat[2] = -1
-        dat[3] = -1        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            dat[2] = 1
-            if not done:
-                boom = time.time()*1000
-            done = 1
-    dat[0] = R + offset
-    dat[1] = L + offset
-    send_message()
-
-def state_6():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-30)  
-        dat[2] = 1
-        dat[3] = -1        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        else:
-            dat[2] = -1
-            z = 0
             done = 1
     dat[0] = R + offset
     dat[1] = L + offset
     send_message()
 
 # Callback code_________________________________________________________________________
-states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
+states = [state_0, state_1, state_2]
 
 def callback(data):
     global i, apex, flag, ground, run, done, avg, devider, ref_height, startup, offset
