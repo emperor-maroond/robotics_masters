@@ -75,8 +75,6 @@ i = 0
 ground = False
 apex = False
 run = True
-avg = -0.22
-devider = 0
 ref_height = 0
 arm_len = 1
 startup = True
@@ -293,8 +291,6 @@ def callback(data):
     offset = encoder_1
 
     height = np.sin(encoder_1)*arm_len - ref_height
-    devider += 1
-    avg += height
     
     if run:
         states[i]()
@@ -315,22 +311,19 @@ def callback(data):
             i += 1
             flag = 1
         
-        if devider == 10:
-            avg = avg/devider
-            devider = 0
-            # print(avg)
-            if avg<=0.2:                       # Check the correct height
-                if not ground:
-                    run = True
-                    flag = 1
-            if avg>0.3 and not apex:
-                if not apex and ground and i>0:
-                    run = True
-                    flag = 1
-            if avg>0.3 and apex:
-                if ground and apex and i>0:
-                    run = True
-                    flag = 1
+        # print(avg)
+        if height<=0.2:                       # Check the correct height
+            if not ground:
+                run = True
+                flag = 1
+        if height>0.3 and not apex:
+            if not apex and ground and i>0:
+                run = True
+                flag = 1
+        if height>0.3 and apex:
+            if ground and apex and i>0:
+                run = True
+                flag = 1
     
     if i >= len(states)-1:
         i = len(states)-1
