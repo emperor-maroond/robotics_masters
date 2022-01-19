@@ -89,8 +89,8 @@ def state_0():  # START state as well as STOP state
     global end_R, end_L, done
     end_R = d2r(90+30)
     end_L = d2r(90-30)
-    dat[0] = end_R
-    dat[1] = end_L
+    dat[0] = end_R - offset
+    dat[1] = end_L + offset
     dat[2] = -1
     dat[3] = -1
     done = 1
@@ -122,7 +122,7 @@ def state_1():
                 boom = time.time()*1000
             z = 0
             done = 1
-    dat[0] = R + offset
+    dat[0] = R - offset
     dat[1] = L + offset
     send_message()
 
@@ -152,7 +152,7 @@ def state_2():
             if not done:
                 boom = time.time()*1000
             done = 1
-    dat[0] = R + offset
+    dat[0] = R - offset
     dat[1] = L + offset
     send_message()
 
@@ -180,7 +180,7 @@ def state_3():
             z = 0
             dat[3] = -1
             done = 1
-    dat[0] = R + offset
+    dat[0] = R - offset
     dat[1] = L + offset
     send_message()
 
@@ -210,7 +210,7 @@ def state_4():
                 boom = time.time()*1000
             z = 0
             done = 1
-    dat[0] = R + offset
+    dat[0] = R - offset
     dat[1] = L + offset
     send_message()
 
@@ -240,7 +240,7 @@ def state_5():
             if not done:
                 boom = time.time()*1000
             done = 1
-    dat[0] = R + offset
+    dat[0] = R - offset
     dat[1] = L + offset
     send_message()
 
@@ -268,7 +268,7 @@ def state_6():
             dat[2] = -1
             z = 0
             done = 1
-    dat[0] = R + offset
+    dat[0] = R - offset
     dat[1] = L + offset
     send_message()
 
@@ -282,15 +282,20 @@ def callback(data):
     servoFeed_L = data.some_floats[1]
     encoder_1 = data.some_floats[2] # assume this is height
     encoder_2 = data.some_floats[3]
+    rad = d2r(encoder_1)
     test_boom()
     
     if startup:
         startup = False
-        ref_height = np.sin(encoder_1)*arm_len
+        ref_height = np.sin(rad)*arm_len
+        delay = time.time()*1000
 
-    offset = encoder_1
+        while time.time()*1000-delay <= 1000:
+            states[0]()
 
-    height = np.sin(encoder_1)*arm_len - ref_height
+    offset = rad
+
+    height = np.sin(rad)*arm_len - ref_height
     
     if run:
         states[i]()
@@ -312,15 +317,15 @@ def callback(data):
             flag = 1
         
         # print(avg)
-        if height<=0.2:                       # Check the correct height
+        if height<=0.1:                       # Check the correct height
             if not ground:
                 run = True
                 flag = 1
-        if height>0.3 and not apex:
+        if height>0.2 and not apex:
             if not apex and ground and i>0:
                 run = True
                 flag = 1
-        if height>0.3 and apex:
+        if height>0.2 and apex:
             if ground and apex and i>0:
                 run = True
                 flag = 1
