@@ -23,12 +23,13 @@ message.some_floats = []
 firing = False
 boom = 0
 
-dat = [None]*4
+dat = [None]*5
 
 dat[0] = 0 # Rev Right
 dat[1] = 0 # Rev Left
 dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
+dat[4] = 0 # Offset
 
 def d2r(deg):
     return deg*np.pi/180
@@ -93,6 +94,7 @@ def state_0():  # START state as well as STOP state
     dat[1] = end_L + offset
     dat[2] = -1
     dat[3] = -1
+    dat[4] = offset
     done = 1
     send_message()
 
@@ -122,8 +124,9 @@ def state_1():
                 boom = time.time()*1000
             z = 0
             done = 1
-    dat[0] = R - offset
-    dat[1] = L + offset
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
     send_message()
 
 def state_2():
@@ -140,6 +143,8 @@ def state_2():
         end_L = d2r(90-0)
         dat[2] = -1
         dat[3] = -1        
+        if not done:
+            boom = time.time()*1000
     if not flag:
         z += 1
         if L!=end_L:
@@ -152,8 +157,9 @@ def state_2():
             if not done:
                 boom = time.time()*1000
             done = 1
-    dat[0] = R - offset
-    dat[1] = L + offset
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
     send_message()
 
 def state_3():
@@ -179,9 +185,12 @@ def state_3():
         if R==end_R and L==end_L:
             z = 0
             dat[3] = -1
+            if not done:
+                boom = time.time()*1000
             done = 1
-    dat[0] = R - offset
-    dat[1] = L + offset
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
     send_message()
 
 def state_4():
@@ -210,8 +219,9 @@ def state_4():
                 boom = time.time()*1000
             z = 0
             done = 1
-    dat[0] = R - offset
-    dat[1] = L + offset
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
     send_message()
 
 def state_5():
@@ -227,7 +237,9 @@ def state_5():
         end_R = d2r(90-30)
         end_L = d2r(90+30)  
         dat[2] = -1
-        dat[3] = -1        
+        dat[3] = -1    
+        if not done:
+            boom = time.time()*1000    
     if not flag:
         z += 1
         if L!=end_L:
@@ -240,8 +252,9 @@ def state_5():
             if not done:
                 boom = time.time()*1000
             done = 1
-    dat[0] = R - offset
-    dat[1] = L + offset
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
     send_message()
 
 def state_6():
@@ -266,10 +279,13 @@ def state_6():
             R = move(start_R, end_R, z)
         else:
             dat[2] = -1
+            if not done:
+                boom = time.time()*1000
             z = 0
             done = 1
-    dat[0] = R - offset
-    dat[1] = L + offset
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
     send_message()
 
 # Callback code_________________________________________________________________________
@@ -290,7 +306,7 @@ def callback(data):
         ref_height = np.sin(rad)*arm_len
         delay = time.time()*1000
 
-        while time.time()*1000-delay <= 1000:
+        while time.time()*1000-delay <= 3000:
             states[0]()
 
     offset = rad

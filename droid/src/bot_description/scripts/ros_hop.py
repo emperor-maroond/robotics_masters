@@ -29,6 +29,7 @@ dat[0] = 0 # Rev Right
 dat[1] = 0 # Rev Left
 dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
+dat[4] = 0 # Offset
 
 def d2r(deg):
     return deg*np.pi/180
@@ -95,8 +96,8 @@ def state_0():  # START state as well as STOP state
     dat[1] = end_L
     dat[2] = -1
     dat[3] = -1
+    dat[4] = offset
     done = 1
-    send_message()
 
 def state_1():
     global flag, start_R, end_R, start_L, end_L, z, done, boom
@@ -125,9 +126,9 @@ def state_1():
                 boom = time.time()*1000
             z = 0
             done = 1
-    dat[0] = R + offset
-    dat[1] = L + offset
-    send_message()
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
 
 def state_2():
     global flag, start_R, end_R, start_L, end_L, z, done, boom
@@ -141,8 +142,8 @@ def state_2():
         start_L = end_L
         end_R = d2r(90)
         end_L = d2r(90)
-        dat[2] = -1
-        dat[3] = -1        
+        dat[2] = 1
+        dat[3] = 1        
     if not flag:
         z += 1
         if L!=end_L:
@@ -151,40 +152,46 @@ def state_2():
             R = move(start_R, end_R, z)
         if R==end_R and L==end_L:
             z = 0
-            dat[1] = 1
-            dat[3] = 1
+            dat[1] = -1
+            dat[3] = -1
             if not done:
                 boom = time.time()*1000
             done = 1
-    dat[0] = R + offset
-    dat[1] = L + offset
-    send_message()
+    dat[0] = R
+    dat[1] = L
+    dat[4] = offset
 
 # Callback code_________________________________________________________________________
 states = [state_0, state_1, state_2]
 
 def callback(data):
-    global i, apex, flag, ground, run, done, avg, devider, ref_height, startup, offset
+    global i, apex, flag, ground, run, done, ref_height, startup, offset
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0]
     servoFeed_L = data.some_floats[1]
     encoder_1 = data.some_floats[2] # assume this is height
     encoder_2 = data.some_floats[3]
+    rad = d2r(encoder_1)
     test_boom()
     
     if startup:
         startup = False
-        ref_height = np.sin(encoder_1)*arm_len
+        ref_height = np.sin(rad)*arm_len
+        delay = time.time()*1000
 
-    offset = encoder_1
+        while time.time()*1000-delay <= 3000:
+            states[0]()
+            send_message()
 
-    height = np.sin(encoder_1)*arm_len - ref_height
-    devider += 1
-    avg += height
+    offset = rad
+
+    height = np.sin(rad)*arm_len - ref_height
     
     if run:
         states[i]()
     
+    send_message()
+
     if not firing:
         if done:
             if not ground and i>0:
@@ -201,22 +208,18 @@ def callback(data):
             i += 1
             flag = 1
         
-        if devider == 10:
-            avg = avg/devider
-            devider = 0
-            # print(avg)
-            if avg<=0.2:                       # Check the correct height
-                if not ground:
-                    run = True
-                    flag = 1
-            if avg>0.3 and not apex:
-                if not apex and ground and i>0:
-                    run = True
-                    flag = 1
-            if avg>0.3 and apex:
-                if ground and apex and i>0:
-                    run = True
-                    flag = 1
+        if height<=50/1000:                       # Check the correct height
+            if not ground:
+                run = True
+                flag = 1
+        if height>200/1000 and not apex:
+            if not apex and ground and i>0:
+                run = True
+                flag = 1
+        if height>200/1000 and apex:
+            if ground and apex and i>0:
+                run = True
+                flag = 1
     
     if i >= len(states)-1:
         i = len(states)-1
