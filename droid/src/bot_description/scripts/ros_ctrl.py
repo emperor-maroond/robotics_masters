@@ -292,7 +292,7 @@ def state_6():
 states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
 
 def callback(data):
-    global i, apex, flag, ground, run, done, avg, devider, ref_height, startup, offset
+    global i, apex, flag, ground, run, done, ref_height, startup, offset
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0]
     servoFeed_L = data.some_floats[1]
@@ -332,7 +332,6 @@ def callback(data):
             i += 1
             flag = 1
         
-        # print(avg)
         if height<=0.1:                       # Check the correct height
             if not ground:
                 run = True

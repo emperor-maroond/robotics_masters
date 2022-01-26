@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+from concurrent.futures import process, thread
+from curses import tigetflag
+from signal import SIGINT, siginterrupt, signal
 import numpy as np
 import rospy as rp
 import time
+import pyautogui
 
 from math import isclose
 from std_msgs.msg import Float64
@@ -23,7 +27,7 @@ message.some_floats = []
 firing = False
 boom = 0
 
-dat = [None]*4
+dat = [None]*5
 
 dat[0] = 0 # Rev Right
 dat[1] = 0 # Rev Left
@@ -48,7 +52,7 @@ def move(start, stop, z):
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<120:
+    if delay<160:
         firing = True
     else:
         firing = False
@@ -59,7 +63,7 @@ def send_message():
     for n in range(0, len(dat)):
         message.some_floats.append(dat[n])
     
-    rp.loginfo(message)
+    # rp.loginfo(message)
     pub.publish(message)
     message.some_floats.clear()
     
@@ -71,6 +75,7 @@ end_R   = 0
 start_L = 0
 end_L   = 0
 z = 1
+triggered = 1
 
 i = 0
 ground = False
@@ -152,7 +157,7 @@ def state_2():
             R = move(start_R, end_R, z)
         if R==end_R and L==end_L:
             z = 0
-            dat[1] = -1
+            dat[2] = -1
             dat[3] = -1
             if not done:
                 boom = time.time()*1000
@@ -165,7 +170,7 @@ def state_2():
 states = [state_0, state_1, state_2]
 
 def callback(data):
-    global i, apex, flag, ground, run, done, ref_height, startup, offset
+    global i, apex, flag, ground, run, done, ref_height, startup, offset, triggered
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0]
     servoFeed_L = data.some_floats[1]
@@ -187,9 +192,12 @@ def callback(data):
 
     height = np.sin(rad)*arm_len - ref_height
     
+    # print(r2d(offset), height)
+
     if run:
         states[i]()
     
+    dat[4] = offset
     send_message()
 
     if not firing:
@@ -207,27 +215,32 @@ def callback(data):
             run = False
             i += 1
             flag = 1
+            triggered = 0
         
         if height<=50/1000:                       # Check the correct height
             if not ground:
                 run = True
                 flag = 1
-        if height>200/1000 and not apex:
+                triggered = 1
+        if height>200/1000.0 and not apex:
             if not apex and ground and i>0:
                 run = True
                 flag = 1
-        if height>200/1000 and apex:
+                triggered = 1
+        if height>200/1000.0 and apex:
             if ground and apex and i>0:
                 run = True
                 flag = 1
+                triggered = 1
     
-    if i >= len(states)-1:
-        i = len(states)-1
-
     ser_R.append(servoFeed_R)
     ser_L.append(servoFeed_L)
     enc_1.append(encoder_1)
     enc_2.append(encoder_2)
+
+    if i >= len(states):
+        i = len(states)-1
+        # pyautogui.hotkey('ctrl', 'c')
 
 def listener():
     try:
@@ -236,17 +249,16 @@ def listener():
             rp.rostime.wallsleep(0.5)
     except KeyboardInterrupt:
         # destroy()
-        rp.signal_shutdown("Adios")
+        # rp.signal_shutdown("Adios")
         print('Bye')
         
-        # rp.signal_shutdown("Adios")
-        # file = open('data.txt', 'a')
-        # file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-        # file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-        # file.write('Encoder data 1:\n {}\n'.format(enc_1))
-        # file.write('Encoder data 2:\n {}\n'.format(enc_2))
-        # file.close()
-        # print('Adios!')
+        file = open('data.txt', 'a')
+        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+        file.write('Encoder data 1:\n {}\n'.format(enc_1))
+        file.write('Encoder data 2:\n {}\n'.format(enc_2))
+        file.close()
+        print('Adios!')
 
 
 # main code_____________________________________________________________________
