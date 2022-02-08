@@ -61,12 +61,6 @@ def send_message():
     
 # States_____________________________________________________________________________________
 i = 0
-flag = 1
-done = 0
-start_R = 0
-end_R   = 0
-start_L = 0
-end_L   = 0
 arm_len = 1
 startup = 1
 ref_height = 0
@@ -92,7 +86,7 @@ def state_1():
     dat[2] = 1
     dat[3] = 1    
     # print('1')
-    boom = time.time() * 1000
+    # boom = time.time() * 1000
 
 def state_2():
     global boom
@@ -101,13 +95,14 @@ def state_2():
     dat[2] = -1
     dat[3] = -1
     # print('2')
-    boom = time.time() * 1000
+    # boom = time.time() * 1000
 
 # Callback code_________________________________________________________________________
 states = [state_0, state_1, state_2]
+apex_reached = True
 
 def callback(data):
-    global i, flag, done, ref_height, startup
+    global i, ref_height, startup, apex_reached
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0]
     servoFeed_L = data.some_floats[1]
@@ -129,13 +124,15 @@ def callback(data):
     height = np.sin(rad)*arm_len - ref_height
     
     # print(height)
-    print(encoder_1)
+    # print(encoder_1)
     if not firing:
         states[i]()
-        if height<=0:
+        if height<=0 and apex_reached:
+            apex_reached = False
             i+=1
             # print(height*1000, i, "lol")
         if height>=400/1000:
+            apex_reached = True
             i+=1 
             # print(height*1000)
     
@@ -160,7 +157,7 @@ def listener():
         # rp.signal_shutdown("Adios")
         print('Bye')
         
-        file = open('data.txt', 'a')
+        file = open('/home/devlon/robotics_masters/data.txt', 'a')
         file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
         file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
         file.write('Encoder data 1:\n {}\n'.format(enc_1))

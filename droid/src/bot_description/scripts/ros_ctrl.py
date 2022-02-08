@@ -3,10 +3,8 @@
 import numpy as np
 import rospy as rp
 import time
+import pyautogui
 
-from math import isclose
-from std_msgs.msg import Float64
-from std_srvs.srv import Empty
 from my_message.msg import my_message
 
 rp.init_node('master')
@@ -23,13 +21,12 @@ message.some_floats = []
 firing = False
 boom = 0
 
-dat = [None]*5
+dat = [None]*4
 
 dat[0] = 0 # Rev Right
 dat[1] = 0 # Rev Left
 dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
-dat[4] = 0 # Offset
 
 def d2r(deg):
     return deg*np.pi/180
@@ -37,18 +34,15 @@ def d2r(deg):
 def r2d(rad):
     return rad*180/np.pi
 
-def move(start, stop, z):
-    delta = stop - start
-    if abs(delta)>d2r(17):
-        q = delta/300*z
-    else:
-        q = delta/200*z
-    return start + q
+def move(end, current):
+    smootedMotion = (0.2*end) + (0.8*current)
+    return smootedMotion
+
 
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<150:
+    if delay<200:
         firing = True
     else:
         firing = False
@@ -59,27 +53,17 @@ def send_message():
     for n in range(0, len(dat)):
         message.some_floats.append(dat[n])
     
-    rp.loginfo(message)
+    # rp.loginfo(message)
     pub.publish(message)
     message.some_floats.clear()
     
 # States_____________________________________________________________________________________
-flag = 1
-done = 0
-start_R = 0
-end_R   = 0
-start_L = 0
-end_L   = 0
-z = 1
-
 i = 0
-ground = False
-apex = False
-run = True
-ref_height = 0
 arm_len = 1
-startup = True
-offset = 0
+startup = 1
+ref_height = 0
+height = None
+done = True
 
 ser_R = []
 ser_L = []
@@ -87,218 +71,108 @@ enc_1 = []
 enc_2 = []
 
 def state_0():  # START state as well as STOP state
-    global end_R, end_L, done
-    end_R = d2r(90+30)
-    end_L = d2r(90-30)
-    dat[0] = end_R - offset
-    dat[1] = end_L + offset
+    global boom, done
+    end_R = d2r(90+20)
+    end_L = d2r(90-20)
+    dat[0] = end_R
+    dat[1] = end_L
     dat[2] = -1
     dat[3] = -1
-    dat[4] = offset
-    done = 1
-    send_message()
 
 def state_1():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        done = 0
-        global R, L
-        R = end_R
-        L = end_L
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-45)
-        dat[2] = -1
+    global boom, done
+    end_R = d2r(90+20)
+    end_L = d2r(90-20)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = -1
+    dat[3] = -1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+        dat[2] = 1
         dat[3] = -1
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            dat[2] = 1
-            if not done:
-                boom = time.time()*1000
-            z = 0
-            done = 1
-    dat[0] = R
-    dat[1] = L
-    dat[4] = offset
-    send_message()
+        done = True
+        # boom = time.time() * 1000
 
 def state_2():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L        
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-0)
+    global boom, done
+    end_R = d2r(90+20)
+    end_L = d2r(90-20)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = 1
+    dat[3] = -1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = -1
-        dat[3] = -1        
-        if not done:
-            boom = time.time()*1000
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            dat[3] = 1
-            if not done:
-                boom = time.time()*1000
-            done = 1
-    dat[0] = R
-    dat[1] = L
-    dat[4] = offset
-    send_message()
+        dat[3] = 1
+        done = True
 
 def state_3():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-30)
-        end_L = d2r(90+30)        
-        dat[2] = -1
-        dat[3] = 1        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            dat[3] = -1
-            if not done:
-                boom = time.time()*1000
-            done = 1
-    dat[0] = R
-    dat[1] = L
-    dat[4] = offset
-    send_message()
-
-def state_4():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        done = 0
-        global R, L
-        R = end_R
-        L = end_L
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-45)
-        end_L = d2r(90+30)
+    global boom, done
+    end_R = d2r(90-20)
+    end_L = d2r(90+20)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = -1
+    dat[3] = 1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = -1
         dat[3] = -1
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            dat[3] = 1
-            if not done:
-                boom = time.time()*1000
-            z = 0
-            done = 1
-    dat[0] = R
-    dat[1] = L
-    dat[4] = offset
-    send_message()
+        done = True
+
+def state_4():
+    global boom, done
+    end_R = d2r(90-20)
+    end_L = d2r(90+20)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = -1
+    dat[3] = -1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+        dat[2] = -1
+        dat[3] = 1
+        done = True
 
 def state_5():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-30)
-        end_L = d2r(90+30)  
-        dat[2] = -1
-        dat[3] = -1    
-        if not done:
-            boom = time.time()*1000    
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            dat[2] = 1
-            if not done:
-                boom = time.time()*1000
-            done = 1
-    dat[0] = R
-    dat[1] = L
-    dat[4] = offset
-    send_message()
+    global boom, done
+    end_R = d2r(90-20)
+    end_L = d2r(90+20)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = -1
+    dat[3] = 1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+        dat[2] = 1
+        dat[3] = -1
+        done = True
 
 def state_6():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-30)  
-        dat[2] = 1
-        dat[3] = -1        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        else:
-            dat[2] = -1
-            if not done:
-                boom = time.time()*1000
-            z = 0
-            done = 1
-    dat[0] = R
-    dat[1] = L
-    dat[4] = offset
-    send_message()
+    global boom, done
+    end_R = d2r(90+20)
+    end_L = d2r(90-20)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = 1
+    dat[3] = -1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+        dat[2] = -1
+        dat[3] = -1
+        done = True
 
 # Callback code_________________________________________________________________________
 states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
+# states = [state_0, state_1, state_2, state_3, state_4, state_5]
+apex_reached = True
+transition = False
 
 def callback(data):
-    global i, apex, flag, ground, run, done, ref_height, startup, offset
+    global i, ref_height, startup, apex_reached,transition, done, boom
     global ser_R, ser_L, enc_1, enc_2
-    servoFeed_R = data.some_floats[0]
+    servoFeed_R = data.some_floats[0] 
     servoFeed_L = data.some_floats[1]
-    encoder_1 = data.some_floats[2] # assume this is height
-    encoder_2 = data.some_floats[3]
+    encoder_1 = data.some_floats[2] # Height
+    encoder_2 = data.some_floats[3] # Length travled
     rad = d2r(encoder_1)
+    
     test_boom()
     
     if startup:
@@ -308,45 +182,37 @@ def callback(data):
 
         while time.time()*1000-delay <= 3000:
             states[0]()
-
-    offset = rad
+            send_message()
+        # else:
+        #     i+=1
 
     height = np.sin(rad)*arm_len - ref_height
+    # if height<0:
+    #     height = 0.0
     
-    if run:
-        states[i]()
+    states[i]()
+
+    if done and not firing:
+        done = False
+        # print(height*1000, i)
+        if height<120/1000 and apex_reached and not transition: # Check the correct height
+            apex_reached = False     
+            i+=1
+            boom = time.time()*1000
+        elif height>=120/1000 and not apex_reached:
+            apex_reached = True
+            transition = True
+            i+=1
+            boom = time.time()*1000
+        elif transition and apex_reached:
+            transition = False
+            i+=1
     
-    if not firing:
-        if done:
-            if not ground and i>0:
-                print(i, 'a')
-                ground = True
-            elif ground and not apex:
-                print(i, "b")
-                apex = True
-            elif apex and ground:
-                print(i, 'c')
-                ground = apex = False
-            done = 0
-            run = False
-            i += 1
-            flag = 1
-        
-        if height<=0.1:                       # Check the correct height
-            if not ground:
-                run = True
-                flag = 1
-        if height>0.2 and not apex:
-            if not apex and ground and i>0:
-                run = True
-                flag = 1
-        if height>0.2 and apex:
-            if ground and apex and i>0:
-                run = True
-                flag = 1
-    
-    if i >= len(states)-1:
+    if i >= len(states):
         i = len(states)-1
+        # pyautogui.hotkey('ctrl', 'c')
+
+    send_message()
 
     ser_R.append(servoFeed_R)
     ser_L.append(servoFeed_L)
@@ -360,11 +226,10 @@ def listener():
             rp.rostime.wallsleep(0.5)
     except KeyboardInterrupt:
         # destroy()
-        rp.signal_shutdown("Adios")
+        # rp.signal_shutdown("Adios")
         print('Bye')
         
-        # rp.signal_shutdown("Adios")
-        # file = open('data.txt', 'a')
+        # file = open('/home/devlon/robotics_masters/data.txt', 'a')
         # file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
         # file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
         # file.write('Encoder data 1:\n {}\n'.format(enc_1))
