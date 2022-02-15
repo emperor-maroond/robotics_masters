@@ -72,8 +72,8 @@ enc_2 = []
 
 def state_0():  # START state as well as STOP state
     global boom, done
-    end_R = d2r(90+20)
-    end_L = d2r(90-20)
+    end_R = d2r(120)
+    end_L = d2r(60)
     dat[0] = end_R
     dat[1] = end_L
     dat[2] = -1
@@ -81,52 +81,52 @@ def state_0():  # START state as well as STOP state
 
 def state_1():
     global boom, done
-    end_R = d2r(90+20)
-    end_L = d2r(90-20)
+    end_R = d2r(115.53)
+    end_L = d2r(70.54)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
     dat[2] = -1
     dat[3] = -1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = 1
-        dat[3] = -1
+        dat[3] = 1
         done = True
         # boom = time.time() * 1000
 
 def state_2():
     global boom, done
-    end_R = d2r(90+20)
-    end_L = d2r(90-20)
+    end_R = d2r(118.15)
+    end_L = d2r(94.43)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
     dat[2] = 1
-    dat[3] = -1
+    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-        dat[2] = -1
+        dat[2] = 1
         dat[3] = 1
         done = True
 
 def state_3():
     global boom, done
-    end_R = d2r(90-20)
-    end_L = d2r(90+20)
+    end_R = d2r(125.80)
+    end_L = d2r(89.80)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = -1
+    dat[2] = 1
     dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-        dat[2] = -1
-        dat[3] = -1
+        dat[2] = 1
+        dat[3] = 1
         done = True
 
 def state_4():
     global boom, done
-    end_R = d2r(90-20)
-    end_L = d2r(90+20)
+    end_R = d2r(67.86)
+    end_L = d2r(129.14)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = -1
-    dat[3] = -1
+    dat[2] = 1
+    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = -1
         dat[3] = 1
@@ -134,29 +134,43 @@ def state_4():
 
 def state_5():
     global boom, done
-    end_R = d2r(90-20)
-    end_L = d2r(90+20)
+    end_R = d2r(100.10)
+    end_L = d2r(136.65)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
     dat[2] = -1
     dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = 1
-        dat[3] = -1
+        dat[3] = 1
         done = True
 
 def state_6():
     global boom, done
-    end_R = d2r(90+20)
-    end_L = d2r(90-20)
+    end_R = d2r(126.42)
+    end_L = d2r(88.29)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
     dat[2] = 1
-    dat[3] = -1
+    dat[3] = 1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+        dat[2] = 1
+        dat[3] = 1
+        done = True
+
+def state_7():
+    global boom, done
+    end_R = d2r(119.36)
+    end_L = d2r(60.64)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = 1
+    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = -1
         dat[3] = -1
         done = True
+
 
 # Callback code_________________________________________________________________________
 states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
