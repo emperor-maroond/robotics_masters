@@ -193,21 +193,21 @@ def callback(data):
     height = np.sin(rad)*arm_len - ref_height
     
     if j == 0:
-        states[j][i]
+        states[j][i/2]
     elif j == 1:
-        states[j][i]
+        states[j][(i-1)/2]
     send_message()
 
     # print(i)
     if not firing:
         # print(height*1000, i)
         if height<300/1000: # Check the correct height
-            if done:
+            if done and j == 0:
                 i += 1
                 j += 1
                 done = False
         elif height>=300/1000:
-            if done:
+            if done and j == 1:
                 i += 1
                 j -= 1
                 done = False
