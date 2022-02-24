@@ -35,7 +35,7 @@ def r2d(rad):
     return rad*180/np.pi
 
 def move(end, current):
-    smootedMotion = (0.2*end) + (0.8*current)
+    smootedMotion = (0.3*end) + (0.7*current)
     return smootedMotion
 
 
@@ -147,8 +147,8 @@ def state_5():
 
 def state_6():
     global boom, done
-    end_R = d2r(126.42)
-    end_L = d2r(88.29)
+    end_R = d2r(118.15)
+    end_L = d2r(94.43)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
     dat[2] = 1
@@ -160,6 +160,19 @@ def state_6():
 
 def state_7():
     global boom, done
+    end_R = d2r(126.42)
+    end_L = d2r(88.29)
+    dat[0] = move(end_R, dat[0])
+    dat[1] = move(end_L, dat[1])
+    dat[2] = 1
+    dat[3] = 1
+    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+        dat[2] = 1
+        dat[3] = 1
+        done = True
+
+def state_8():
+    global boom, done
     end_R = d2r(119.36)
     end_L = d2r(60.64)
     dat[0] = move(end_R, dat[0])
@@ -170,7 +183,6 @@ def state_7():
         dat[2] = -1
         dat[3] = -1
         done = True
-
 
 # Callback code_________________________________________________________________________
 states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
@@ -206,14 +218,17 @@ def callback(data):
     
     states[i]()
 
+    send_message()
+
+    print(i)
     if done and not firing:
         done = False
         # print(height*1000, i)
-        if height<120/1000 and apex_reached and not transition: # Check the correct height
+        if height<150/1000 and apex_reached and not transition: # Check the correct height
             apex_reached = False     
             i+=1
             boom = time.time()*1000
-        elif height>=120/1000 and not apex_reached:
+        elif height>=150/1000 and not apex_reached:
             apex_reached = True
             transition = True
             i+=1
@@ -225,8 +240,6 @@ def callback(data):
     if i >= len(states):
         i = len(states)-1
         # pyautogui.hotkey('ctrl', 'c')
-
-    send_message()
 
     ser_R.append(servoFeed_R)
     ser_L.append(servoFeed_L)
