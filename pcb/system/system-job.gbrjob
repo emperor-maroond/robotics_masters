@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "6.0.2-378541a8eb~116~ubuntu20.04.1"
     },
-    "CreationDate": "2022-03-03T13:02:13+02:00"
+    "CreationDate": "2022-03-07T10:10:35+02:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -18,14 +18,14 @@
       "Y": 118.3
     },
     "LayerNumber": 2,
-    "BoardThickness": 1.93,
+    "BoardThickness": 1.69,
     "Finish": "None"
   },
   "DesignRules": [
     {
       "Layers": "Outer",
-      "PadToPad": 0.0,
-      "PadToTrack": 0.0,
+      "PadToPad": 0.2,
+      "PadToTrack": 0.2,
       "TrackToTrack": 0.2,
       "MinLineWidth": 0.5
     }
@@ -93,19 +93,19 @@
     },
     {
       "Type": "Copper",
-      "Thickness": 0.2,
+      "Thickness": 0.035,
       "Name": "F.Cu"
     },
     {
       "Type": "Dielectric",
-      "Thickness": 1.51,
+      "Thickness": 1.6,
       "Material": "FR4",
       "Name": "F.Cu/B.Cu",
       "Notes": "Type: dielectric layer 1 (from F.Cu to B.Cu)"
     },
     {
       "Type": "Copper",
-      "Thickness": 0.2,
+      "Thickness": 0.035,
       "Name": "B.Cu"
     },
     {
