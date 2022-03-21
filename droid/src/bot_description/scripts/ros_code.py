@@ -144,6 +144,7 @@ enc_1 = []
 enc_2 = []
 
 i = 0
+startup = True
 
 def callback(data):
     global ser_R, ser_L, enc_1, enc_2
@@ -157,6 +158,13 @@ def callback(data):
     ser_L.append(servoFeed_L)
     enc_1.append(encoder_1)
     enc_2.append(encoder_2)
+
+    if startup:
+        startup = False
+        dat[0] = servo_R[i]
+        dat[1] = servo_L[i]
+        dat[2] = solenoid_R[i]
+        dat[3] = solenoid_L[i]
 
     if round(servoFeed_R,5) == round(servo_R[i],5) and round(servoFeed_L,5) == round(servo_L[i],5):
         i+=1
@@ -194,8 +202,8 @@ if __name__ == '__main__':
     decel()
 
     while 1:
-        if(run_time>N_time[-1]):
-            end()
+        if run_time>N_time[-1] or run_time>cN_time[-1]:
+            # end()
             break
 
         tmp, position_cN = interpolate(theta_R, run_time, cN_time, position_cN)
@@ -221,10 +229,10 @@ if __name__ == '__main__':
         run_time += pub_time
 
     try:
-        dat[0] = servo_R[i]
-        dat[1] = servo_L[i]
-        dat[2] = solenoid_R[i]
-        dat[3] = solenoid_L[i]
+        # dat[0] = servo_R[i]
+        # dat[1] = servo_L[i]
+        # dat[2] = solenoid_R[i]
+        # dat[3] = solenoid_L[i]
         listener()
     except rp.ROSInterruptException:
         pass
