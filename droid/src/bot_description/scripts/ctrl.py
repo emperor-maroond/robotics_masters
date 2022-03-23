@@ -12,7 +12,7 @@ rp.init_node('master')
 pub_time = 10/1000
 rate = rp.Rate(1/pub_time)
 
-pub = rp.Publisher('chatter', my_message, queue_size=10)
+pub = rp.Publisher('chatter', my_message, queue_size=5)
 
 message = my_message()
 message.some_floats = []

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from enum import Flag
+from operator import le
+from matplotlib.pyplot import flag
 import numpy as np
 import rospy as rp
 import cloudpickle
@@ -14,20 +17,20 @@ pub_time = 10/1000
 # rate = rp.Rate(1/pub_time)
 rate = rp.Rate(1/pub_time)
 
-pub = rp.Publisher('chatter', my_message, queue_size=10)
+pub = rp.Publisher('chatter', my_message, queue_size=5)
   
 message = my_message()
 message.some_floats = []
 
 data = [None]*3
 
-with open("Feasible_Solution/short1/accel.pkl", "rb") as f:
+with open("Feasible_Solution/damp_x3/accel.pkl", "rb") as f:
     data[0] = cloudpickle.load(f)
 
-with open("Feasible_Solution/short1/steady-state.pkl", "rb") as f:
+with open("Feasible_Solution/damp_x3/steady-state.pkl", "rb") as f:
     data[1] = cloudpickle.load(f)      
 
-with open("Feasible_Solution/short1/decel.pkl", "rb") as f:
+with open("Feasible_Solution/damp_x3/decel.pkl", "rb") as f:
     data[2] = cloudpickle.load(f)
 
 
@@ -38,6 +41,16 @@ def d2r(deg):
 def r2d(rad):
     return rad*180/np.pi
 
+def FeedBack(feed_R, R, feed_L, L, offs):
+    flag = False
+    a = 0
+    if round(R+offs-15)<=round(feed_R) and round(feed_R)<=round(R+offs+15):
+        a += 1 
+    if round(L+offs-15)<=round(feed_L) and round(feed_L)<=round(L+offs+15):
+        a += 1
+    if a == 2:
+        flag = True
+    return flag
 
 # Var for data that will be interpolated
 F_max = data[0].F_max
@@ -72,8 +85,8 @@ def accel():
     N = data[0].N[-1]
     cN = data[0].cN[-1]
     for n in range(1, N+1):
-        F_bang_R.append(data[0].Fbang_pos_R[n].value - data[0].Fbang_neg_R[n].value)
-        F_bang_L.append(data[0].Fbang_pos_L[n].value - data[0].Fbang_neg_L[n].value)
+        F_bang_R.append(data[0].Fbang_pos_R[n].value - data[0].Fbang_neg_R[n].value*100)
+        F_bang_L.append(data[0].Fbang_pos_L[n].value - data[0].Fbang_neg_L[n].value*100)
         N_time.append(data[0].tt0[n].value - data[0].tt0[1].value)
         for c in range(1, cN+1):
             theta_R.append(data[0].q[n,c,'theta_l_R'].value)
@@ -87,8 +100,8 @@ def steady_state():
     N_adder += (data[0].tt0[N].value - data[0].tt0[1].value)
     cN_adder += (data[0].tt[N,cN].value - data[0].tt[1,1].value)
     for n in range(1, N+1):
-        F_bang_R.append(data[1].Fbang_pos_R[n].value - data[1].Fbang_neg_R[n].value)
-        F_bang_L.append(data[1].Fbang_pos_L[n].value - data[1].Fbang_neg_L[n].value)
+        F_bang_R.append(data[1].Fbang_pos_R[n].value - data[1].Fbang_neg_R[n].value*100)
+        F_bang_L.append(data[1].Fbang_pos_L[n].value - data[1].Fbang_neg_L[n].value*100)
         N_time.append(data[1].tt0[n].value - data[1].tt0[1].value + N_adder)
         for c in range(1, cN+1):
             theta_R.append(data[1].q[n,c,'theta_l_R'].value)
@@ -102,8 +115,8 @@ def decel():
     N_adder += (data[1].tt0[N].value - data[1].tt0[1].value)
     cN_adder += (data[1].tt[N,cN].value - data[1].tt[1,1].value)
     for n in range(1, N+1):
-        F_bang_R.append(data[2].Fbang_pos_R[n].value - data[2].Fbang_neg_R[n].value)
-        F_bang_L.append(data[2].Fbang_pos_L[n].value - data[2].Fbang_neg_L[n].value)
+        F_bang_R.append(data[2].Fbang_pos_R[n].value - data[2].Fbang_neg_R[n].value*100)
+        F_bang_L.append(data[2].Fbang_pos_L[n].value - data[2].Fbang_neg_L[n].value*100)
         N_time.append(data[2].tt0[n].value - data[2].tt0[1].value + N_adder)
         for c in range(1, cN+1):
             theta_R.append(data[2].q[n,c,'theta_l_R'].value)
@@ -147,12 +160,15 @@ i = 0
 startup = True
 
 def callback(data):
+    global i, startup, flag
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0] 
     servoFeed_L = data.some_floats[1]
     encoder_1 = data.some_floats[2] # Height
     encoder_2 = data.some_floats[3] # Length travled
-    rad = d2r(encoder_1)
+    offset = encoder_1
+    if offset<5.7:
+        offset=5.7
 
     ser_R.append(servoFeed_R)
     ser_L.append(servoFeed_L)
@@ -165,17 +181,18 @@ def callback(data):
         dat[1] = servo_L[i]
         dat[2] = solenoid_R[i]
         dat[3] = solenoid_L[i]
-
-    if round(servoFeed_R,5) == round(servo_R[i],5) and round(servoFeed_L,5) == round(servo_L[i],5):
-        i+=1
+    # print(i)
+    if True:
         dat[0] = servo_R[i]
         dat[1] = servo_L[i]
         dat[2] = solenoid_R[i]
         dat[3] = solenoid_L[i]
-        
-        if i >= len(servo_R):
-            i = len(servo_R) - 1
-        
+        i += 1
+        rate.sleep()
+
+    # print(i >= len(servo_R), i, len(servo_R), offset)    
+    if i >= len(servo_R)-1:
+        i = len(servo_R)-2
     send_message()
 
 def listener():
@@ -212,27 +229,21 @@ if __name__ == '__main__':
         servo_L.append(r2d(tmp)) 
 
         tmp, position_N = interpolate(F_bang_R, run_time, N_time, position_N)
-        if tmp >= 0.13:
+        if tmp >= 0.1:
             solenoid_R.append(np.ceil(tmp))
-        elif tmp <= -0.13:
+        elif tmp <= -0.1:
             solenoid_R.append(np.floor(tmp))   
         else:
             solenoid_R.append(np.round(tmp))
         tmp, position_N = interpolate(F_bang_L, run_time, N_time, position_N)
-        if tmp >= 0.13:
+        if tmp >= 0.1:
             solenoid_L.append(np.ceil(tmp))
-        elif tmp <= -0.13:
+        elif tmp <= -0.1:
             solenoid_L.append(np.floor(tmp))   
         else:
             solenoid_L.append(np.round(tmp))
 
         run_time += pub_time
 
-    try:
-        # dat[0] = servo_R[i]
-        # dat[1] = servo_L[i]
-        # dat[2] = solenoid_R[i]
-        # dat[3] = solenoid_L[i]
-        listener()
-    except rp.ROSInterruptException:
-        pass
+    listener()
+        
