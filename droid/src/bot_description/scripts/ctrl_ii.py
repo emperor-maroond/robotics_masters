@@ -10,10 +10,10 @@ from my_message.msg import my_message
 
 rp.init_node('master')
 
-pub_time = 10/1000
+pub_time = 5/1000
 rate = rp.Rate(1/pub_time)
 
-pub = rp.Publisher('chatter', my_message, queue_size=10)
+pub = rp.Publisher('chatter', my_message, queue_size=3)
 
 message = my_message()
 message.some_floats = []
@@ -36,7 +36,8 @@ def r2d(rad):
     return rad*180/np.pi
 
 def move(end, current):
-    smootedMotion = (0.3*end) + (0.7*current)
+    ratio = 0.5
+    smootedMotion = ((1-ratio)*end) + (ratio*current)
     return smootedMotion
 
 
@@ -61,7 +62,7 @@ def send_message():
 # States_____________________________________________________________________________________
 i = 0
 j = 0
-arm_len = 1
+arm_len = 0.84
 startup = 1
 ref_height = 0
 height = None
@@ -74,8 +75,8 @@ enc_2 = []
 
 class acel():
     def rest():
-        end_R = d2r(120)
-        end_L = d2r(60)
+        end_R = d2r(95)
+        end_L = d2r(85)
         dat[0] = end_R
         dat[1] = end_L
         dat[2] = -1
@@ -83,52 +84,44 @@ class acel():
 
     def ground():
         global done
-        end_R = d2r(115.53)
-        end_L = d2r(70.54)
+        end_R = d2r(95)
+        end_L = d2r(85)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
-        dat[2] = -1
-        dat[3] = -1
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = 1
+            dat[2] = -1
             dat[3] = 1
             done = True
 
     def air():
         global done
-        end_R = d2r(125.80)
-        end_L = d2r(89.80 )
+        end_R = d2r(91)
+        end_L = d2r(130 )
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
-        dat[2] = 1
-        dat[3] = 1
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
-            dat[3] = 1
+            dat[3] = -1
             done = True
 
 class steady_state():
     def ground():
-        global done
-        end_R = d2r(67.86)
-        end_L = d2r(129.14)
+        global done, i
+        end_R = d2r(120)
+        end_L = d2r(95)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
-        dat[2] = 1
-        dat[3] = 1
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
-            steady_state.ground2()
+            i += 1
 
     def ground2():
         global done
-        end_R = d2r(100.10)
-        end_L = d2r(136.65)
+        end_R = d2r(120)
+        end_L = d2r(95)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
-        dat[2] = -1
-        dat[3] = -1
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
             dat[3] = 1
@@ -136,37 +129,64 @@ class steady_state():
 
     def air():
         global done
-        end_R = d2r(125.80)
-        end_L = d2r(89.80 )
+        end_R = d2r(130)
+        end_L = d2r(91)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
-        dat[2] = 1
-        dat[3] = 1
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = 1
+            dat[3] = 1
+            done = True
+
+    def ground3():
+        global done, i
+        end_R = d2r(95)
+        end_L = d2r(120)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            i += 1
+
+    def ground4():
+        global done
+        end_R = d2r(95)
+        end_L = d2r(120)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
             dat[3] = 1
             done = True
 
 class decel():
-    def ground():
+    def air():
         global done
-        end_R = d2r(120)
-        end_L = d2r(60)
+        end_R = d2r(91)
+        end_L = d2r(130 )
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
-        dat[2] = 1
-        dat[3] = 1
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = 1
+            dat[3] = -1
+            done = True
+
+    def ground():
+        global done
+        end_R = d2r(95)
+        end_L = d2r(85)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
             done = True
-
-    def air():
-        pass
+        
 
 # Callback code_________________________________________________________________________
-ground = [acel.ground, steady_state.ground, decel.ground]
-air = [acel.air, steady_state.air]
+ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, decel.ground]
+air = [acel.air, steady_state.air, decel.air]
 
 states = [ground, air]
 
@@ -190,7 +210,8 @@ def callback(data):
             acel.rest()
             send_message()
 
-    height = np.sin(rad)*arm_len - ref_height
+    # height = np.sin(rad)*arm_len - ref_height
+
     
     if j == 0:
         states[j][i/2]
@@ -198,15 +219,13 @@ def callback(data):
         states[j][(i-1)/2]
     send_message()
 
-    # print(i)
-    if not firing:
-        # print(height*1000, i)
-        if height<300/1000: # Check the correct height
+    if done:
+        if height<=150/1000:
             if done and j == 0:
                 i += 1
                 j += 1
                 done = False
-        elif height>=300/1000:
+        elif height>=400/1000:
             if done and j == 1:
                 i += 1
                 j -= 1

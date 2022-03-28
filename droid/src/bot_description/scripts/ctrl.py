@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
+from ctrl import state_8
 import rospy as rp
 import time
 # import pyautogui
@@ -9,10 +10,10 @@ from my_message.msg import my_message
 
 rp.init_node('master')
 
-pub_time = 10/1000
+pub_time = 5/1000
 rate = rp.Rate(1/pub_time)
 
-pub = rp.Publisher('chatter', my_message, queue_size=5)
+pub = rp.Publisher('chatter', my_message, queue_size=3)
 
 message = my_message()
 message.some_floats = []
@@ -35,7 +36,7 @@ def r2d(rad):
     return rad*180/np.pi
 
 def move(end, current):
-    smootedMotion = (0.3*end) + (0.7*current)
+    smootedMotion = (0.5*end) + (0.5*current)
     return smootedMotion
 
 
@@ -59,7 +60,7 @@ def send_message():
     
 # States_____________________________________________________________________________________
 i = 0
-arm_len = 1
+arm_len = 0.84
 startup = 1
 ref_height = 0
 height = None
@@ -71,127 +72,99 @@ enc_1 = []
 enc_2 = []
 
 def state_0():  # START state as well as STOP state
-    global boom, done
-    end_R = d2r(120)
-    end_L = d2r(60)
+    global done
+    end_R = d2r(110)
+    end_L = d2r(110)
     dat[0] = end_R
     dat[1] = end_L
     dat[2] = -1
     dat[3] = -1
 
 def state_1():
-    global boom, done
-    end_R = d2r(115.53)
-    end_L = d2r(70.54)
+    global done
+    end_R = d2r(85)
+    end_L = d2r(95)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = -1
-    dat[3] = -1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-        dat[2] = 1
+        dat[2] = -1
         dat[3] = 1
         done = True
-        # boom = time.time() * 1000
 
 def state_2():
-    global boom, done
-    end_R = d2r(118.15)
-    end_L = d2r(94.43)
+    global done
+    end_R = d2r(91)
+    end_L = d2r(132)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = 1
-    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = 1
-        dat[3] = 1
+        dat[3] = -1
         done = True
 
 def state_3():
-    global boom, done
-    end_R = d2r(125.80)
-    end_L = d2r(89.80)
+    global done
+    end_R = d2r(125)
+    end_L = d2r(100)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = 1
-    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = 1
         dat[3] = 1
         done = True
 
 def state_4():
-    global boom, done
-    end_R = d2r(67.86)
-    end_L = d2r(129.14)
+    global done
+    end_R = d2r(100)
+    end_L = d2r(125)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = 1
-    dat[3] = 1
+    print
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = -1
-        dat[3] = 1
+        dat[3] = -1
         done = True
 
 def state_5():
-    global boom, done
-    end_R = d2r(100.10)
-    end_L = d2r(136.65)
+    global done
+    end_R = d2r(100)
+    end_L = d2r(125)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = -1
-    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = 1
         dat[3] = 1
-        done = True
+        done = True        
 
 def state_6():
-    global boom, done
-    end_R = d2r(118.15)
-    end_L = d2r(94.43)
+    global done
+    end_R = d2r(85)
+    end_L = d2r(85)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = 1
-    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-        dat[2] = 1
-        dat[3] = 1
+        dat[2] = -1
+        dat[3] = -1
         done = True
 
 def state_7():
-    global boom, done
-    end_R = d2r(126.42)
-    end_L = d2r(88.29)
+    global done
+    end_R = d2r(110)
+    end_L = d2r(110)
     dat[0] = move(end_R, dat[0])
     dat[1] = move(end_L, dat[1])
-    dat[2] = 1
-    dat[3] = 1
-    if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-        dat[2] = 1
-        dat[3] = 1
-        done = True
-
-def state_8():
-    global boom, done
-    end_R = d2r(119.36)
-    end_L = d2r(60.64)
-    dat[0] = move(end_R, dat[0])
-    dat[1] = move(end_L, dat[1])
-    dat[2] = 1
-    dat[3] = 1
     if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
         dat[2] = -1
         dat[3] = -1
         done = True
 
 # Callback code_________________________________________________________________________
-states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
-# states = [state_0, state_1, state_2, state_3, state_4, state_5]
-apex_reached = True
-transition = False
+states = [state_0, state_1, ]
+# states = [state_0, state_1, state_2]
+apex_reached = False
 
 def callback(data):
-    global i, ref_height, startup, apex_reached,transition, done, boom
+    global i, ref_height, startup, apex_reached,done
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0] 
     servoFeed_L = data.some_floats[1]
@@ -206,35 +179,26 @@ def callback(data):
         ref_height = np.sin(rad)*arm_len
         delay = time.time()*1000
 
-        while time.time()*1000-delay <= 3000:
+        while time.time()*1000-delay <= 2000:
             states[0]()
             send_message()
-        # else:
-        #     i+=1
+        i+=1
 
-    height = np.sin(rad)*arm_len - ref_height
-    # if height<0:
-    #     height = 0.0
+    # height = np.sin(rad)*arm_len - ref_height
+    height = np.sin(rad)*arm_len
     
     states[i]()
-
     send_message()
-
-    print(i)
-    if done and not firing:
+    # print(height, np.sin(rad)*arm_len, ref_height, i)
+    if done:
         done = False
-        # print(height*1000, i)
-        if height<150/1000 and apex_reached and not transition: # Check the correct height
+        if height<=150/1000 and apex_reached: # Check the correct height
+            # print(height, i)
             apex_reached = False     
             i+=1
-            boom = time.time()*1000
-        elif height>=150/1000 and not apex_reached:
+        if height>=400/1000 and not apex_reached:
+            # print(height, i)
             apex_reached = True
-            transition = True
-            i+=1
-            boom = time.time()*1000
-        elif transition and apex_reached:
-            transition = False
             i+=1
     
     if i >= len(states):
@@ -256,15 +220,23 @@ def listener():
         # rp.signal_shutdown("Adios")
         print('Bye')
         
-        # file = open('/home/devlon/robotics_masters/data.txt', 'a')
-        # file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-        # file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-        # file.write('Encoder data 1:\n {}\n'.format(enc_1))
-        # file.write('Encoder data 2:\n {}\n'.format(enc_2))
-        # file.close()
+        file = open('/home/devlon/robotics_masters/data.txt', 'a')
+        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+        file.write('Encoder data 1:\n {}\n'.format(enc_1))
+        file.write('Encoder data 2:\n {}\n'.format(enc_2))
+        file.close()
         # print('Adios!')
 
 
 # main code_____________________________________________________________________
 if __name__ == '__main__':
-    listener()
+    try:
+        listener()
+    except KeyboardInterrupt:
+        file = open('/home/devlon/robotics_masters/data.txt', 'a')
+        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+        file.write('Encoder data 1:\n {}\n'.format(enc_1))
+        file.write('Encoder data 2:\n {}\n'.format(enc_2))
+        file.close()
