@@ -77,8 +77,8 @@ enc_2 = []
 
 class acel():
     def rest():
-        end_R = d2r(95)
-        end_L = d2r(85)
+        end_R = d2r(90)
+        end_L = d2r(80)
         dat[0] = end_R
         dat[1] = end_L
         dat[2] = -1
@@ -131,7 +131,7 @@ class steady_state():
             dat[3] = 1
             done = True
 
-    def air():
+    def air1():
         global done
         end_R = d2r(130)
         end_L = d2r(91)
@@ -165,8 +165,7 @@ class steady_state():
             dat[3] = 1
             done = True
 
-class decel():
-    def air():
+    def air2():
         global done
         end_R = d2r(91)
         end_L = d2r(130 )
@@ -177,10 +176,11 @@ class decel():
             dat[3] = -1
             done = True
 
+class decel():
     def ground():
         global done
-        end_R = d2r(95)
-        end_L = d2r(85)
+        end_R = d2r(90)
+        end_L = d2r(80)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -191,7 +191,7 @@ class decel():
 
 # Callback code_________________________________________________________________________
 ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, decel.ground]
-air = [acel.air, steady_state.air, decel.air]
+air = [acel.air, steady_state.air1, steady_state.air2]
 apex_reached = 0
 
 def callback(data):
@@ -218,8 +218,13 @@ def callback(data):
     height = np.sin(rad)*arm_len
     
     if i >= len(ground) or j>=len(air):
-        pass
-        # pyautogui.hotkey('ctrl', 'c')
+        file = open('data.txt', 'a')
+        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+        file.write('Encoder data 1:\n {}\n'.format(enc_1))
+        file.write('Encoder data 2:\n {}\n'.format(enc_2))
+        file.close()
+        pyautogui.hotkey('ctrl', 'c')
 
     print(i, j, apex_reached, height)
     if not firing:
@@ -246,24 +251,14 @@ def callback(data):
     enc_2.append(encoder_2)
 
 def listener():
-    try:
-        rp.Subscriber('sensor_data', my_message, callback)
-        while not rp.core.is_shutdown():
-            rp.rostime.wallsleep(0.5)
-    except KeyboardInterrupt:
-        # destroy()
-        # rp.signal_shutdown("Adios")
-        print('Bye')
-        
-        file = open('data.txt', 'a')
-        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-        file.write('Encoder data 1:\n {}\n'.format(enc_1))
-        file.write('Encoder data 2:\n {}\n'.format(enc_2))
-        file.close()
-        # print('Adios!')
+    rp.Subscriber('sensor_data', my_message, callback)
+    while not rp.core.is_shutdown():
+        rp.rostime.wallsleep(0.5)
 
 
 # main code_____________________________________________________________________
 if __name__ == '__main__':
-    listener()
+    try:
+        listener()
+    except KeyboardInterrupt:
+        print('bye')
