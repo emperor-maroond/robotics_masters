@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+from turtle import shape
 import numpy as np
+from pandas import array
 from sympy import ground_roots
 import rospy as rp
 import time
@@ -13,7 +15,7 @@ rp.init_node('master')
 pub_time = 5/1000
 rate = rp.Rate(1/pub_time)
 
-pub = rp.Publisher('chatter', my_message, queue_size=3)
+pub = rp.Publisher('chatter', my_message, queue_size=1)
 
 message = my_message()
 message.some_floats = []
@@ -44,7 +46,7 @@ def move(end, current):
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<200:
+    if delay<150:
         firing = True
     else:
         firing = False
@@ -89,7 +91,7 @@ class acel():
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = -1
+            dat[2] = 1
             dat[3] = 1
             done = True
 
@@ -106,15 +108,17 @@ class acel():
 
 class steady_state():
     def ground():
-        global done, i
+        global done, i, boom
         end_R = d2r(120)
         end_L = d2r(95)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            print("yes")
             dat[2] = -1
             dat[3] = -1
             i += 1
+            boom = time.time()*1000
 
     def ground2():
         global done
@@ -134,12 +138,12 @@ class steady_state():
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = 1
+            dat[2] = -1
             dat[3] = 1
             done = True
 
     def ground3():
-        global done, i
+        global done, i, boom
         end_R = d2r(95)
         end_L = d2r(120)
         dat[0] = move(end_R, dat[0])
@@ -148,6 +152,7 @@ class steady_state():
             dat[2] = -1
             dat[3] = -1
             i += 1
+            boom = time.time()*1000
 
     def ground4():
         global done
@@ -187,11 +192,10 @@ class decel():
 # Callback code_________________________________________________________________________
 ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, decel.ground]
 air = [acel.air, steady_state.air, decel.air]
-
-states = [ground, air]
+apex_reached = 0
 
 def callback(data):
-    global i, j, ref_height, startup, done, boom
+    global i, j, ref_height, startup, done, apex_reached
     global ser_R, ser_L, enc_1, enc_2
     servoFeed_R = data.some_floats[0] 
     servoFeed_L = data.some_floats[1]
@@ -211,29 +215,30 @@ def callback(data):
             send_message()
 
     # height = np.sin(rad)*arm_len - ref_height
-
+    height = np.sin(rad)*arm_len
     
-    if j == 0:
-        states[j][i/2]
-    elif j == 1:
-        states[j][(i-1)/2]
+    if i >= len(ground) or j>=len(air):
+        pass
+        # pyautogui.hotkey('ctrl', 'c')
+
+    print(i, j, apex_reached, height)
+    if not firing:
+        if not apex_reached:
+            ground[i]()
+        if apex_reached:
+            air[j]()
     send_message()
 
-    if done:
-        if height<=150/1000:
-            if done and j == 0:
-                i += 1
-                j += 1
-                done = False
-        elif height>=400/1000:
-            if done and j == 1:
-                i += 1
-                j -= 1
-                done = False
-    
-    if i >= len(states)[1]:
-        i = len(states)[1] - 1
-        # pyautogui.hotkey('ctrl', 'c')
+    if height<=200/1000 and apex_reached:
+        if done:
+            j += 1
+            apex_reached = 0
+            done = False
+    if height>=400/1000 and not apex_reached and j<len(air):
+        if done:
+            i += 1
+            apex_reached = 1
+            done = False
 
     ser_R.append(servoFeed_R)
     ser_L.append(servoFeed_L)
@@ -250,7 +255,7 @@ def listener():
         # rp.signal_shutdown("Adios")
         print('Bye')
         
-        file = open('/home/devlon/robotics_masters/data.txt', 'a')
+        file = open('data.txt', 'a')
         file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
         file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
         file.write('Encoder data 1:\n {}\n'.format(enc_1))
