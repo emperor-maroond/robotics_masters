@@ -114,7 +114,6 @@ class steady_state():
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            print("yes")
             dat[2] = -1
             dat[3] = -1
             i += 1
@@ -190,8 +189,8 @@ class decel():
         
 
 # Callback code_________________________________________________________________________
-ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, decel.ground]
-air = [acel.air, steady_state.air1, steady_state.air2]
+ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, steady_state.ground, steady_state.ground2, decel.ground]
+air = [acel.air, steady_state.air1, steady_state.air2, steady_state.air1]
 apex_reached = 0
 
 def callback(data):
@@ -216,17 +215,8 @@ def callback(data):
 
     # height = np.sin(rad)*arm_len - ref_height
     height = np.sin(rad)*arm_len
-    
-    if i >= len(ground) or j>=len(air):
-        file = open('data.txt', 'a')
-        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-        file.write('Encoder data 1:\n {}\n'.format(enc_1))
-        file.write('Encoder data 2:\n {}\n'.format(enc_2))
-        file.close()
-        pyautogui.hotkey('ctrl', 'c')
 
-    print(i, j, apex_reached, height)
+    # print(i, j, apex_reached, height)
     if not firing:
         if not apex_reached:
             ground[i]()
@@ -234,12 +224,12 @@ def callback(data):
             air[j]()
     send_message()
 
-    if height<=200/1000 and apex_reached:
+    if height<=230/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
             done = False
-    if height>=400/1000 and not apex_reached and j<len(air):
+    if height>=380/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1
@@ -249,6 +239,15 @@ def callback(data):
     ser_L.append(servoFeed_L)
     enc_1.append(encoder_1)
     enc_2.append(encoder_2)
+
+    if i > len(ground) or j>len(air):
+        file = open('data.txt', 'a')
+        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+        file.write('Encoder data 1:\n {}\n'.format(enc_1))
+        file.write('Encoder data 2:\n {}\n'.format(enc_2))
+        file.close()
+        pyautogui.hotkey('ctrl', 'c')
 
 def listener():
     rp.Subscriber('sensor_data', my_message, callback)
