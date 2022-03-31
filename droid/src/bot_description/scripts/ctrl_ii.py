@@ -5,8 +5,8 @@ import numpy as np
 import rospy as rp
 import time
 import pyautogui
-
-from my_message.msg import my_message
+import signal
+import sys
 
 from my_message.msg import my_message
 
@@ -30,6 +30,22 @@ dat[0] = 0 # Rev Right
 dat[1] = 0 # Rev Left
 dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
+
+def sigint_handler(signal, frame):
+    file = open('data.csv', 'a')
+    file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+    file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+    file.write('Encoder data 1:\n {}\n'.format(enc_1))
+    file.write('Encoder data 2:\n {}\n'.format(enc_2))
+    file.close()
+
+    data = np.asarray([[ser_R for n in range (0, len(ser_R))],
+                    [ser_L for n in range (0, len(ser_L))],
+                    [enc_1 for n in range (0, len(enc_1))],
+                    [enc_2 for n in range (0, len(enc_2))]])
+    np.savetxt('data.txt', data)
+    print ('KeyboardInterrupt is caught')
+    sys.exit(0)
 
 def d2r(deg):
     return deg*np.pi/180
@@ -240,15 +256,6 @@ def callback(data):
     enc_1.append(encoder_1)
     enc_2.append(encoder_2)
 
-    if i > len(ground) or j>len(air):
-        file = open('data.txt', 'a')
-        file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-        file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-        file.write('Encoder data 1:\n {}\n'.format(enc_1))
-        file.write('Encoder data 2:\n {}\n'.format(enc_2))
-        file.close()
-        pyautogui.hotkey('ctrl', 'c')
-
 def listener():
     rp.Subscriber('sensor_data', my_message, callback)
     while not rp.core.is_shutdown():
@@ -257,7 +264,5 @@ def listener():
 
 # main code_____________________________________________________________________
 if __name__ == '__main__':
-    try:
-        listener()
-    except KeyboardInterrupt or CondaError:
-        print('bye')
+    signal.signal(signal.SIGINT, sigint_handler)
+    listener()

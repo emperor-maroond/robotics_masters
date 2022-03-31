@@ -256,15 +256,6 @@ def callback(data):
     enc_1.append(encoder_1)
     enc_2.append(encoder_2)
 
-    # if i > len(ground) or j>len(air):
-    #     file = open('data.txt', 'a')
-    #     file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-    #     file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-    #     file.write('Encoder data 1:\n {}\n'.format(enc_1))
-    #     file.write('Encoder data 2:\n {}\n'.format(enc_2))
-    #     file.close()
-    #     pyautogui.hotkey('ctrl', 'c')
-
 def listener():
     rp.Subscriber('sensor_data', my_message, callback)
     while not rp.core.is_shutdown():
