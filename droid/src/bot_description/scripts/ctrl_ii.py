@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-from turtle import shape
+from conda import CondaError
 import numpy as np
-from pandas import array
-from sympy import ground_roots
 import rospy as rp
 import time
 import pyautogui
+
+from my_message.msg import my_message
 
 from my_message.msg import my_message
 
@@ -259,5 +259,5 @@ def listener():
 if __name__ == '__main__':
     try:
         listener()
-    except KeyboardInterrupt:
+    except KeyboardInterrupt or CondaError:
         print('bye')

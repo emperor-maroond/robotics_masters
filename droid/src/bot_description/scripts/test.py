@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from turtle import shape
+from conda import CondaError
 import numpy as np
 
 
@@ -26,8 +27,10 @@ def t9():
 uno = [t1, t2, t3, t4, t5]
 dos = [t6, t7, t8, t9]
 
-test = [uno,dos]
-
-print(test[1][0])
-
+if __name__ == '__main__':
+    try:
+        while 1:
+            print("i eat cake")
+    except KeyboardInterrupt or CondaError:
+        print('bye')
 
