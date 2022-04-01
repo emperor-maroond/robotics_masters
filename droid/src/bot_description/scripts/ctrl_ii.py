@@ -39,11 +39,11 @@ def sigint_handler(signal, frame):
     file.write('Encoder data 2:\n {}\n'.format(enc_2))
     file.close()
 
-    data = np.asarray([[ser_R for n in range (0, len(ser_R))],
-                    [ser_L for n in range (0, len(ser_L))],
-                    [enc_1 for n in range (0, len(enc_1))],
-                    [enc_2 for n in range (0, len(enc_2))]])
-    np.savetxt('data.txt', data)
+    # data = np.asarray([[ser_R for n in range (0, len(ser_R))],
+    #                 [ser_L for n in range (0, len(ser_L))],
+    #                 [enc_1 for n in range (0, len(enc_1))],
+    #                 [enc_2 for n in range (0, len(enc_2))]])
+    # np.savetxt('data.txt', data)
     print ('KeyboardInterrupt is caught')
     sys.exit(0)
 
