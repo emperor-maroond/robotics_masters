@@ -54,7 +54,7 @@ def r2d(rad):
     return rad*180/np.pi
 
 def move(end, current):
-    ratio = 0.8
+    ratio = 0.65
     smootedMotion = ((1-ratio)*end) + (ratio*current)
     return smootedMotion
 
