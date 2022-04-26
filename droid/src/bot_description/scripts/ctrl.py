@@ -32,7 +32,7 @@ dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
 
 def sigint_handler(signal, frame):
-    file = open('data.csv', 'a')
+    file = open('data.csv', 'w')
     file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
     file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
     file.write('Encoder data 1:\n {}\n'.format(enc_1))
@@ -61,7 +61,7 @@ def move(end, current):
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<150:
+    if delay<180:
         firing = True
     else:
         firing = False
@@ -239,7 +239,8 @@ def callback(data):
             air[j]()
     send_message()
 
-    if height<=250/1000 and apex_reached:
+    #250/1000
+    if height<=280/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
