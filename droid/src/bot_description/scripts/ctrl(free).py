@@ -92,8 +92,8 @@ enc_2 = []
 
 class acel():
     def rest():
-        end_R = d2r(110)
-        end_L = d2r(110)
+        end_R = d2r(75)
+        end_L = d2r(105)
         dat[0] = end_R
         dat[1] = end_L
         dat[2] = -1
@@ -101,8 +101,8 @@ class acel():
 
     def ground():
         global done
-        end_R = d2r(110)
-        end_L = d2r(110)
+        end_R = d2r(98)
+        end_L = d2r(127)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -112,8 +112,8 @@ class acel():
 
     def air():
         global done
-        end_R = d2r(85)
-        end_L = d2r(120)
+        end_R = d2r(110)
+        end_L = d2r(130)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -124,8 +124,8 @@ class acel():
 class steady_state():
     def ground():
         global done, i, boom
-        end_R = d2r(120)
-        end_L = d2r(100)
+        end_R = d2r(125)
+        end_L = d2r(80)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -136,19 +136,19 @@ class steady_state():
 
     def ground2():
         global done
-        end_R = d2r(120)
-        end_L = d2r(100)
+        end_R = d2r(122)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = 1
+            dat[2] = -1
             dat[3] = 1
             done = True
 
     def air1():
         global done
-        end_R = d2r(120)
-        end_L = d2r(85)
+        end_R = d2r(130)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -158,8 +158,8 @@ class steady_state():
 
     def ground3():
         global done, i, boom
-        end_R = d2r(100)
-        end_L = d2r(120)
+        end_R = d2r(80)
+        end_L = d2r(125)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -170,19 +170,19 @@ class steady_state():
 
     def ground4():
         global done
-        end_R = d2r(100)
-        end_L = d2r(120)
+        end_R = d2r(110)
+        end_L = d2r(122)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
-            dat[3] = 1
+            dat[3] = -1
             done = True
 
     def air2():
         global done
-        end_R = d2r(85)
-        end_L = d2r(120)
+        end_R = d2r(110)
+        end_L = d2r(130)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -193,8 +193,8 @@ class steady_state():
 class decel():
     def ground():
         global done
-        end_R = d2r(110)
-        end_L = d2r(110)
+        end_R = d2r(75)
+        end_L = d2r(105)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
