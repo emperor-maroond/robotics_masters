@@ -204,7 +204,7 @@ class decel():
         
 
 # Callback code_________________________________________________________________________
-ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, steady_state.ground, steady_state.ground2, decel.ground]
+ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, decel.ground]
 air = [acel.air, steady_state.air1, steady_state.air2, steady_state.air1]
 apex_reached = 0
 
