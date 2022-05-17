@@ -143,7 +143,7 @@ class steady_state():
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = -1
+            dat[2] = 1
             dat[3] = 1
             done = True
 
@@ -178,7 +178,7 @@ class steady_state():
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
-            dat[3] = -1
+            dat[3] = 1
             done = True
 
     def air2():
@@ -232,7 +232,7 @@ def callback(data):
             send_message()
 
     # height = np.sin(rad)*arm_len - ref_height
-    height = np.sin(rad)*arm_len
+    height = np.sin(rad)*arm_len + 0.078
 
     print(i, j, apex_reached, height)
     if not firing:
@@ -248,7 +248,7 @@ def callback(data):
             j += 1
             apex_reached = 0
             done = False
-    if height>=320/1000 and not apex_reached and j<len(air):
+    if height>=350/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1
