@@ -45,6 +45,8 @@ def sigint_handler(signal, frame):
     #                 [enc_1 for n in range (0, len(enc_1))],
     #                 [enc_2 for n in range (0, len(enc_2))]])
     # np.savetxt('data.txt', data)
+    acel.rest()
+    send_message()
     print ('KeyboardInterrupt is caught')
     sys.exit(0)
 
@@ -114,20 +116,20 @@ class acel():
 
     def air():
         global done
-        end_R = d2r(95)
-        end_L = d2r(65)
+        end_R = d2r(110)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
-            dat[3] = -1
+            dat[3] = 1
             done = True
 
 class steady_state():
     def ground():
         global done, i, boom
-        end_R = d2r(115)
-        end_L = d2r(75)
+        end_R = d2r(130)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -138,8 +140,8 @@ class steady_state():
 
     def ground2():
         global done
-        end_R = d2r(115)
-        end_L = d2r(75)
+        end_R = d2r(130)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -149,19 +151,19 @@ class steady_state():
 
     def air1():
         global done
-        end_R = d2r(65)
-        end_L = d2r(95)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = -1
+            dat[2] = 1
             dat[3] = 1
             done = True
 
     def ground3():
         global done, i, boom
-        end_R = d2r(75)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(130)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -172,8 +174,8 @@ class steady_state():
 
     def ground4():
         global done
-        end_R = d2r(75)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(130)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -183,20 +185,20 @@ class steady_state():
 
     def air2():
         global done
-        end_R = d2r(95)
-        end_L = d2r(65)
+        end_R = d2r(110)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = 1
-            dat[3] = -1
+            dat[3] = 1
             done = True
 
 class decel():
     def ground():
         global done
-        end_R = d2r(75)
-        end_L = d2r(105)
+        end_R = d2r(70)
+        end_L = d2r(130)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -232,7 +234,7 @@ def callback(data):
             send_message()
 
     # height = np.sin(rad)*arm_len - ref_height
-    height = np.sin(rad)*arm_len + 0.078
+    height = np.sin(rad)*arm_len + 0.16 - 0.073
 
     print(i, j, apex_reached, height)
     if not firing:
@@ -243,12 +245,12 @@ def callback(data):
     send_message()
 
     #250/1000
-    if height<=280/1000 and apex_reached:
+    if height<=380/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
             done = False
-    if height>=350/1000 and not apex_reached and j<len(air):
+    if height>=380/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1
