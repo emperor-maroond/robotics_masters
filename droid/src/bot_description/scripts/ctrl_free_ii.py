@@ -245,12 +245,12 @@ def callback(data):
     send_message()
 
     #250/1000
-    if height<=380/1000 and apex_reached:
+    if height<=440/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
             done = False
-    if height>=380/1000 and not apex_reached and j<len(air):
+    if height>=440/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1
