@@ -8,13 +8,13 @@ import cloudpickle
 
 # Insert all the data_________________________________________________________________________________________________________
 m = [0]*3
-with open("Optimisation_Code/Feasible_Solution/damp_x1/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x3/steady-state.pkl", "rb") as f:
     m[1] = cloudpickle.load(f)
     
-with open("Optimisation_Code/Feasible_Solution/damp_x1/accel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x3/accel.pkl", "rb") as f:
     m[0] = cloudpickle.load(f)
     
-with open("Optimisation_Code/Feasible_Solution/damp_x1/decel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x3/decel.pkl", "rb") as f:
     m[2] = cloudpickle.load(f)
     
 N = m[0].N[-1]
