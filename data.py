@@ -8,13 +8,14 @@ import cloudpickle
 
 # Insert all the data_________________________________________________________________________________________________________
 m = [0]*3
-with open("Optimisation_Code/Feasible_Solution/damp_x3/steady-state.pkl", "rb") as f:
+# damp_x3 has right shape but is way faster than actual robot
+with open("Optimisation_Code/Feasible_Solution/damp_x2/steady-state.pkl", "rb") as f:
     m[1] = cloudpickle.load(f)
     
-with open("Optimisation_Code/Feasible_Solution/damp_x3/accel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x2/accel.pkl", "rb") as f:
     m[0] = cloudpickle.load(f)
     
-with open("Optimisation_Code/Feasible_Solution/damp_x3/decel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x2/decel.pkl", "rb") as f:
     m[2] = cloudpickle.load(f)
     
 N = m[0].N[-1]
@@ -68,7 +69,7 @@ def interpolate(y_inter, cur_time, x_inter, position):
             return ans, position
 
 run_time = 0
-pub_time = 5/1000
+pub_time = 1/1000
 position_cN = 0
 x = []
 z = []
@@ -112,14 +113,21 @@ def kalman(u):
 
 for i in range(0, len(enc1)):
     enc1[i] = 0.84*np.sin(enc1[i]*np.pi/180.0)
+    
+kal_z = kalman(enc1)
 
 # Plot the data______________________________________________________________________________________________________________________
 dt = 10/1000
 t = np.arange(start=0, stop=len(enc1)*dt, step=dt)
+reduced_z = []
+for i in range(0, len(t)):
+    if t[i] > 3 and t[i] < 6.8:
+        reduced_z.append(kal_z[i]) 
 plt.figure(1)
 plt.xticks(np.arange(start=0, stop=len(enc1)*dt, step=0.5))
+t = np.arange(start=0, stop=len(reduced_z)*dt, step=dt)
 # plt.plot(enc1, LineWidth=1, label='z Unfiltered')
-plt.plot(t, kalman(enc1), LineWidth=1, label='z Kalman')
+plt.plot(t, reduced_z, LineWidth=1, label='z Kalman')
 plt.plot(time, z, LineWidth=1, label='Interpolated')
 plt.legend()
 
