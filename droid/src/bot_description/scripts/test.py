@@ -32,18 +32,6 @@ dat[2] = 0 # Slider Right
 dat[3] = 0 # Slider Left
 
 def sigint_handler(signal, frame):
-    file = open('data.csv', 'a')
-    file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
-    file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
-    file.write('Encoder data 1:\n {}\n'.format(enc_1))
-    file.write('Encoder data 2:\n {}\n'.format(enc_2))
-    file.close()
-
-    # data = np.asarray([[ser_R for n in range (0, len(ser_R))],
-    #                 [ser_L for n in range (0, len(ser_L))],
-    #                 [enc_1 for n in range (0, len(enc_1))],
-    #                 [enc_2 for n in range (0, len(enc_2))]])
-    # np.savetxt('data.txt', data)
     print ('KeyboardInterrupt is caught')
     sys.exit(0)
 
@@ -90,12 +78,14 @@ enc_1 = []
 enc_2 = []
 
 # Callback code_________________________________________________________________________
+max = 0
 def callback(data):
-    global ser_R, ser_L, enc_1, enc_2, startup
+    global ser_R, ser_L, enc_1, enc_2, startup, max
     servoFeed_R = data.some_floats[0] 
     servoFeed_L = data.some_floats[1]
     encoder_1 = data.some_floats[2] # Height
     encoder_2 = data.some_floats[3] # Length travled    
+    rad = d2r(encoder_1)
 
     # print('ass')
     if startup:
@@ -103,20 +93,19 @@ def callback(data):
         delay = time.time()*1000
 
         while time.time()*1000-delay <= 3000:
-            dat[0] = 0 # Rev Right
-            dat[1] = 0 # Rev Left
+            dat[0] = d2r(125)
+            dat[1] = d2r(85)
             dat[2] = -1 # Slider Right
             dat[3] = -1 # Slider Left
             send_message()
 
-    dat[0] = np.pi
-    dat[1] = np.pi 
+    dat[2] = 1 # Slider Right
+    dat[3] = -1 # Slider Left
     send_message()
-
-    ser_R.append(servoFeed_R)
-    ser_L.append(servoFeed_L)
-    enc_1.append(encoder_1)
-    enc_2.append(encoder_2)
+    height = np.sin(rad)*arm_len
+    if height>max:
+        max = height
+    print(max)
 
 def listener():
     rp.Subscriber('sensor_data', my_message, callback)
