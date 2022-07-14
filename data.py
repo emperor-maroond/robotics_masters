@@ -154,4 +154,6 @@ plt.figure(2)
 plt.plot(time, z, LineWidth=1, label='Simulated Data')
 plt.legend()
 
-plt.show()
+# plt.show()
+
+print(x[-1], enc2[-1])

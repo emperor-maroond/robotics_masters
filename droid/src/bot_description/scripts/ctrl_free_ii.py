@@ -38,24 +38,19 @@ def sigint_handler(signal, frame):
     file.write('Encoder data 3:\n {}\n'.format(enc_3))
     file.close()
 
-    # data = np.asarray([[ser_R for n in range (0, len(ser_R))],
-    #                 [ser_L for n in range (0, len(ser_L))],
-    #                 [enc_1 for n in range (0, len(enc_1))],
-    #                 [enc_2 for n in range (0, len(enc_2))]])
-    # np.savetxt('data.txt', data)
     acel.rest()
     send_message()
     print ('KeyboardInterrupt is caught')
     sys.exit(0)
 
 def d2r(deg):
-    return deg*np.pi/180
+    return deg*np.pi/170
 
 def r2d(rad):
-    return rad*180/np.pi
+    return rad*170/np.pi
 
 def move(end, current):
-    ratio = 0.1
+    ratio = 0.05
     smootedMotion = ((1-ratio)*end) + (ratio*current)
     return smootedMotion
 
@@ -94,8 +89,8 @@ enc_3 = []
 
 class acel():
     def rest():
-        end_R = d2r(80)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = end_R
         dat[1] = end_L
         dat[2] = -1
@@ -103,8 +98,8 @@ class acel():
 
     def ground():
         global done
-        end_R = d2r(80)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -116,33 +111,32 @@ class acel():
         global done
         dat[2] = -1
         dat[3] = -1
-        end_R = d2r(115)
-        end_L = d2r(80)
+        end_R = d2r(110)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
-            dat[3] = 1
-            boom = time.time()*1150
+            dat[3] = -1
             done = True
 
 class steady_state():
     def ground():
         global done, i, boom
-        end_R = d2r(115)
-        end_L = d2r(80)
+        end_R = d2r(110)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
             i += 1
-            boom = time.time()*1150
+            boom = time.time()*1000
 
     def ground2():
         global done
-        end_R = d2r(115)
-        end_L = d2r(80)
+        end_R = d2r(110)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -154,32 +148,31 @@ class steady_state():
         global done
         dat[2] = -1
         dat[3] = -1
-        end_R = d2r(80)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
-            dat[2] = 1
+            dat[2] = -1
             dat[3] = -1
-            boom = time.time()*1150
             done = True
 
     def ground3():
         global done, i, boom
-        end_R = d2r(80)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
             i += 1
-            boom = time.time()*1150
+            boom = time.time()*1000
 
     def ground4():
         global done
-        end_R = d2r(80)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -191,21 +184,20 @@ class steady_state():
         global done
         dat[2] = -1
         dat[3] = -1
-        end_R = d2r(115)
-        end_L = d2r(80)
+        end_R = d2r(110)
+        end_L = d2r(70)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
-            dat[3] = 1
-            boom = time.time()*1150
+            dat[3] = -1
             done = True
 
 class decel():
     def ground():
         global done
-        end_R = d2r(80)
-        end_L = d2r(115)
+        end_R = d2r(70)
+        end_L = d2r(110)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -243,7 +235,7 @@ def callback(data):
     # height = np.sin(rad)*arm_len - ref_height
     height = np.sin(rad)*arm_len
 
-    # print(i, j, apex_reached, height)
+    print(i, j, apex_reached, height)
     if not firing:
         if not apex_reached:
             ground[i]()
@@ -252,12 +244,12 @@ def callback(data):
     send_message()
 
     #250/1000
-    if height<=150/1000 and apex_reached:
+    if height<=130/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
             done = False
-    if height>=170/1000 and not apex_reached and j<len(air):
+    if height>=130/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1
