@@ -4,63 +4,180 @@ from mpl_toolkits.mplot3d import Axes3D
 import cloudpickle
 from scipy.interpolate import interp1d
 
-m = [0]*3
-# damp_x3 has right shape but is way faster than actual robot
-with open("Optimisation_Code/Feasible_Solution/damp_x3/steady-state.pkl", "rb") as f:
-    m[1] = cloudpickle.load(f)
-    
-with open("Optimisation_Code/Feasible_Solution/damp_x3/accel.pkl", "rb") as f:
-    m[0] = cloudpickle.load(f)
-    
-with open("Optimisation_Code/Feasible_Solution/damp_x3/decel.pkl", "rb") as f:
-    m[2] = cloudpickle.load(f)
+m1 = [0]*3 # 1.7 sec to complete SS
+with open("Optimisation_Code/Feasible_Solution/damp_x1/steady-state.pkl", "rb") as f:
+    m1[1] = cloudpickle.load(f)    
+with open("Optimisation_Code/Feasible_Solution/damp_x1/accel.pkl", "rb") as f:
+    m1[0] = cloudpickle.load(f)  
+with open("Optimisation_Code/Feasible_Solution/damp_x1/decel.pkl", "rb") as f:
+    m1[2] = cloudpickle.load(f)
 
-N = m[0].N[-1]
-cN = m[0].cN[-1]
+m2 = [0]*3 # 2.0 sec to complete SS
+with open("Optimisation_Code/Feasible_Solution/damp_x2/steady-state.pkl", "rb") as f:
+    m2[1] = cloudpickle.load(f)    
+with open("Optimisation_Code/Feasible_Solution/damp_x2/accel.pkl", "rb") as f:
+    m2[0] = cloudpickle.load(f)  
+with open("Optimisation_Code/Feasible_Solution/damp_x2/decel.pkl", "rb") as f:
+    m2[2] = cloudpickle.load(f)
+
+m3 = [0]*3 # 1.5 sec to complete SS
+with open("Optimisation_Code/Feasible_Solution/damp_x3/steady-state.pkl", "rb") as f:
+    m3[1] = cloudpickle.load(f)    
+with open("Optimisation_Code/Feasible_Solution/damp_x3/accel.pkl", "rb") as f:
+    m3[0] = cloudpickle.load(f)  
+with open("Optimisation_Code/Feasible_Solution/damp_x3/decel.pkl", "rb") as f:
+    m3[2] = cloudpickle.load(f)
+
+N1 = m1[0].N[-1]
+cN1 = m1[0].cN[-1]
+
+N2 = m2[0].N[-1]
+cN2 = m2[0].cN[-1]
+
+N3 = m3[0].N[-1]
+cN3 = m3[0].cN[-1]
 dt = 1/1000
 
 # Handel the optimiser data___________________________________________________________________________________________________
-N_time = []
-cN_time = []
-cN_adder = 0
-adder = 0
+N_time1 = []
+cN_time1 = []
+cN_adder1 = 0
+adder1 = 0
 for i in range(0, 3): # Add the cN node time into an array
     if(i>0):
-        cN_adder += (m[i-1].tt0[N].value - m[i-1].tt0[1].value)
-    for n in range(1, N+1):
-        for c in range(1, cN+1):
-            cN_time.append(m[i].tt[n,c].value - m[i].tt[1,1].value + cN_adder)
+        cN_adder1 += (m1[i-1].tt0[N1].value - m1[i-1].tt0[1].value)
+    for n in range(1, N1+1):
+        for c in range(1, cN1+1):
+            cN_time1.append(m1[i].tt[n,c].value - m1[i].tt[1,1].value + cN_adder1)
             
 for i in range(0, 3): # Add the N node time into an array
     if(i>0):
-        adder += (m[i-1].tt0[N].value - m[i-1].tt0[1].value)
-    for n in range(1, N+1):
-        N_time.append(m[i].tt0[n].value - m[i].tt0[1].value + adder)
+        adder1 += (m1[i-1].tt0[N1].value - m1[i-1].tt0[1].value)
+    for n in range(1, N1+1):
+        N_time1.append(m1[i].tt0[n].value - m1[i].tt0[1].value + adder1)
 
-x = []
-z = []
-r = []
-l = []
+x1 = []
+z1 = []
+r1 = []
+l1 = []
+vel_z1 = []
 adder = 0
 for i in range(0, 3):
     if(i>0):
-        adder += m[i-1].q[N,cN,'x'].value
-    for n in range(1, N+1):
-        for c in range(1, cN+1):
-            z.append(m[i].q[n,c,'z'].value)
-            x.append(m[i].q[n,c,'x'].value + adder) 
-            r.append(m[i].q[n,c,'theta_l_R'].value*180/np.pi)
-            l.append(m[i].q[n,c,'theta_l_L'].value*180/np.pi)
+        adder += m1[i-1].q[N1,cN1,'x'].value
+    for n in range(1, N1+1):
+        for c in range(1, cN1+1):
+            z1.append(m1[i].q[n,c,'z'].value)
+            vel_z1.append(m1[i].dq[n,c,'z'].value)
+            x1.append(m1[i].q[n,c,'x'].value + adder) 
+            r1.append(m1[i].q[n,c,'theta_l_R'].value*180/np.pi)
+            l1.append(m1[i].q[n,c,'theta_l_L'].value*180/np.pi)
 
-f = interp1d(cN_time, z, kind='cubic')     
-xnew = np.linspace(0, cN_time[-1], num=1000, endpoint=True)
+N_time2 = []
+cN_time2 = []
+cN_adder2 = 0
+adder2 = 0
+for i in range(0, 3): # Add the cN node time into an array
+    if(i>0):
+        cN_adder2 += (m2[i-1].tt0[N2].value - m2[i-1].tt0[1].value)
+    for n in range(1, N2+1):
+        for c in range(1, cN2+1):
+            cN_time2.append(m2[i].tt[n,c].value - m2[i].tt[1,1].value + cN_adder2)
+            
+for i in range(0, 3): # Add the N node time into an array
+    if(i>0):
+        adder2 += (m2[i-1].tt0[N2].value - m2[i-1].tt0[1].value)
+    for n in range(1, N2+1):
+        N_time2.append(m2[i].tt0[n].value - m2[i].tt0[1].value + adder2)
+
+x2 = []
+z2 = []
+r2 = []
+l2 = []
+vel_z2 = []
+t = []
+adder = 0
+for i in range(0, 3):
+    if(i>0):
+        adder += m2[i-1].q[N2,cN2,'x'].value
+    for n in range(1, N2+1):
+        for c in range(1, cN2+1):
+            z2.append(m2[i].q[n,c,'z'].value)
+            vel_z2.append(m2[i].dq[n,c,'z'].value)
+            t.append(m2[i].tt0[n].value - m1[i].tt0[1].value)
+            x2.append(m2[i].q[n,c,'x'].value + adder) 
+            r2.append(m2[i].q[n,c,'theta_l_R'].value*180/np.pi)
+            l2.append(m2[i].q[n,c,'theta_l_L'].value*180/np.pi)
+
+N_time3 = []
+cN_time3 = []
+cN_adder3 = 0
+adder3 = 0
+for i in range(0, 3): # Add the cN node time into an array
+    if(i>0):
+        cN_adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
+    for n in range(1, N3+1):
+        for c in range(1, cN3+1):
+            cN_time3.append(m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3)
+            
+for i in range(0, 3): # Add the N node time into an array
+    if(i>0):
+        adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
+    for n in range(1, N3+1):
+        N_time3.append(m3[i].tt0[n].value - m3[i].tt0[1].value + adder3)
+
+x3 = []
+z3 = []
+r3 = []
+l3 = []
+vel_z3 = []
+adder = 0
+for i in range(0, 3):
+    if(i>0):
+        adder += m3[i-1].q[N3,cN3,'x'].value
+    for n in range(1, N3+1):
+        for c in range(1, cN3+1):
+            z3.append(m3[i].q[n,c,'z'].value)
+            vel_z3.append(m3[i].dq[n,c,'z'].value)
+            x3.append(m3[i].q[n,c,'x'].value + adder) 
+            r3.append(m3[i].q[n,c,'theta_l_R'].value*180/np.pi)
+            l3.append(m3[i].q[n,c,'theta_l_L'].value*180/np.pi)
+
+# The graphs__________________________________________________________________________________________________
+z1 = interp1d(cN_time1, z1, kind='cubic')     
+xnew1 = np.linspace(0, cN_time1[-1], num=1000, endpoint=True)
+z2 = interp1d(cN_time2, z2, kind='cubic')     
+xnew2 = np.linspace(0, cN_time2[-1], num=1000, endpoint=True)
+z3 = interp1d(cN_time3, z3, kind='cubic')     
+xnew3 = np.linspace(0, cN_time3[-1], num=1000, endpoint=True)
 
 plt.figure(1)
-plt.xticks(np.arange(start=0, stop=cN_time[-1], step=0.1))
+plt.xticks(np.arange(start=0, stop=cN_time3[-1]+1, step=0.1))
 plt.ylabel('vertical distance (m)')
 plt.xlabel('time(s)')
-plt.plot(xnew, f(xnew), LineWidth=1)
-plt.plot(cN_time, z, LineWidth=1)
+plt.plot(xnew1, z1(xnew1), linewidth=1, label='1.7 Steady-State')
+plt.plot(xnew2, z2(xnew2), linewidth=1, label='2.0 Steady-State')
+plt.plot(xnew3, z3(xnew3), linewidth=1, label='1.5 Steady-State')
 plt.legend()
 
-plt.show()
+vel_z1 = interp1d(cN_time1, vel_z1, kind='cubic')     
+xnew1 = np.linspace(0, cN_time1[-1], num=1000, endpoint=True)
+vel_z2 = interp1d(cN_time2, vel_z2, kind='cubic')     
+xnew2 = np.linspace(0, cN_time2[-1], num=1000, endpoint=True)
+vel_z3 = interp1d(cN_time3, vel_z3, kind='cubic')     
+xnew3 = np.linspace(0, cN_time3[-1], num=1000, endpoint=True)
+
+plt.figure(2)
+plt.xticks(np.arange(start=0, stop=cN_time3[-1]+1, step=0.1))
+plt.ylabel('vertical velocity (m/s)')
+plt.xlabel('time(s)')
+plt.plot(xnew1, vel_z1(xnew1), linewidth=1, label='1.7 Steady-State')
+plt.plot(xnew2, vel_z2(xnew2), linewidth=1, label='2.0 Steady-State')
+plt.plot(xnew3, vel_z3(xnew3), linewidth=1, label='1.5 Steady-State')
+plt.legend()
+
+# plt.show()
+
+print((m1[1].q0[N1,'x'].value-m1[1].q0[1,'x'].value)/(m1[1].tt0[N1].value - m1[1].tt0[1].value))
+print((m2[1].q0[N2,'x'].value-m2[1].q0[1,'x'].value)/(m2[1].tt0[N2].value - m2[1].tt0[1].value))
+print((m3[1].q0[N3,'x'].value-m3[1].q0[1,'x'].value)/(m3[1].tt0[N3].value - m3[1].tt0[1].value))

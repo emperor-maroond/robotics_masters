@@ -44,20 +44,20 @@ def sigint_handler(signal, frame):
     sys.exit(0)
 
 def d2r(deg):
-    return deg*np.pi/170
+    return deg*np.pi/165
 
 def r2d(rad):
-    return rad*170/np.pi
+    return rad*165/np.pi
 
 def move(end, current):
-    ratio = 0.05
+    ratio = 0.01
     smootedMotion = ((1-ratio)*end) + (ratio*current)
     return smootedMotion
 
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<120:
+    if delay<80:
         firing = True
     else:
         firing = False
@@ -89,7 +89,7 @@ enc_3 = []
 
 class acel():
     def rest():
-        end_R = d2r(70)
+        end_R = d2r(65)
         end_L = d2r(105)
         dat[0] = end_R
         dat[1] = end_L
@@ -97,34 +97,36 @@ class acel():
         dat[3] = -1
 
     def ground():
-        global done
-        end_R = d2r(70)
+        global done, boom
+        end_R = d2r(65)
         end_L = d2r(105)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = 1
+            #boom = time.time()*1000
             done = True
 
     def air():
-        global done
+        global done, boom
         dat[2] = -1
         dat[3] = -1
         end_R = d2r(105)
-        end_L = d2r(70)
+        end_L = d2r(65)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
+            boom = time.time()*1000
             done = True
 
 class steady_state():
     def ground():
         global done, i, boom
         end_R = d2r(105)
-        end_L = d2r(70)
+        end_L = d2r(65)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -136,7 +138,7 @@ class steady_state():
     def ground2():
         global done
         end_R = d2r(105)
-        end_L = d2r(70)
+        end_L = d2r(65)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -145,21 +147,22 @@ class steady_state():
             done = True
 
     def air1():
-        global done
+        global done, boom
         dat[2] = -1
         dat[3] = -1
-        end_R = d2r(70)
+        end_R = d2r(65)
         end_L = d2r(105)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
+            boom = time.time()*1000
             done = True
 
     def ground3():
         global done, i, boom
-        end_R = d2r(70)
+        end_R = d2r(65)
         end_L = d2r(105)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
@@ -171,7 +174,7 @@ class steady_state():
 
     def ground4():
         global done
-        end_R = d2r(70)
+        end_R = d2r(65)
         end_L = d2r(105)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
@@ -181,23 +184,24 @@ class steady_state():
             done = True
 
     def air2():
-        global done
+        global done, boom
         dat[2] = -1
         dat[3] = -1
         end_R = d2r(105)
-        end_L = d2r(70)
+        end_L = d2r(65)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
             dat[2] = -1
             dat[3] = -1
+            boom = time.time()*1000
             done = True
 
 class decel():
     def ground():
         global done
         end_R = d2r(105)
-        end_L = d2r(70)
+        end_L = d2r(65)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
