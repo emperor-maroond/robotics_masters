@@ -57,7 +57,7 @@ def move(end, current):
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<20:
+    if delay<60:
         firing = True
     else:
         firing = False
@@ -248,12 +248,12 @@ def callback(data):
     send_message()
 
     #250/1000
-    if height<=140/1000 and apex_reached:
+    if height<=130/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
             done = False
-    if height>=140/1000 and not apex_reached and j<len(air):
+    if height>=130/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1

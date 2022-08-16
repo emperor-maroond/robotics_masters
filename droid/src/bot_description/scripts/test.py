@@ -112,8 +112,8 @@ class acel():
         global done, boom
         dat[2] = -1
         dat[3] = -1
-        end_R = d2r(65)
-        end_L = d2r(105)
+        end_R = d2r(105)
+        end_L = d2r(65)
         dat[0] = move(end_R, dat[0])
         dat[1] = move(end_L, dat[1])
         if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
@@ -248,12 +248,12 @@ def callback(data):
     send_message()
 
     #250/1000
-    if height<=150/1000 and apex_reached:
+    if height<=140/1000 and apex_reached:
         if done:
             j += 1
             apex_reached = 0
             done = False
-    if height>=150/1000 and not apex_reached and j<len(air):
+    if height>=140/1000 and not apex_reached and j<len(air):
         if done:
             i += 1
             apex_reached = 1
