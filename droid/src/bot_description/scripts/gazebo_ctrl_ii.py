@@ -3,304 +3,271 @@
 import numpy as np
 import rospy as rp
 import time
+import signal
+import sys
 
-from math import isclose
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty
 from gazebo_msgs.msg import ModelStates
 
 rp.init_node('commander')
 
-pub_time = 10/1000
+pub_time = 5/1000
 rate = rp.Rate(1/pub_time)
 
 reset_simulation = rp.ServiceProxy('/gazebo/reset_simulation', Empty)
 
-pub = [None]*4
-
-pub[0] = rp.Publisher("/bot/RevR_position_controller/command", Float64, queue_size=10)
-pub[1] = rp.Publisher("/bot/RevL_position_controller/command", Float64, queue_size=10)
-pub[2] = rp.Publisher("/bot/SliderR_position_controller/command", Float64, queue_size=10)
-pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue_size=10)
-
 # Functions__________________________________________________________________________________
 firing = False
 boom = 0
+
+pub = [None]*4
+pub[0] = rp.Publisher("/bot/RevR_position_controller/command", Float64, queue_size=1)
+pub[1] = rp.Publisher("/bot/RevL_position_controller/command", Float64, queue_size=1)
+pub[2] = rp.Publisher("/bot/SliderR_position_controller/command", Float64, queue_size=1)
+pub[3] = rp.Publisher("/bot/SliderL_position_controller/command", Float64, queue_size=1)
+
+dat = [None]*4
+dat[0] = 0 # Rev Right
+dat[1] = 0 # Rev Left
+dat[2] = 0 # Slider Right
+dat[3] = 0 # Slider Left
+
+def sigint_handler(signal, frame):
+    file = open('data.csv', 'w')
+    file.write('Servo Feedback Right:\n {}\n'.format(ser_R))
+    file.write('Servo Feedback Left:\n {}\n'.format(ser_L))
+    file.write('Encoder data 1:\n {}\n'.format(enc_1))
+    file.write('Encoder data 2:\n {}\n'.format(enc_2))
+    file.write('Encoder data 3:\n {}\n'.format(enc_3))
+    file.close()
+
+    acel.rest()
+    send_message()
+    print ('KeyboardInterrupt is caught')
+    sys.exit(0)
+
 def d2r(deg):
-    return deg*np.pi/165
+    return deg*np.pi/180
 
 def r2d(rad):
-    return rad*165/np.pi
+    return rad*180/np.pi
 
-def move(start, stop, z):
-    delta = stop - start
-    if abs(delta)>d2r(17):
-        q = delta/300*z
-    else:
-        q = delta/200*z
-    return start + q
+def move(end, current):
+    ratio = 0.001
+    smootedMotion = ((1-ratio)*end) + (ratio*current)
+    return smootedMotion
 
 def test_boom():
     global firing, boom
     delay = time.time()*1000 - boom
-    if delay<150:
+    if delay<60:
         firing = True
     else:
         firing = False
 
+def send_message():
+    global message
+    # rp.loginfo(message)
+    for i in range(0, len(dat)):
+        pub[i].publish(dat[i])
+    
 # States_____________________________________________________________________________________
-flag = 1
-done = 0
-start_R = 0
-end_R   = 0
-start_L = 0
-end_L   = 0
-z = 1
+i = 0
+j = 0
+startup = 1
+height = None
+done = True
 
-def state_0():  # START state as well as STOP state
-    global end_R, end_L, done
-    end_R = d2r(90+30)
-    end_L = d2r(90-30)
-    pub[0].publish(end_R)
-    pub[1].publish(end_L)
-    pub[2].publish(-165)
-    pub[3].publish(-165)
-    done = 1
+ser_R = []
+ser_L = []
+enc_1 = []
+enc_2 = []
+enc_3 = []
 
-def state_1():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        done = 0
-        global R, L
-        R = end_R
-        L = end_L
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-45)
-        pub[2].publish(-165)
-        pub[3].publish(-165)
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            pub[2].publish(165)
-            if not done:
-                boom = time.time()*1000
-            z = 0
-            done = 1
-    pub[0].publish(R)
-    pub[1].publish(L)
+class acel():
+    def rest():
+        end_R = d2r(65)
+        end_L = d2r(110)
+        dat[0] = end_R
+        dat[1] = end_L
+        dat[2] = -1
+        dat[3] = -1
 
+    def ground():
+        global done, boom
+        end_R = d2r(65)
+        end_L = d2r(110)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = 1
+            #boom = time.time()*1000
+            done = True
 
-def state_2():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L        
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-0)
-        pub[2].publish(-165)
-        pub[3].publish(-165)        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            pub[3].publish(165)
-            if not done:
-                boom = time.time()*1000
-            done = 1
-    pub[0].publish(R)
-    pub[1].publish(L)
+    def air():
+        global done, boom
+        dat[2] = -1
+        dat[3] = -1
+        end_R = d2r(110)
+        end_L = d2r(65)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            boom = time.time()*1000
+            done = True
 
+class steady_state():
+    def ground():
+        global done, i, boom
+        end_R = d2r(110)
+        end_L = d2r(65)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            i += 1
+            boom = time.time()*1000
 
-def state_3():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-30)
-        end_L = d2r(90+30)        
-        pub[2].publish(-165)
-        pub[3].publish(165)        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            pub[3].publish(-165)
-            done = 1
-    pub[0].publish(R)
-    pub[1].publish(L)
+    def ground2():
+        global done
+        end_R = d2r(110)
+        end_L = d2r(65)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = 1
+            dat[3] = -1
+            done = True
 
-def state_4():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        done = 0
-        global R, L
-        R = end_R
-        L = end_L
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-45)
-        end_L = d2r(90+30)
-        pub[2].publish(-165)
-        pub[3].publish(-165)
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            pub[3].publish(165)
-            if not done:
-                boom = time.time()*1000
-            z = 0
-            done = 1
-    pub[0].publish(R)
-    pub[1].publish(L)
+    def air1():
+        global done, boom
+        dat[2] = -1
+        dat[3] = -1
+        end_R = d2r(65)
+        end_L = d2r(110)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            boom = time.time()*1000
+            done = True
 
-def state_5():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90-30)
-        end_L = d2r(90+30)  
-        pub[2].publish(-165)
-        pub[3].publish(-165)        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        if R==end_R and L==end_L:
-            z = 0
-            pub[2].publish(165)
-            if not done:
-                boom = time.time()*1000
-            done = 1
-    pub[0].publish(R)
-    pub[1].publish(L)
+    def ground3():
+        global done, i, boom
+        end_R = d2r(65)
+        end_L = d2r(110)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            i += 1
+            boom = time.time()*1000
 
-def state_6():
-    global flag, start_R, end_R, start_L, end_L, z, done, boom
-    if flag:
-        global R, L
-        done = 0
-        R = end_R
-        L = end_L  
-        flag = 0
-        start_R = end_R
-        start_L = end_L
-        end_R = d2r(90+30)
-        end_L = d2r(90-30)  
-        pub[2].publish(165)
-        pub[3].publish(-165)        
-    if not flag:
-        z += 1
-        if L!=end_L:
-            L = move(start_L, end_L, z)
-        if R!=end_R:
-            R = move(start_R, end_R, z)
-        else:
-            pub[2].publish(-165)
-            z = 0
-            done = 1
-    pub[0].publish(R)
-    pub[1].publish(L)
+    def ground4():
+        global done
+        end_R = d2r(65)
+        end_L = d2r(110)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = 1
+            done = True
+
+    def air2():
+        global done, boom
+        dat[2] = -1
+        dat[3] = -1
+        end_R = d2r(110)
+        end_L = d2r(65)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            boom = time.time()*1000
+            done = True
+
+class decel():
+    def ground():
+        global done
+        end_R = d2r(110)
+        end_L = d2r(65)
+        dat[0] = move(end_R, dat[0])
+        dat[1] = move(end_L, dat[1])
+        if round(dat[0], 5)==round(end_R, 5) and round(dat[1], 5)==round(end_L, 5):
+            dat[2] = -1
+            dat[3] = -1
+            done = True
+        
 
 # Callback code_________________________________________________________________________
-i = 0
-ground = False
-apex = False
-run = True
-avg = -0.22
-devider = 0
-states = [state_0, state_1, state_2, state_3, state_4, state_5, state_6]
+ground = [acel.ground, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, steady_state.ground, steady_state.ground2, steady_state.ground3, steady_state.ground4, decel.ground]
+air = [acel.air, steady_state.air1, steady_state.air2, steady_state.air1, steady_state.air2]
+apex_reached = 0
+
 def callback(data):
-    global i, apex, flag, ground, run, done, avg, devider
-    pose = data.pose[2]
-    z = pose.position.z
+    global i, j, startup, done, apex_reached
+    global ser_R, ser_L, enc_1, enc_2, enc_3
+    servoFeed_R = data.some_floats[0] 
+    servoFeed_L = data.some_floats[1]
+    encoder_1 = data.some_floats[2] # Height
+    encoder_2 = data.some_floats[3] # Length travled
+    encoder_3 = data.some_floats[4]
+    rad = d2r(encoder_1)
+    
     test_boom()
-    if run:
-        states[i]()
+    
+    if startup:
+        startup = False
+        delay = time.time()*1000
+
+        while time.time()*1000-delay <= 3000:
+            acel.rest()
+            send_message()
+
+    # height = np.sin(rad)*arm_len
+
+    print(i, j, apex_reached, height)
     if not firing:
+        if not apex_reached:
+            ground[i]()
+        if apex_reached:
+            air[j]()
+    send_message()
+
+    #250/1000
+    if height<=130/1000 and apex_reached:
         if done:
-            if not ground and i>0:
-                print(i, 'a')
-                ground = True
-            elif ground and not apex:
-                print(i, "b")
-                apex = True
-            elif apex and ground:
-                print(i, 'c')
-                ground = apex = False
-            done = 0
-            run = False
+            j += 1
+            apex_reached = 0
+            done = False
+    if height>=130/1000 and not apex_reached and j<len(air):
+        if done:
             i += 1
-            flag = 1
-        devider += 1
-        avg = avg + z
-        if devider == 10:
-            avg = avg/devider
-            devider = 0
-            if avg<-0.22:
-                if not ground:
-                    run = True
-                    flag = 1
-            if avg>-0.16 and not apex:
-                if not apex and ground and i>0:
-                    run = True
-                    flag = 1
-            if avg>-0.22 and apex:
-                if ground and apex and i>0:
-                    run = True
-                    flag = 1
-    if i >= len(states)-1:
-        i = len(states)-1
+            apex_reached = 1
+            done = False
+
+    ser_R.append(servoFeed_R)
+    ser_L.append(servoFeed_L)
+    enc_1.append(encoder_1)
+    enc_2.append(encoder_2)
+    enc_3.append(encoder_3)
 
 def listener():
-    try:
-        rp.Subscriber('/gazebo/link_states', ModelStates, callback)
-        while not rp.core.is_shutdown():
-            rp.rostime.wallsleep(0.5)
-    except KeyboardInterrupt:
-        pass
+    rp.Subscriber('/gazebo/link_states', ModelStates, callback)
+    while not rp.core.is_shutdown():
+        rp.rostime.wallsleep(0.5)
+
 
 # main code_____________________________________________________________________
 if __name__ == '__main__':
-    reset_simulation()
-    time.sleep(0.5)
-    states[0]()
-    rp.sleep(1)  
+    signal.signal(signal.SIGINT, sigint_handler)
     listener()
