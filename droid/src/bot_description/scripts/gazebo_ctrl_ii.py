@@ -8,7 +8,7 @@ import sys
 
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty
-from gazebo_msgs.msg import ModelStates
+from gazebo_msgs.srv import GetModelState
 
 rp.init_node('commander')
 
@@ -20,6 +20,8 @@ reset_simulation = rp.ServiceProxy('/gazebo/reset_simulation', Empty)
 # Functions__________________________________________________________________________________
 firing = False
 boom = 0
+
+link_states = rp.ServiceProxy( '/gazebo/get_model_state', GetModelState)
 
 pub = [None]*4
 pub[0] = rp.Publisher("/bot/RevR_position_controller/command", Float64, queue_size=1)
@@ -214,60 +216,55 @@ air = [acel.air, steady_state.air1, steady_state.air2, steady_state.air1, steady
 apex_reached = 0
 
 def callback(data):
-    global i, j, startup, done, apex_reached
-    global ser_R, ser_L, enc_1, enc_2, enc_3
-    servoFeed_R = data.some_floats[0] 
-    servoFeed_L = data.some_floats[1]
-    encoder_1 = data.some_floats[2] # Height
-    encoder_2 = data.some_floats[3] # Length travled
-    encoder_3 = data.some_floats[4]
-    rad = d2r(encoder_1)
-    
-    test_boom()
-    
-    if startup:
-        startup = False
-        delay = time.time()*1000
+    while not rp.is_shutdown:
+        global i, j, startup, done, apex_reached
+        global ser_R, ser_L, enc_1, enc_2, enc_3
+        servoFeed_R = data.some_floats[0] 
+        servoFeed_L = data.some_floats[1]
+        encoder_1 = data.some_floats[2] # Height
+        encoder_2 = data.some_floats[3] # Length travled
+        encoder_3 = data.some_floats[4]
+        rad = d2r(encoder_1)
+        
+        test_boom()
+        
+        if startup:
+            startup = False
+            delay = time.time()*1000
 
-        while time.time()*1000-delay <= 3000:
-            acel.rest()
-            send_message()
+            while time.time()*1000-delay <= 3000:
+                acel.rest()
+                send_message()
 
-    # height = np.sin(rad)*arm_len
+        # height = np.sin(rad)*arm_len
 
-    print(i, j, apex_reached, height)
-    if not firing:
-        if not apex_reached:
-            ground[i]()
-        if apex_reached:
-            air[j]()
-    send_message()
+        print(i, j, apex_reached, height)
+        if not firing:
+            if not apex_reached:
+                ground[i]()
+            if apex_reached:
+                air[j]()
+        send_message()
 
-    #250/1000
-    if height<=130/1000 and apex_reached:
-        if done:
-            j += 1
-            apex_reached = 0
-            done = False
-    if height>=130/1000 and not apex_reached and j<len(air):
-        if done:
-            i += 1
-            apex_reached = 1
-            done = False
+        #250/1000
+        if height<=130/1000 and apex_reached:
+            if done:
+                j += 1
+                apex_reached = 0
+                done = False
+        if height>=130/1000 and not apex_reached and j<len(air):
+            if done:
+                i += 1
+                apex_reached = 1
+                done = False
 
-    ser_R.append(servoFeed_R)
-    ser_L.append(servoFeed_L)
-    enc_1.append(encoder_1)
-    enc_2.append(encoder_2)
-    enc_3.append(encoder_3)
-
-def listener():
-    rp.Subscriber('/gazebo/link_states', ModelStates, callback)
-    while not rp.core.is_shutdown():
-        rp.rostime.wallsleep(0.5)
-
+        ser_R.append(servoFeed_R)
+        ser_L.append(servoFeed_L)
+        enc_1.append(encoder_1)
+        enc_2.append(encoder_2)
+        enc_3.append(encoder_3)
 
 # main code_____________________________________________________________________
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, sigint_handler)
-    listener()
+    callback()
