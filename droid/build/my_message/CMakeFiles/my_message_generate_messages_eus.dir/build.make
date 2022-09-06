@@ -60,11 +60,11 @@ my_message/CMakeFiles/my_message_generate_messages_eus: /home/devlon/robotics_ma
 /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/msg/my_message.l: /opt/ros/noetic/lib/geneus/gen_eus.py
 /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/msg/my_message.l: /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/devlon/robotics_masters/droid/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from my_message/my_message.msg"
-	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /home/devlon/anaconda3/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg -Imy_message:/home/devlon/robotics_masters/droid/src/my_message/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p my_message -o /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/msg
+	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg -Imy_message:/home/devlon/robotics_masters/droid/src/my_message/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p my_message -o /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/msg
 
 /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/manifest.l: /opt/ros/noetic/lib/geneus/gen_eus.py
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/devlon/robotics_masters/droid/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp manifest code for my_message"
-	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /home/devlon/anaconda3/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message my_message std_msgs
+	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message my_message std_msgs
 
 my_message_generate_messages_eus: my_message/CMakeFiles/my_message_generate_messages_eus
 my_message_generate_messages_eus: /home/devlon/robotics_masters/droid/devel/share/roseus/ros/my_message/msg/my_message.l

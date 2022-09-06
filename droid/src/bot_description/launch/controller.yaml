@@ -2,17 +2,17 @@ bot:
   # Publish all joint states -----------------------------------
   joint_state_controller:
     type: joint_state_controller/JointStateController
-    publish_rate: 50
+    publish_rate: 100
 
   # Position Controllers --------------------------------------
   RevR_position_controller:
     type: effort_controllers/JointPositionController
     joint: RevR
-    pid: {p: 30.0, i: 0.0, d: 1.0}
+    pid: {p: 200.0, i: 2.0, d: 2.5}
   RevL_position_controller:
     type: effort_controllers/JointPositionController
     joint: RevL
-    pid: {p: 30.0, i: 0.1, d: 1.0}
+    pid: {p: 200.0, i: 2.0, d: 2.5}
   SliderL_position_controller:
     type: effort_controllers/JointEffortController
     joint: SliderL

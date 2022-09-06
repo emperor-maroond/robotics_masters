@@ -60,12 +60,12 @@ my_message/CMakeFiles/my_message_generate_messages_py: /home/devlon/robotics_mas
 /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/_my_message.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/_my_message.py: /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/devlon/robotics_masters/droid/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG my_message/my_message"
-	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /home/devlon/anaconda3/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg -Imy_message:/home/devlon/robotics_masters/droid/src/my_message/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p my_message -o /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg
+	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg -Imy_message:/home/devlon/robotics_masters/droid/src/my_message/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p my_message -o /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg
 
 /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/__init__.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/__init__.py: /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/_my_message.py
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/devlon/robotics_masters/droid/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python msg __init__.py for my_message"
-	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /home/devlon/anaconda3/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg --initpy
+	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg --initpy
 
 my_message_generate_messages_py: my_message/CMakeFiles/my_message_generate_messages_py
 my_message_generate_messages_py: /home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message/msg/_my_message.py

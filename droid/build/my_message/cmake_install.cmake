@@ -62,7 +62,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/home/devlon/anaconda3/bin/python3" -m compileall "/home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/devlon/robotics_masters/droid/devel/lib/python3/dist-packages/my_message")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

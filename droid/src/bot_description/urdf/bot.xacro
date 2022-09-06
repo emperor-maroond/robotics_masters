@@ -30,7 +30,7 @@
   <inertial>
     <origin rpy="0 0 0" xyz="-0.02304248360485034 -2.2504051277461024e-06 -0.05416915490409829"/>
     <mass value="0.25"/>
-    <inertia ixx="0.000436" ixy="0.0" ixz="2.6e-05" iyy="0.000444" iyz="-0.0" izz="8e-06"/>
+    <inertia ixx="0.000436" ixy="0.0" ixz="2.6e-05" iyy="0.000444" iyz="-0.0" izz="0.000444"/>
   </inertial>
   <visual>
     <origin rpy="0 0 0" xyz="-0.337324 -0.147203 -0.440063"/>
@@ -51,7 +51,7 @@
   <inertial>
     <origin rpy="0 0 0" xyz="0.02304180933164246 -2.2504051263028124e-06 -0.05416915490391633"/>
     <mass value="0.25"/>
-    <inertia ixx="0.000436" ixy="-0.0" ixz="-2.6e-05" iyy="0.000444" iyz="-0.0" izz="8e-06"/>
+    <inertia ixx="0.000436" ixy="-0.0" ixz="-2.6e-05" iyy="0.000444" iyz="-0.0" izz="0.000444"/>
   </inertial>
   <visual>
     <origin rpy="0 0 0" xyz="-0.580324 -0.147203 -0.440063"/>
@@ -116,7 +116,7 @@
     <parent link="base_link"/>
     <child link="right_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="6" lower="-3.14159" upper="3.14159" velocity="8.05536"/>
+    <limit effort="5.0013915" lower="-3.14159" upper="3.14159" velocity="3.926991"/>
 </joint>
 
 <joint name="RevR" type="revolute">
@@ -124,7 +124,7 @@
     <parent link="base_link"/>
     <child link="left_hip_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="6" lower="-3.14159" upper="3.14159" velocity="8.05536"/>
+    <limit effort="5.0013915" lower="-3.14159" upper="3.14159" velocity="3.926991"/>
 </joint>
 
 <joint name="SliderL" type="prismatic">
@@ -133,7 +133,7 @@
     <child link="right_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <limit effort="300" lower="0" upper="0.125" velocity="1000"/>
-    <dynamics damping="85"/>
+    <dynamics damping="90"/>
 </joint>
 
 <joint name="SliderR" type="prismatic">
@@ -142,7 +142,7 @@
     <child link="left_foot_1"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <limit effort="300" lower="0" upper="0.125" velocity="1000"/>
-    <dynamics damping="85"/>
+    <dynamics damping="90"/>
 </joint>
 
 <!-- Links to constrain to planar -->
@@ -165,22 +165,53 @@
     <inertial>
         <origin xyz="0 0 1" rpy="0 0 0"/>
         <mass value="0.01"/>
-        <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+        <inertia ixx="1000" ixy="0.0" ixz="0.0" iyy="1000" iyz="0.0" izz="1000"/>
     </inertial>
 </link>
+
+<!-- <link name="rotation_link">
+    <collision>
+        <origin xyz="0 0 1" rpy="0 0 0"/>
+        <geometry>
+            <box size="0.01 0.01 0.01"/>
+        </geometry>
+    </collision>
+    <visual>
+        <origin xyz="0 0 1" rpy="0 0 0"/>
+        <geometry>
+            <box size="0.01 0.01 0.01"/>
+        </geometry>
+        <material name="silver"/>
+    </visual>
+    <inertial>
+        <origin xyz="0 0 1" rpy="0 0 0"/>
+        <mass value="0.01"/>
+        <inertia ixx="1000" ixy="0.0" ixz="0.0" iyy="1000" iyz="0.0" izz="1000"/>
+    </inertial>
+</link> -->
 
 <joint name="y_direction" type="prismatic">
     <parent link="world"/>
     <child link="y_axis_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="1000"/>
+    <limit effort="0" lower="-1.79769e+308" upper="1.79769e+308" velocity="0"/>
+    <dynamics damping="0.3"/>
 </joint>
 
 <joint name="z_direction" type="prismatic">
     <parent link="y_axis_link"/>
     <child link="base_link"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-1.79769e+308" upper="1.79769e+308" velocity="1000"/>
+    <limit effort="0" lower="-1.79769e+308" upper="1.79769e+308" velocity="0"/>
+    <dynamics damping="0.3"/>
 </joint>
+
+<!-- <joint name="rotation" type="fixed">
+    <parent link="rotation_link"/>
+    <child link="base_link"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <limit effort="0" lower="-1.57080" upper="1.57080" velocity="0"/>
+    <dynamics damping="0.65"/>
+</joint> -->
 
 </robot>

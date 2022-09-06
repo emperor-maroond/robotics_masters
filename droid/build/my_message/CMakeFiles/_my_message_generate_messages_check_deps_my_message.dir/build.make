@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/devlon/robotics_masters/droid/build
 include my_message/CMakeFiles/_my_message_generate_messages_check_deps_my_message.dir/progress.make
 
 my_message/CMakeFiles/_my_message_generate_messages_check_deps_my_message:
-	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /home/devlon/anaconda3/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py my_message /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg 
+	cd /home/devlon/robotics_masters/droid/build/my_message && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py my_message /home/devlon/robotics_masters/droid/src/my_message/msg/my_message.msg 
 
 _my_message_generate_messages_check_deps_my_message: my_message/CMakeFiles/_my_message_generate_messages_check_deps_my_message
 _my_message_generate_messages_check_deps_my_message: my_message/CMakeFiles/_my_message_generate_messages_check_deps_my_message.dir/build.make

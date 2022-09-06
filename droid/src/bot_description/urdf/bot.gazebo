@@ -11,6 +11,8 @@
 
 <gazebo reference="base_link">
     <material>${body_color}</material>
+    <kp>1e200</kp>
+    <kd>1e200</kd>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
     <selfCollide>true</selfCollide>
@@ -34,20 +36,37 @@
 
 <gazebo reference="left_foot_1">
     <material>${body_color}</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
+    <kp>1e105</kp>
+    <kd>1e103</kd>
+    <mu1>1e10</mu1>
+    <mu2>1e10</mu2>
+    <bounce_threshold>1e100</bounce_threshold> 
+    <fdir1>1 1 0</fdir1>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.00</minDepth>
     <selfCollide>true</selfCollide>
 </gazebo>
 
 <gazebo reference="right_foot_1">
     <material>${body_color}</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
+    <kp>1e105</kp>
+    <kd>1e103</kd>
+    <mu1>1e10</mu1>
+    <mu2>1e10</mu2>
+    <bounce_threshold>1e100</bounce_threshold> 
+    <fdir1>1 1 0</fdir1>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.00</minDepth>   
     <selfCollide>true</selfCollide>
 </gazebo>
 
-<gazebo reference="link1">
+<gazebo reference="y_axis_link">
     <material>${body_color}</material>
     <selfCollide>true</selfCollide>
 </gazebo>
+
+<!-- <gazebo reference="rotation_link">
+    <material>${body_color}</material>
+    <selfCollide>true</selfCollide>
+</gazebo> -->
 </robot>
