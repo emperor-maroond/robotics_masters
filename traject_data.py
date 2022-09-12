@@ -48,7 +48,7 @@ for i in range(0, len(m1)): # Add the cN node time into an array
         cN_adder1 += (m1[i-1].tt0[N1].value - m1[i-1].tt0[1].value)
     for n in range(1, N1+1):
         for c in range(1, cN1+1):
-            cN_time1.append(m1[i].tt[n,c].value - m1[i].tt[1,1].value + cN_adder1)
+            cN_time1.append((m1[i].tt[n,c].value - m1[i].tt[1,1].value + cN_adder1) * (100+65)/100)
             
 for i in range(0, len(m1)): # Add the N node time into an array
     if(i>0):
@@ -72,7 +72,7 @@ for i in range(0, len(m1)):
         for c in range(1, cN1+1):
             z1.append(m1[i].q[n,c,'z'].value)
             vel_z1.append(m1[i].dq[n,c,'z'].value)
-            vel_x1.append(m1[i].dq[n,c,'x'].value)
+            vel_x1.append(m1[i].dq[n,c,'x'].value * (100-65)/100)
             x1.append(m1[i].q[n,c,'x'].value + adder) 
             r1.append(m1[i].q[n,c,'theta_l_R'].value*180/np.pi)
             l1.append(m1[i].q[n,c,'theta_l_L'].value*180/np.pi)
@@ -88,7 +88,7 @@ for i in range(0, len(m2)): # Add the cN node time into an array
         cN_adder2 += (m2[i-1].tt0[N2].value - m2[i-1].tt0[1].value)
     for n in range(1, N2+1):
         for c in range(1, cN2+1):
-            cN_time2.append(m2[i].tt[n,c].value - m2[i].tt[1,1].value + cN_adder2)
+            cN_time2.append((m2[i].tt[n,c].value - m2[i].tt[1,1].value + cN_adder2) * (100+65)/100)
             
 for i in range(0, len(m2)): # Add the N node time into an array
     if(i>0):
@@ -113,7 +113,7 @@ for i in range(0, len(m2)):
             z2.append(m2[i].q[n,c,'z'].value)
             vel_z2.append(m2[i].dq[n,c,'z'].value)
             x2.append(m2[i].q[n,c,'x'].value + adder) 
-            vel_x2.append(m2[i].dq[n,c,'x'].value)
+            vel_x2.append(m2[i].dq[n,c,'x'].value * (100-65)/100)
             r2.append(m2[i].q[n,c,'theta_l_R'].value*180/np.pi)
             l2.append(m2[i].q[n,c,'theta_l_L'].value*180/np.pi)
             GRF_L2.append(m2[i].GRF_L[n,c,'Z','ps'].value)
@@ -128,7 +128,7 @@ for i in range(0, len(m3)): # Add the cN node time into an array
         cN_adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
     for n in range(1, N3+1):
         for c in range(1, cN3+1):
-            cN_time3.append(m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3)
+            cN_time3.append((m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3) * (100+65)/100)
             
 for i in range(0, len(m3)): # Add the N node time into an array
     if(i>0):
@@ -153,7 +153,7 @@ for i in range(0, len(m3)):
             z3.append(m3[i].q[n,c,'z'].value)
             vel_z3.append(m3[i].dq[n,c,'z'].value)
             x3.append(m3[i].q[n,c,'x'].value + adder)
-            vel_x3.append(m3[i].dq[n,c,'x'].value) 
+            vel_x3.append(m3[i].dq[n,c,'x'].value * (100-65)/100) 
             r3.append(m3[i].q[n,c,'theta_l_R'].value*180/np.pi)
             l3.append(m3[i].q[n,c,'theta_l_L'].value*180/np.pi)
             GRF_L3.append(m3[i].GRF_L[n,c,'Z','ps'].value)
@@ -219,20 +219,20 @@ plt.legend(fontsize=15)
 # plt.grid()
 # plt.legend(fontsize=15)
 
-plt.show()
+# plt.show()
 
-# avg = 0
-# for n in range(1, N1+1):
-#     avg += m1[0].dq0[n, 'x'].value
-# print(avg/N1)
-# avg = 0
-# for n in range(1, N2+1):
-#     avg += m2[0].dq0[n, 'x'].value
-# print(avg/N2)
-# avg = 0
-# for n in range(1, N3+1):
-#     avg += m3[0].dq0[n, 'x'].value
-# print(avg/N3)
+avg = 0
+for n in range(0, len(vel_x1)):
+    avg += vel_x1[n]
+print(avg/len(vel_x1), cN_time1[-1], x1[-1])
+avg = 0
+for n in range(0, len(vel_x2)):
+    avg += vel_x2[n]
+print(avg/len(vel_x2), cN_time2[-1])
+avg = 0
+for n in range(0, len(vel_x3)):
+    avg += vel_x3[n]
+print(avg/len(vel_x3), cN_time3[-1])
 
 # print(m1[0].tt0[N1].value-m1[0].tt0[1].value)
 # print(m2[0].tt0[N2].value-m2[0].tt0[1].value)
