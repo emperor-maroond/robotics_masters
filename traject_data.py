@@ -5,7 +5,7 @@ import cloudpickle
 from scipy.interpolate import interp1d
 
 m1 = [] # 0.7 m/s SS
-with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/00/steady-state.pkl", "rb") as f:
     m1.append(cloudpickle.load(f))    
 # with open("Optimisation_Code/Feasible_Solution/02/accel.pkl", "rb") as f:
 #     m1.append(cloudpickle.load(f))  
@@ -13,7 +13,7 @@ with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
 #     m1.append(cloudpickle.load(f)) 
 
 m2 = [] # 0.5 m/s SS
-with open("Optimisation_Code/Feasible_Solution/00/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
     m2.append(cloudpickle.load(f))    
 # with open("Optimisation_Code/Feasible_Solution/00/accel.pkl", "rb") as f:
 #     m2.append(cloudpickle.load(f)) 
@@ -166,9 +166,9 @@ plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.2), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time2, z2, linewidth=1.5, label='0.5 m/s')
-plt.plot(cN_time1, z1, linewidth=1.5, label='0.7 m/s')
-plt.plot(cN_time3, z3, linewidth=1.5, label='0.9 m/s')
+plt.plot(cN_time1, z1, linewidth=1.5, label='0.5 m/s')
+plt.plot(cN_time2, z2, linewidth=1.5, label='0.6 m/s')
+plt.plot(cN_time3, z3, linewidth=1.5, label='0.8 m/s')
 plt.grid()
 plt.legend(fontsize=15) 
 
@@ -177,9 +177,9 @@ plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.2), fontsize=18)
 plt.ylabel('vertical velocity (m/s)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time2, vel_z2, linewidth=1.5, label='0.5 m/s')
-plt.plot(cN_time1, vel_z1, linewidth=1.5, label='0.7 m/s')
-plt.plot(cN_time3, vel_z3, linewidth=1.5, label='0.9 m/s')
+plt.plot(cN_time1, vel_z1, linewidth=1.5, label='0.5 m/s')
+plt.plot(cN_time2, vel_z2, linewidth=1.5, label='0.6 m/s')
+plt.plot(cN_time3, vel_z3, linewidth=1.5, label='0.8 m/s')
 plt.grid()
 plt.legend(fontsize=15)
 
@@ -188,9 +188,9 @@ plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.2), fontsize=18)
 plt.ylabel('horisontal distance (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time2, x2, linewidth=1.5, label='0.5 m/s')
-plt.plot(cN_time1, x1, linewidth=1.5, label='0.7 m/s')
-plt.plot(cN_time3, x3, linewidth=1.5, label='0.9 m/s')
+plt.plot(cN_time1, x1, linewidth=1.5, label='0.5 m/s')
+plt.plot(cN_time2, x2, linewidth=1.5, label='0.6 m/s')
+plt.plot(cN_time3, x3, linewidth=1.5, label='0.8 m/s')
 plt.grid()
 plt.legend(fontsize=15) 
 
@@ -199,9 +199,9 @@ plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.2), fontsize=18)
 plt.ylabel('horisontal velocity (m/s)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time2, vel_x2, linewidth=1.5, label='0.5 m/s')
-plt.plot(cN_time1, vel_x1, linewidth=1.5, label='0.7 m/s')
-plt.plot(cN_time3, vel_x3, linewidth=1.5, label='0.9 m/s')
+plt.plot(cN_time1, vel_x1, linewidth=1.5, label='0.5 m/s')
+plt.plot(cN_time2, vel_x2, linewidth=1.5, label='0.6 m/s')
+plt.plot(cN_time3, vel_x3, linewidth=1.5, label='0.8 m/s')
 plt.grid()
 plt.legend(fontsize=15)
 
@@ -220,8 +220,20 @@ plt.legend(fontsize=15)
 # plt.legend(fontsize=15)
 
 plt.show()
+
 # avg = 0
 # for n in range(1, N1+1):
-#     avg += m3[0].dq0[n, 'x'].value
-
+#     avg += m1[0].dq0[n, 'x'].value
 # print(avg/N1)
+# avg = 0
+# for n in range(1, N2+1):
+#     avg += m2[0].dq0[n, 'x'].value
+# print(avg/N2)
+# avg = 0
+# for n in range(1, N3+1):
+#     avg += m3[0].dq0[n, 'x'].value
+# print(avg/N3)
+
+# print(m1[0].tt0[N1].value-m1[0].tt0[1].value)
+# print(m2[0].tt0[N2].value-m2[0].tt0[1].value)
+# print(m3[0].tt0[N3].value-m3[0].tt0[1].value)
