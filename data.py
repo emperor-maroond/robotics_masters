@@ -1,5 +1,3 @@
-from traceback import print_tb
-from turtle import color
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
@@ -44,6 +42,10 @@ sim_height = make_list(rows[5])
 sim_dist = make_list(rows[7])
 # sim_angle = make_list(rows[9])
 sim_time = make_list(rows[11])
+
+value = sim_dist[0]
+for i in range(0, len(sim_dist)):
+    sim_dist[i] = -sim_dist[i] + value
 
 value = sim_time[0]
 for i in range(0, len(sim_time)):
@@ -113,10 +115,10 @@ t = np.arange(start=0, stop=len(enc1)*dt, step=dt)
 rt = np.arange(start=0, stop=len(renc1)*dt, step=dt)
 # l = np.arange(0, len(kal_rough)*dt, dt)
 
-def velocity(pos):
+def velocity(pos, t):
     vel = []
     for i in range(0, len(pos)-1):
-        tmp = (pos[i+1]-pos[i])/dt
+        tmp = (pos[i+1]-pos[i])/(t[i+1]-t[i])
         vel.append(tmp)
     vel.append(0)
     return vel  
@@ -157,71 +159,72 @@ sim_dist = shorten(sim_dist, o, p, sim_time)
 sim_height = shorten(sim_height, o, p, sim_time)
 sim_time = shorten(sim_time, o, p, sim_time)
 
-vel_x = velocity(kal_x)
-vel_z = velocity(kal_z)
-vel_r = velocity(kal_r)
-vel_l = velocity(kal_l)
-rvel_x = velocity(rkal_x)
-rvel_z = velocity(rkal_z)
-rvel_r = velocity(rkal_r)
-rvel_l = velocity(rkal_l)
-sim_vel_x = velocity(sim_dist)
-sim_vel_z = velocity(sim_height)
-
 t = np.arange(start=0, stop=len(kal_z)*dt, step=dt)
 rt = np.arange(start=0, stop=len(rkal_z)*dt, step=dt)
 value = sim_time[0]
+
+vel_x = velocity(kal_x, t)
+vel_z = velocity(kal_z, t)
+vel_r = velocity(kal_r, t)
+vel_l = velocity(kal_l, t)
+rvel_x = velocity(rkal_x, rt)
+rvel_z = velocity(rkal_z, rt)
+rvel_r = velocity(rkal_r, rt)
+rvel_l = velocity(rkal_l, rt)
+sim_vel_x = velocity(sim_dist, sim_time)
+sim_vel_z = velocity(sim_height, sim_time)
+
 # sim_time = [(x-value) for x in sim_time]
 
-# plt.figure(1)
-# plt.yticks(fontsize=18)
-# # plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
-# plt.xticks(np.arange(start=0, stop=len(rkal_z)*dt, step=0.5), fontsize=18)
-# plt.ylabel('horizontal distance (m)', fontsize=22)
-# plt.xlabel('time(s)', fontsize=22)
-# plt.grid()
-# plt.plot(cN_time1, x1, linewidth=1.5, label='optimiser')
-# plt.plot(t, kal_x, linewidth=1.5, label='normal')
-# plt.plot(rt, rkal_x, linewidth=1.5, label='rough surface')
+plt.figure(1)
+plt.yticks(fontsize=18)
+# plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
+plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
+plt.ylabel('horizontal distance (m)', fontsize=22)
+plt.xlabel('time(s)', fontsize=22)
+plt.grid()
+plt.plot(cN_time1, x1, linewidth=1.5, label='optimiser')
+plt.plot(t, kal_x, linewidth=1.5, label='normal')
+plt.plot(rt, rkal_x, linewidth=1.5, label='rough surface')
 # plt.plot(sim_time, sim_dist, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+plt.legend(fontsize=15)
 
 # cN_time1 = [x*2 for x in cN_time1]
 plt.figure(2)
 plt.yticks(fontsize=18)
-plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
+plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time(s)', fontsize=22)
 plt.grid()
 plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
 plt.plot(t, kal_z, linewidth=1.5, label='normal')
 plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
-plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
+# plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
 plt.legend(fontsize=15)
 
-# plt.figure(3)
-# plt.yticks(fontsize=18)
-# plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
-# plt.ylabel('horizontal velocity (m/s)', fontsize=22)
-# plt.xlabel('time(s)', fontsize=22)
-# plt.grid()
-# plt.plot(cN_time1, vel_x1, linewidth=1.5, label='optimiser')
-# plt.plot(t, vel_x, linewidth=1.5, label='normal')
-# plt.plot(rt, rvel_x, linewidth=1.5, label='rough surface')
+plt.figure(3)
+plt.yticks(fontsize=18)
+plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
+plt.ylabel('horizontal velocity (m/s)', fontsize=22)
+plt.xlabel('time(s)', fontsize=22)
+plt.grid()
+plt.plot(cN_time1, vel_x1, linewidth=1.5, label='optimiser')
+plt.plot(t, vel_x, linewidth=1.5, label='normal')
+plt.plot(rt, rvel_x, linewidth=1.5, label='rough surface')
 # plt.plot(sim_time, sim_vel_x, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+plt.legend(fontsize=15)
 
-# plt.figure(4)
-# plt.yticks(fontsize=18)
-# plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
-# plt.ylabel('vertical velocity (m/s)', fontsize=22)
-# plt.xlabel('time(s)', fontsize=22)
-# plt.grid()
-# plt.plot(cN_time1, vel_z1, linewidth=1.5, label='optimiser')
-# plt.plot(t, vel_z, linewidth=1.5, label='normal')
-# plt.plot(rt, rvel_z, linewidth=1.5, label='rough surface')
+plt.figure(4)
+plt.yticks(fontsize=18)
+plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
+plt.ylabel('vertical velocity (m/s)', fontsize=22)
+plt.xlabel('time(s)', fontsize=22)
+plt.grid()
+plt.plot(cN_time1, vel_z1, linewidth=1.5, label='optimiser')
+plt.plot(t, vel_z, linewidth=1.5, label='normal')
+plt.plot(rt, rvel_z, linewidth=1.5, label='rough surface')
 # plt.plot(sim_time, sim_vel_z, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+plt.legend(fontsize=15)
 
 # plt.figure(5)
 # plt.yticks(fontsize=18)
@@ -312,7 +315,7 @@ for i in range(0, len(rvel_x)):
 
 avg = avg/j
 ravg = ravg/rj
-print(avg, ravg, j, rj, len(rvel_x))
+print(avg, ravg)
 
 avg = 0
 for i in range(0, len(vel_x1)):
