@@ -21,7 +21,7 @@ with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
 #     m2.append(cloudpickle.load(f)) 
 
 m3 = [] # 1.0 m/s SS
-with open("Optimisation_Code/Feasible_Solution/03/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/02/steady-state.pkl", "rb") as f:
     m3.append(cloudpickle.load(f))   
 # with open("Optimisation_Code/Feasible_Solution/03/accel.pkl", "rb") as f:
 #     m3.append(cloudpickle.load(f))  
@@ -185,135 +185,149 @@ for i in range(0, len(m3)):
 
 # The graphs__________________________________________________________________________________________________
 
-yeet = False
-teet = False
-for i in range(0, len(grf_L1)):
-    if grf_L1[i]>=1 and yeet:
-        yeet = False
-        print('l1', cN_time1[i], l1[i], 'grounded')
-    if grf_L1[i]<=1 and not yeet:
-        yeet = True
-        print('l1', cN_time1[i], l1[i], 'air')
-    if grf_R1[i]>=1 and teet:
-        teet = False
-        print('r1', cN_time1[i], r1[i], 'grounded')
-    if grf_R1[i]<=1 and not teet:
-        teet = True
-        print('r1', cN_time1[i], r1[i], 'air')
-
-yeet = False
-teet = False
-for i in range(0, len(grf_L2)):
-    if grf_L2[i]>=1 and yeet:
-        yeet = False
-        print('l2', cN_time2[i], l2[i], 'grounded')
-    if grf_L2[i]<=1 and not yeet:
-        yeet = True
-        print('l2', cN_time2[i], l2[i], 'air')
-    if grf_R2[i]>=1 and teet:
-        teet = False
-        print('r2', cN_time2[i], r2[i], 'grounded')
-    if grf_R2[i]<=1 and not teet:
-        teet = True
-        print('r2', cN_time2[i], r2[i], 'air')
-
-yeet = False
-teet = False
-g3 = []
-a3 = []
-for i in range(0, len(grf_L3)):
-    if grf_L3[i]>=1 and yeet:
-        yeet = False
-        print('l3', cN_time3[i], l3[i], 'grounded')
-        g3.append(cN_time3[i])
-    if grf_L3[i]<=1 and not yeet:
-        yeet = True
-        print('l3', cN_time3[i], l3[i], 'air')
-        if cN_time3[i] > 0.0:
-            a3.append(cN_time3[i])
-    if grf_R3[i]>=1 and teet:
-        teet = False
-        print('r3', cN_time3[i], r3[i], 'grounded')
-        g3.append(cN_time3[i])
-    if grf_R3[i]<=1 and not teet:
-        teet = True
-        print('r3', cN_time3[i], r3[i], 'air')
-        if cN_time3[i] > 0.0:
-            a3.append(cN_time3[i])
-
-# plt.figure(1)
-# plt.yticks(fontsize=18)
-# plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
-# plt.ylabel('vertical height (m)', fontsize=22)
-# plt.xlabel('time (s)', fontsize=22)
-# plt.plot(cN_time1, z1, linewidth=1.5, label='0.18 m/s')
-# boom = False
-# bang = False
-# for i in range(0, len(F_pos_L1)):
-#     if F_pos_L1[i]>0.8 and boom:
-#         boom = False
-#         plt.plot(cN_time1[i], z1[i], c='k', marker='+', markersize='14')
-#     if F_neg_L1[i]>0.8 and not boom:
-#         boom = True
-#         plt.plot(cN_time1[i], z1[i], c='k', marker='.', markersize='12')
-#     if F_pos_R1[i]>0.8 and bang:
-#         bang = False
-#         plt.plot(cN_time1[i], z1[i], c='r', marker='x', markersize='14')
-#     if F_neg_R1[i]>0.8 and not bang:
-#         bang = True
-#         plt.plot(cN_time1[i], z1[i], c='r', marker='.', markersize='12')
-# plt.grid()
-# plt.legend(fontsize=15) 
-
-# plt.figure(2)
-# plt.yticks(fontsize=18)
-# plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
-# plt.ylabel('vertical height (m)', fontsize=22)
-# plt.xlabel('time (s)', fontsize=22)
-# plt.plot(cN_time2, z2, linewidth=1.5, label='0.28 m/s')
-# boom = False
-# bang = False
-# for i in range(0, len(F_pos_L2)):
-#     if F_pos_L2[i]>0.8 and boom:
-#         boom = False
-#         plt.plot(cN_time2[i], z2[i], c='k', marker='+', markersize='14')
-#     if F_neg_L2[i]>0.8 and not boom:
-#         boom = True
-#         plt.plot(cN_time2[i], z2[i], c='k', marker='.', markersize='12')
-#     if F_pos_R2[i]>0.8 and bang:
-#         bang = False
-#         plt.plot(cN_time2[i], z2[i], c='r', marker='x', markersize='14')
-#     if F_neg_R2[i]>0.8 and not bang:
-#         bang = True
-#         plt.plot(cN_time2[i], z2[i], c='r', marker='.', markersize='12')
-# plt.grid()
-# plt.legend(fontsize=15) 
-
-plt.figure(3)
+plt.figure(1)
 plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time3, z3, linewidth=1.5, label='0.30 m/s')
-boom = True
+plt.plot(cN_time1, z1, linewidth=1.5, label='0.18 m/s')
+boom = False
 bang = False
-for i in range(0, len(F_pos_L3)):
-    if F_pos_L3[i]>0.8 and boom:
+for i in range(0, len(F_pos_L1)):
+    if F_pos_L1[i]>0.8 and boom:
         boom = False
-        plt.plot(cN_time3[i], z3[i], c='k', marker='+', markersize='14')
-    if F_neg_L3[i]>0.8 and not boom:
+        plt.plot(cN_time1[i], z1[i], c='k', marker='+', markersize='14')
+    if F_neg_L1[i]>0.8 and not boom:
         boom = True
-        plt.plot(cN_time3[i], z3[i], c='k', marker='.', markersize='12')
-    if F_pos_R3[i]>0.8 and bang:
+        plt.plot(cN_time1[i], z1[i], c='k', marker='.', markersize='12')
+    if F_pos_R1[i]>0.8 and bang:
         bang = False
-        plt.plot(cN_time3[i], z3[i], c='r', marker='x', markersize='14')
-    if F_neg_R3[i]>0.8 and not bang:
+        plt.plot(cN_time1[i], z1[i], c='r', marker='x', markersize='14')
+    if F_neg_R1[i]>0.8 and not bang:
         bang = True
-        plt.plot(cN_time3[i], z3[i], c='r', marker='.', markersize='12')
+        plt.plot(cN_time1[i], z1[i], c='r', marker='.', markersize='12')
+grf_L1 = [x/250 for x in grf_L1]
+grf_R1 = [x/250 for x in grf_R1]
+plt.plot(cN_time1, grf_R1)
+plt.plot(cN_time1, grf_L1)
 plt.grid()
 plt.legend(fontsize=15) 
 
+plt.figure(2)
+plt.yticks(fontsize=18)
+plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
+plt.ylabel('vertical height (m)', fontsize=22)
+plt.xlabel('time (s)', fontsize=22)
+plt.plot(cN_time2, z2, linewidth=1.5, label='0.28 m/s')
+boom = False
+bang = False
+for i in range(0, len(F_pos_L2)):
+    if F_pos_L2[i]>0.8 and boom:
+        boom = False
+        plt.plot(cN_time2[i], z2[i], c='k', marker='+', markersize='14')
+    if F_neg_L2[i]>0.8 and not boom:
+        boom = True
+        plt.plot(cN_time2[i], z2[i], c='k', marker='.', markersize='12')
+    if F_pos_R2[i]>0.8 and bang:
+        bang = False
+        plt.plot(cN_time2[i], z2[i], c='r', marker='x', markersize='14')
+    if F_neg_R2[i]>0.8 and not bang:
+        bang = True
+        plt.plot(cN_time2[i], z2[i], c='r', marker='.', markersize='12')
+grf_L2 = [x/250 for x in grf_L2]
+grf_R2 = [x/250 for x in grf_R2]
+plt.plot(cN_time2, grf_R2)
+plt.plot(cN_time2, grf_L2)
+plt.plot(cN_time2, r2)
+plt.plot(cN_time2, l2)
+plt.grid()
+plt.legend(fontsize=15) 
+
+# plt.figure(3)
+# plt.yticks(fontsize=18)
+# plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
+# plt.ylabel('vertical height (m)', fontsize=22)
+# plt.xlabel('time (s)', fontsize=22)
+# plt.plot(cN_time3, z3, linewidth=1.5, label='0.30 m/s')
+# boom = True
+# bang = False
+# for i in range(0, len(F_pos_L3)):
+#     if F_pos_L3[i]>0.8 and boom:
+#         boom = False
+#         plt.plot(cN_time3[i], z3[i], c='k', marker='+', markersize='14')
+#     if F_neg_L3[i]>0.8 and not boom:
+#         boom = True
+#         plt.plot(cN_time3[i], z3[i], c='k', marker='.', markersize='12')
+#     if F_pos_R3[i]>0.8 and bang:
+#         bang = False
+#         plt.plot(cN_time3[i], z3[i], c='r', marker='x', markersize='14')
+#     if F_neg_R3[i]>0.8 and not bang:
+#         bang = True
+#         plt.plot(cN_time3[i], z3[i], c='r', marker='.', markersize='12')
+# grf_L3 = [x/250 for x in grf_L3]
+# grf_R3 = [x/250 for x in grf_R3]
+# plt.plot(cN_time3, grf_R3)
+# plt.plot(cN_time3, grf_L3)
+# plt.grid()
+# plt.legend(fontsize=15) 
+
 plt.show()
+
+# yeet = False
+# teet = False
+# for i in range(0, len(F_pos_L1)):
+#     if F_pos_L1[i]>=0.8 and yeet:
+#         yeet = False
+#         print('l1', cN_time1[i], l1[i], 'extend')
+#     if F_neg_L1[i]>=0.8 and not yeet:
+#         yeet = True
+#         print('l1', cN_time1[i], l1[i], 'retract')
+#     if F_pos_R1[i]>=0.8 and teet:
+#         teet = False
+#         print('r1', cN_time1[i], r1[i], 'extend')
+#     if F_neg_R1[i]>=0.8 and not teet:
+#         teet = True
+#         print('r1', cN_time1[i], r1[i], 'retract')
+
+# yeet = False
+# teet = False
+# for i in range(0, len(grf_L2)):
+#     if grf_L2[i]>=1 and yeet:
+#         yeet = False
+#         print('l2', cN_time2[i], l2[i], 'grounded')
+#     if grf_L2[i]<=1 and not yeet:
+#         yeet = True
+#         print('l2', cN_time2[i], l2[i], 'air')
+#     if grf_R2[i]>=1 and teet:
+#         teet = False
+#         print('r2', cN_time2[i], r2[i], 'grounded')
+#     if grf_R2[i]<=1 and not teet:
+#         teet = True
+#         print('r2', cN_time2[i], r2[i], 'air')
+
+# yeet = False
+# teet = False
+# g3 = []
+# a3 = []
+# for i in range(0, len(grf_L3)):
+#     if grf_L3[i]>=1 and yeet:
+#         yeet = False
+#         print('l3', cN_time3[i], l3[i], 'grounded')
+#         g3.append(cN_time3[i])
+#     if grf_L3[i]<=1 and not yeet:
+#         yeet = True
+#         print('l3', cN_time3[i], l3[i], 'air')
+#         if cN_time3[i] > 0.0:
+#             a3.append(cN_time3[i])
+#     if grf_R3[i]>=1 and teet:
+#         teet = False
+#         print('r3', cN_time3[i], r3[i], 'grounded')
+#         g3.append(cN_time3[i])
+#     if grf_R3[i]<=1 and not teet:
+#         teet = True
+#         print('r3', cN_time3[i], r3[i], 'air')
+#         if cN_time3[i] > 0.0:
+#             a3.append(cN_time3[i])
 
 # avg = 0
 # for n in range(0, len(vel_x1)):
