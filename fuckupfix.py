@@ -2,15 +2,15 @@ import cloudpickle
 import numpy as np
 
 m1 = [] # 0.7 m/s SS
-with open("Optimisation_Code/Feasible_Solution/00/accel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/01/accel.pkl", "rb") as f:
     m1.append(cloudpickle.load(f))    
 
 m2 = [] # 0.5 m/s SS
-with open("Optimisation_Code/Feasible_Solution/00/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
     m2.append(cloudpickle.load(f))    
 
 m3 = [] # 1.0 m/s SS
-with open("Optimisation_Code/Feasible_Solution/00/decel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/01/decel.pkl", "rb") as f:
     m3.append(cloudpickle.load(f))   
 
 N1 = m1[0].N[-1]
@@ -59,7 +59,7 @@ adder += m1[0].q[N1,cN1,'x'].value
 for n in range(1, N2+1):
     for c in range(1, cN2+1):
         N_time1.append(m2[0].tt0[n].value - m2[0].tt0[1].value + adder1)
-        cN_time1.append((m2[0].tt[n,c].value - m2[0].tt[1,1].value)*2.2 + cN_adder1)
+        cN_time1.append((m2[0].tt[n,c].value - m2[0].tt[1,1].value)*2.1 + cN_adder1)
         z1.append(m2[0].q[n,c,'z'].value)
         vel_z1.append(m2[0].dq[n,c,'z'].value)
         x1.append(m2[0].q[n,c,'x'].value + adder) 

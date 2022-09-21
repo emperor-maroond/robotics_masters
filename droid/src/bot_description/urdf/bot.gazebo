@@ -65,8 +65,8 @@
     <selfCollide>true</selfCollide>
 </gazebo>
 
-<!-- <gazebo reference="rotation_link">
+<gazebo reference="rotation_link">
     <material>${body_color}</material>
     <selfCollide>true</selfCollide>
-</gazebo> -->
+</gazebo>
 </robot>

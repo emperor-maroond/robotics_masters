@@ -169,7 +169,7 @@
     </inertial>
 </link>
 
-<!-- <link name="rotation_link">
+<link name="rotation_link">
     <collision>
         <origin xyz="0 0 1" rpy="0 0 0"/>
         <geometry>
@@ -188,7 +188,7 @@
         <mass value="0.01"/>
         <inertia ixx="1000" ixy="0.0" ixz="0.0" iyy="1000" iyz="0.0" izz="1000"/>
     </inertial>
-</link> -->
+</link>
 
 <joint name="y_direction" type="prismatic">
     <parent link="world"/>
@@ -200,18 +200,18 @@
 
 <joint name="z_direction" type="prismatic">
     <parent link="y_axis_link"/>
-    <child link="base_link"/>
+    <child link="rotation_link"/>
     <axis xyz="0 0 1"/>
     <limit effort="0" lower="-1.79769e+308" upper="1.79769e+308" velocity="0"/>
     <dynamics damping="0.3"/>
 </joint>
 
-<!-- <joint name="rotation" type="fixed">
+<joint name="rotation" type="fixed">
     <parent link="rotation_link"/>
     <child link="base_link"/>
     <axis xyz="1.0 0.0 0.0"/>
     <limit effort="0" lower="-1.57080" upper="1.57080" velocity="0"/>
     <dynamics damping="0.65"/>
-</joint> -->
+</joint>
 
 </robot>
