@@ -1,3 +1,4 @@
+from audioop import avg
 import cloudpickle
 import numpy as np
 
@@ -93,4 +94,11 @@ file.write('{}\n'.format(list(x1)))
 file.write('{}\n'.format(list(z1)))
 file.write('{}\n'.format(list(vel_x1)))
 file.write('{}\n'.format(list(vel_z1)))
+file.write('{}\n'.format(list(grf_L1)))
+file.write('{}\n'.format(list(grf_R1)))
 file.close()
+
+# avg = 0
+# for i in vel_z1:
+#     avg += i
+# print(avg/len(vel_z1))
