@@ -30,7 +30,7 @@ vel_z1 = make_list(rows[4])
 grf_L1 = make_list(rows[5])
 grf_R1 = make_list(rows[6])
 
-file = open('droid/src/bot_description/scripts/data/sim.csv')
+file = open('droid/src/bot_description/scripts/data/0.65data.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
@@ -41,7 +41,7 @@ sim_r_ser = make_list(rows[1])
 sim_l_ser = make_list(rows[3])
 sim_height = make_list(rows[5])
 sim_dist = make_list(rows[7])
-# sim_angle = make_list(rows[9])
+sim_angle = make_list(rows[9])
 sim_time = make_list(rows[11])
 
 value = sim_dist[0]
@@ -54,20 +54,26 @@ for i in range(0, len(sim_time)):
 
 sim_height = [(x+0.22) for x in sim_height]
 
-file = open('droid/src/bot_description/scripts/data/main_data_v2.csv')
+file = open('droid/src/bot_description/scripts/data/freebod.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
         rows.append(row)
 file.close()
 
-r_ser = make_list(rows[97])
-l_ser = make_list(rows[99])
-enc1 = make_list(rows[101])
-enc2 = make_list(rows[103])
-enc3 = []
+# r_ser = make_list(rows[97])
+# l_ser = make_list(rows[99])
+# enc1 = make_list(rows[101])
+# enc2 = make_list(rows[103])
+# enc3 = []
 
-file = open('droid/src/bot_description/scripts/data/rough_data.csv')
+r_ser = make_list(rows[1])
+l_ser = make_list(rows[3])
+enc1 = make_list(rows[5])
+enc2 = make_list(rows[7])
+enc3 = make_list(rows[9])
+
+file = open('droid/src/bot_description/scripts/data/free_rough.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
@@ -78,7 +84,7 @@ rr_ser = make_list(rows[1])
 rl_ser = make_list(rows[3])
 renc1 = make_list(rows[5])
 renc2 = make_list(rows[7])
-renc3 = []
+renc3 = make_list(rows[9])
     
 # Handel the sensor data_____________________________________________________________________________________________________________
 def kalman(u):
@@ -146,7 +152,9 @@ rkal_theta = kalman(renc3)
 sim_dist = kalman(sim_dist)
 sim_height = kalman(sim_height)
 
-a = 3.0; b = 7.5; c = 7.33; d = c+(b-a)
+# a = 3.0; b = 7.5; c = 7.33; d = c+(b-a)
+# o = 0.0; p = 5 #o+(b-a)
+a = 5.35; b = 10.1; c = 3.05; d = c+(b-a)
 o = 0.0; p = 5 #o+(b-a)
 kal_r = shorten(kal_r, a, b, t)
 kal_l = shorten(kal_l, a, b, t)
@@ -181,8 +189,8 @@ sim_vel_z = velocity(sim_height, sim_time)
 
 # plt.figure(1)
 # plt.yticks(fontsize=18)
-# # plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
-# plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
+# plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
+# # plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 # plt.ylabel('horizontal distance (m)', fontsize=22)
 # plt.xlabel('time(s)', fontsize=22)
 # plt.grid()
@@ -190,47 +198,46 @@ sim_vel_z = velocity(sim_height, sim_time)
 # plt.plot(t, kal_x, linewidth=1.5, label='rigid surface')
 # plt.plot(rt, rkal_x, linewidth=1.5, label='rough surface')
 # # plt.plot(sim_time, sim_dist, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+# plt.legend(fontsize=18)
 
-# # cN_time1 = [x*2 for x in cN_time1]
-# plt.figure(2)
+plt.figure(2)
 # plt.ylim([0, 0.7])
-# plt.yticks(fontsize=18)
-# plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
-# plt.ylabel('vertical height (m)', fontsize=22)
-# plt.xlabel('time(s)', fontsize=22)
-# plt.grid()
-# plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
-# plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
-# plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
-# # plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+plt.yticks(fontsize=18)
+plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
+plt.ylabel('vertical height (m)', fontsize=22)
+plt.xlabel('time(s)', fontsize=22)
+plt.grid()
+plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
+plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
+plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
+# plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
+plt.legend(fontsize=18)
 
 # plt.figure(3)
-# plt.ylim([-0.2, 0.8])
+# # plt.ylim([-0.2, 0.8])
 # plt.yticks(fontsize=18)
 # plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 # plt.ylabel('horizontal velocity (m/s)', fontsize=22)
 # plt.xlabel('time(s)', fontsize=22)
 # plt.grid()
 # plt.plot(cN_time1, vel_x1, linewidth=1.5, label='optimiser')
-# plt.plot(t, vel_x, linewidth=1.5, label='rigid surface')
-# plt.plot(rt, rvel_x, linewidth=1.5, label='rough surface')
-# # plt.plot(sim_time, sim_vel_x, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+# # plt.plot(t, vel_x, linewidth=1.5, label='rigid surface')
+# # plt.plot(rt, rvel_x, linewidth=1.5, label='rough surface')
+# plt.plot(sim_time, sim_vel_x, linewidth=1.5, label='simulation')
+# plt.legend(fontsize=18)
 
 # plt.figure(4)
-# plt.ylim([-1.8, 2.9])
+# # plt.ylim([-1.8, 2.9])
 # plt.yticks(fontsize=18)
 # plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 # plt.ylabel('vertical velocity (m/s)', fontsize=22)
 # plt.xlabel('time(s)', fontsize=22)
 # plt.grid()
 # plt.plot(cN_time1, vel_z1, linewidth=1.5, label='optimiser')
-# plt.plot(t, vel_z, linewidth=1.5, label='rigid surface')
-# plt.plot(rt, rvel_z, linewidth=1.5, label='rough surface')
-# # plt.plot(sim_time, sim_vel_z, linewidth=1.5, label='simulation')
-# plt.legend(fontsize=15)
+# # plt.plot(t, vel_z, linewidth=1.5, label='rigid surface')
+# # plt.plot(rt, rvel_z, linewidth=1.5, label='rough surface')
+# plt.plot(sim_time, sim_vel_z, linewidth=1.5, label='simulation')
+# plt.legend(fontsize=18)
 
 # plt.figure(5)
 # plt.yticks(fontsize=18)
@@ -242,35 +249,35 @@ sim_vel_z = velocity(sim_height, sim_time)
 # plt.plot(rt, rkal_theta, linewidth=1.5, label='rough surface')
 # plt.legend(fontsize=15)
 
-grouned_z = []
-grouned_x = []
-grouned_velz = []
-air_z = []
-air_x = []
-air_velz = []
-rgrouned_z = []
-rgrouned_x = []
-rgrouned_velz = []
-rair_z = []
-rair_x = []
-rair_velz = []
-grouned_z1 = []
-grouned_x1 = []
-grouned_velz1 = []
-air_z1 = []
-air_x1 = []
-air_velz1 = []
-fig = plt.figure()
-ax = fig.gca(projection ='3d')
-# plt.title('Vertical Position vs Velocity')
-# plt.yticks(fontsize=18)
-# plt.xticks(fontsize=18)
-ax.set_xlabel('vertical velocity (m/s)')
-ax.set_zlabel('vertical height (m)')
-ax.set_ylabel('horizontal distance (m)')
+# grouned_z = []
+# grouned_x = []
+# grouned_velz = []
+# air_z = []
+# air_x = []
+# air_velz = []
+# rgrouned_z = []
+# rgrouned_x = []
+# rgrouned_velz = []
+# rair_z = []
+# rair_x = []
+# rair_velz = []
+# grouned_z1 = []
+# grouned_x1 = []
+# grouned_velz1 = []
+# air_z1 = []
+# air_x1 = []
+# air_velz1 = []
+# fig = plt.figure()
+# ax = fig.gca(projection ='3d')
+# # plt.title('Vertical Position vs Velocity')
+# # plt.yticks(fontsize=18)
+# # plt.xticks(fontsize=18)
+# ax.set_xlabel('vertical velocity (m/s)')
+# ax.set_zlabel('vertical height (m)')
+# ax.set_ylabel('horizontal distance (m)')
 
 # height = 0.1
-height = 0.25
+# height = 0.25
 # for i in range(0, len(kal_z)):
 #     if kal_z[i] <= height:
 #         grouned_z.append(kal_z[i])
@@ -308,27 +315,27 @@ height = 0.25
 # ax.plot(rgrouned_velz, rgrouned_x, rgrouned_z, linewidth=2, c='r', linestyle='dotted')        
 # ax.plot(rair_velz, rair_x, rair_z, linewidth=2, c='b', linestyle='dotted')
 
-height = 0.28
-for i in range(0, len(z1)):
-    if z1[i]<=height:
-        grouned_z1.append(z1[i])
-        grouned_x1.append(x1[i])
-        grouned_velz1.append(vel_z1[i])
-        air_z1.append(np.nan)
-        air_x1.append(np.nan)
-        air_velz1.append(np.nan) 
+# height = 0.28
+# for i in range(0, len(z1)):
+#     if z1[i]<=height:
+#         grouned_z1.append(z1[i])
+#         grouned_x1.append(x1[i])
+#         grouned_velz1.append(vel_z1[i])
+#         air_z1.append(np.nan)
+#         air_x1.append(np.nan)
+#         air_velz1.append(np.nan) 
 
-    if z1[i]>height:
-        air_z1.append(z1[i])
-        air_x1.append(x1[i])
-        air_velz1.append(vel_z1[i])
-        grouned_z1.append(np.nan)
-        grouned_x1.append(np.nan)
-        grouned_velz1.append(np.nan)
+#     if z1[i]>height:
+#         air_z1.append(z1[i])
+#         air_x1.append(x1[i])
+#         air_velz1.append(vel_z1[i])
+#         grouned_z1.append(np.nan)
+#         grouned_x1.append(np.nan)
+#         grouned_velz1.append(np.nan)
 
-ax.plot(vel_z1, x1, z1, linewidth=1, c='r')
-ax.plot(grouned_velz1, grouned_x1, grouned_z1, linewidth=1, c='r')        
-ax.plot(air_velz1, air_x1, air_z1, linewidth=1, c='b')
+# ax.plot(vel_z1, x1, z1, linewidth=1, c='r')
+# ax.plot(grouned_velz1, grouned_x1, grouned_z1, linewidth=1, c='r')        
+# ax.plot(air_velz1, air_x1, air_z1, linewidth=1, c='b')
 
 # avg = 0
 # j = 0
