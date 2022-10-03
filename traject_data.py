@@ -145,7 +145,7 @@ for i in range(0, len(m3)): # Add the cN node time into an array
         cN_adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
     for n in range(1, N3+1):
         for c in range(1, cN3+1):
-            cN_time3.append((m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3) * 1.0)
+            cN_time3.append((m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3) * 1.2)
             
 for i in range(0, len(m3)): # Add the N node time into an array
     if(i>0):
@@ -174,7 +174,7 @@ for i in range(0, len(m3)):
             z3.append(m3[i].q[n,c,'z'].value)
             vel_z3.append(m3[i].dq[n,c,'z'].value)
             x3.append(m3[i].q[n,c,'x'].value + adder)
-            vel_x3.append(m3[i].dq[n,c,'x'].value * (100-0)/100) 
+            vel_x3.append(m3[i].dq[n,c,'x'].value * (100-55)/100) 
             r3.append(m3[i].q[n,c,'theta_l_R'].value)
             l3.append(m3[i].q[n,c,'theta_l_L'].value)
             grf_L3.append(m3[i].GRF_L[n,c,'Z','ps'].value)

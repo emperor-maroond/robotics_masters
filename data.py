@@ -397,7 +397,7 @@ def calculate_ss_vel(height, time, vel_z, vel_x):
     return avg_z/div, avg_x/div
 
 # print(calculate_ss_vel(sim_height, sim_time, sim_vel_z, sim_vel_x))
-# print(calculate_ss_vel(kal_z, t, vel_z, vel_x))
-# print(calculate_ss_vel(rkal_z, rt, rvel_z, rvel_x))
+print(calculate_ss_vel(kal_z, t, vel_z, vel_x))
+print(calculate_ss_vel(rkal_z, rt, rvel_z, rvel_x))
 
-plt.show()
+# plt.show()
