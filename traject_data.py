@@ -97,7 +97,7 @@ for i in range(0, len(m2)): # Add the cN node time into an array
         cN_adder2 += (m2[i-1].tt0[N2].value - m2[i-1].tt0[1].value)
     for n in range(1, N2+1):
         for c in range(1, cN2+1):
-            cN_time2.append((m2[i].tt[n,c].value - m2[i].tt[1,1].value + cN_adder2) * 1.0)
+            cN_time2.append((m2[i].tt[n,c].value - m2[i].tt[1,1].value + cN_adder2) * 1.3)
             
 for i in range(0, len(m2)): # Add the N node time into an array
     if(i>0):
@@ -126,7 +126,7 @@ for i in range(0, len(m2)):
             z2.append(m2[i].q[n,c,'z'].value)
             vel_z2.append(m2[i].dq[n,c,'z'].value)
             x2.append(m2[i].q[n,c,'x'].value + adder) 
-            vel_x2.append(m2[i].dq[n,c,'x'].value * (100-0)/100)
+            vel_x2.append(m2[i].dq[n,c,'x'].value * (100-48.738)/100)
             r2.append(m2[i].q[n,c,'theta_l_R'].value)
             l2.append(m2[i].q[n,c,'theta_l_L'].value)
             grf_L2.append(m2[i].GRF_L[n,c,'Z','ps'].value)
@@ -145,7 +145,7 @@ for i in range(0, len(m3)): # Add the cN node time into an array
         cN_adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
     for n in range(1, N3+1):
         for c in range(1, cN3+1):
-            cN_time3.append((m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3) * 1.2)
+            cN_time3.append((m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3) * 1.1)
             
 for i in range(0, len(m3)): # Add the N node time into an array
     if(i>0):
@@ -174,7 +174,7 @@ for i in range(0, len(m3)):
             z3.append(m3[i].q[n,c,'z'].value)
             vel_z3.append(m3[i].dq[n,c,'z'].value)
             x3.append(m3[i].q[n,c,'x'].value + adder)
-            vel_x3.append(m3[i].dq[n,c,'x'].value * (100-55)/100) 
+            vel_x3.append(m3[i].dq[n,c,'x'].value * (100-15.969)/100) 
             r3.append(m3[i].q[n,c,'theta_l_R'].value)
             l3.append(m3[i].q[n,c,'theta_l_L'].value)
             grf_L3.append(m3[i].GRF_L[n,c,'Z','ps'].value)
@@ -215,7 +215,7 @@ plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time2, z2, linewidth=1.5, label='0.15 m/s')
+plt.plot(cN_time2, z2, linewidth=1.5, label='0.20 m/s')
 boom = False
 bang = True
 for i in range(0, len(F_pos_L2)):
