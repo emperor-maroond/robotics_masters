@@ -1,9 +1,6 @@
-from traceback import print_tb
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import cloudpickle
-from scipy.interpolate import interp1d
 
 m1 = [] # 0.7 m/s SS
 with open("Optimisation_Code/Feasible_Solution/damp_x1/steady-state.pkl", "rb") as f:
