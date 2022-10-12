@@ -255,65 +255,65 @@ for i in range(0, len(F_pos_L3)):
 plt.grid()
 plt.legend(fontsize=15) 
 
-plt.show()
+# plt.show()
 
-# yeet = False
-# teet = False
-# for i in range(0, len(grf_L1)):
-#     if grf_L1[i]>1 and yeet:
-#         yeet = False
-#         print('l1', cN_time1[i], l1[i]*180/np.pi, 'grounded')
-#     if grf_L1[i]<=1 and not yeet:
-#         yeet = True
-#         print('l1', cN_time1[i], l1[i]*180/np.pi, 'air')
-#     if grf_R1[i]>1 and teet:
-#         teet = False
-#         print('r1', cN_time1[i], r1[i]*180/np.pi, 'grounded')
-#     if grf_R1[i]<=1 and not teet:
-#         teet = True
-#         print('r1', cN_time1[i], r1[i]*180/np.pi, 'air')
+yeet = False
+teet = False
+for i in range(0, len(grf_L1)):
+    if grf_L1[i]>0.01 and yeet:
+        yeet = False
+        print('l1', cN_time1[i], l1[i]*180/np.pi, 'grounded')
+    if grf_L1[i]<=0.01 and not yeet:
+        yeet = True
+        print('l1', cN_time1[i], l1[i]*180/np.pi, 'air')
+    if grf_R1[i]>0.01 and teet:
+        teet = False
+        print('r1', cN_time1[i], r1[i]*180/np.pi, 'grounded')
+    if grf_R1[i]<=0.01 and not teet:
+        teet = True
+        print('r1', cN_time1[i], r1[i]*180/np.pi, 'air')
 
-# yeet = False
-# teet = False
-# for i in range(0, len(grf_L2)):
-#     if grf_L2[i]>1 and yeet:
-#         yeet = False
-#         print('l2', cN_time2[i], l2[i]*180/np.pi, 'grounded')
-#     if grf_L2[i]<=1 and not yeet:
-#         yeet = True
-#         print('l2', cN_time2[i], l2[i]*180/np.pi, 'air')
-#     if grf_R2[i]>1 and teet:
-#         teet = False
-#         print('r2', cN_time2[i], r2[i]*180/np.pi, 'grounded')
-#     if grf_R2[i]<=1 and not teet:
-#         teet = True
-#         print('r2', cN_time2[i], r2[i]*180/np.pi, 'air')
+yeet = False
+teet = False
+for i in range(0, len(grf_L2)):
+    if grf_L2[i]>0.01 and yeet:
+        yeet = False
+        print('l2', cN_time2[i], l2[i]*180/np.pi, 'grounded')
+    if grf_L2[i]<=0.01 and not yeet:
+        yeet = True
+        print('l2', cN_time2[i], l2[i]*180/np.pi, 'air')
+    if grf_R2[i]>0.01 and teet:
+        teet = False
+        print('r2', cN_time2[i], r2[i]*180/np.pi, 'grounded')
+    if grf_R2[i]<=0.01 and not teet:
+        teet = True
+        print('r2', cN_time2[i], r2[i]*180/np.pi, 'air')
 
-# yeet = False
-# teet = False
-# for i in range(0, len(grf_L3)):
-#     if grf_L3[i]>1 and yeet:
-#         yeet = False
-#         print('l3', cN_time3[i], l3[i]*180/np.pi, 'grounded')
-#     if grf_L3[i]<=1 and not yeet:
-#         yeet = True
-#         print('l3', cN_time3[i], l3[i]*180/np.pi, 'air')
-#     if grf_R3[i]>1 and teet:
-#         teet = False
-#         print('r3', cN_time3[i], r3[i]*180/np.pi, 'grounded')
-#     if grf_R3[i]<=1 and not teet:
-#         teet = True
-#         print('r3', cN_time3[i], r3[i]*180/np.pi, 'air')
+yeet = False
+teet = False
+for i in range(0, len(grf_L3)):
+    if grf_L3[i]>0.01 and yeet:
+        yeet = False
+        print('l3', cN_time3[i], l3[i]*180/np.pi, 'grounded')
+    if grf_L3[i]<=0.01 and not yeet:
+        yeet = True
+        print('l3', cN_time3[i], l3[i]*180/np.pi, 'air')
+    if grf_R3[i]>0.01 and teet:
+        teet = False
+        print('r3', cN_time3[i], r3[i]*180/np.pi, 'grounded')
+    if grf_R3[i]<=0.01 and not teet:
+        teet = True
+        print('r3', cN_time3[i], r3[i]*180/np.pi, 'air')
 
-avg = 0
-for n in range(0, len(vel_x1)):
-    avg += vel_x1[n]
-print(avg/len(vel_x1), cN_time1[-1], x1[-1])
-avg = 0
-for n in range(0, len(vel_x2)):
-    avg += vel_x2[n]
-print(avg/len(vel_x2), cN_time2[-1])
-avg = 0
-for n in range(0, len(vel_x3)):
-    avg += vel_x3[n]
-print(avg/len(vel_x3), cN_time3[-1])
+# avg = 0
+# for n in range(0, len(vel_x1)):
+#     avg += vel_x1[n]
+# print(avg/len(vel_x1), cN_time1[-1], x1[-1])
+# avg = 0
+# for n in range(0, len(vel_x2)):
+#     avg += vel_x2[n]
+# print(avg/len(vel_x2), cN_time2[-1])
+# avg = 0
+# for n in range(0, len(vel_x3)):
+#     avg += vel_x3[n]
+# print(avg/len(vel_x3), cN_time3[-1])
