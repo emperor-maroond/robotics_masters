@@ -3,15 +3,15 @@ import cloudpickle
 import numpy as np
 
 m1 = [] # 0.7 m/s SS
-with open("Optimisation_Code/Feasible_Solution/01/accel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x2/accel.pkl", "rb") as f:
     m1.append(cloudpickle.load(f))    
 
 m2 = [] # 0.5 m/s SS
-with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x2/steady-state.pkl", "rb") as f:
     m2.append(cloudpickle.load(f))    
 
 m3 = [] # 1.0 m/s SS
-with open("Optimisation_Code/Feasible_Solution/01/decel.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x2/decel.pkl", "rb") as f:
     m3.append(cloudpickle.load(f))   
 
 N1 = m1[0].N[-1]
@@ -41,13 +41,13 @@ adder = 0
 for n in range(1, N1+1):
     N_time1.append(m1[0].tt0[n].value - m1[0].tt0[1].value + adder1)
     for c in range(1, cN1+1):
-        cN_time1.append((m1[0].tt[n,c].value - m1[0].tt[1,1].value + cN_adder1) * (100+40)/100)        
+        cN_time1.append((m1[0].tt[n,c].value - m1[0].tt[1,1].value + cN_adder1) * (100+0)/100)        
 
 for n in range(1, N1+1):
     for c in range(1, cN1+1):
         z1.append(m1[0].q[n,c,'z'].value)
         vel_z1.append(m1[0].dq[n,c,'z'].value)
-        vel_x1.append(m1[0].dq[n,c,'x'].value * (100-40)/100)
+        vel_x1.append(m1[0].dq[n,c,'x'].value * (100-0)/100)
         x1.append(m1[0].q[n,c,'x'].value + adder) 
         r1.append(m1[0].q[n,c,'theta_l_R'].value*180/np.pi)
         l1.append(m1[0].q[n,c,'theta_l_L'].value*180/np.pi)
@@ -55,32 +55,32 @@ for n in range(1, N1+1):
         grf_R1.append(m1[0].GRF_R[n,c,'Z','ps'].value)
 
 adder1 += (m1[0].tt0[N1].value - m1[0].tt0[1].value)
-cN_adder1 += (m1[0].tt0[N1].value - m1[0].tt0[1].value) * (100+40)/100
+cN_adder1 += (m1[0].tt0[N1].value - m1[0].tt0[1].value) * (100+0)/100
 adder += m1[0].q[N1,cN1,'x'].value
 for n in range(1, N2+1):
     for c in range(1, cN2+1):
         N_time1.append(m2[0].tt0[n].value - m2[0].tt0[1].value + adder1)
-        cN_time1.append((m2[0].tt[n,c].value - m2[0].tt[1,1].value)*2.1 + cN_adder1)
+        cN_time1.append((m2[0].tt[n,c].value - m2[0].tt[1,1].value)*1.3 + cN_adder1)
         z1.append(m2[0].q[n,c,'z'].value)
         vel_z1.append(m2[0].dq[n,c,'z'].value)
         x1.append(m2[0].q[n,c,'x'].value + adder) 
-        vel_x1.append(m2[0].dq[n,c,'x'].value * (100-65)/100)
+        vel_x1.append(m2[0].dq[n,c,'x'].value * (100-48.738)/100)
         r1.append(m2[0].q[n,c,'theta_l_R'].value*180/np.pi)
         l1.append(m2[0].q[n,c,'theta_l_L'].value*180/np.pi)
         grf_L1.append(m2[0].GRF_L[n,c,'Z','ps'].value)
         grf_R1.append(m2[0].GRF_R[n,c,'Z','ps'].value)
         
 adder1 += (m2[0].tt0[N2].value - m2[0].tt0[1].value)
-cN_adder1 += (m2[0].tt0[N2].value - m2[0].tt0[1].value) * 2.2
+cN_adder1 += (m2[0].tt0[N2].value - m2[0].tt0[1].value) * 1.3
 adder += m2[0].q[N2,cN2,'x'].value
 for n in range(1, N3+1):
     for c in range(1, cN3+1):
         N_time1.append(m3[0].tt0[n].value - m3[0].tt0[1].value + adder1)
-        cN_time1.append((m3[0].tt[n,c].value - m3[0].tt[1,1].value)*(100+40)/100 + cN_adder1)
+        cN_time1.append((m3[0].tt[n,c].value - m3[0].tt[1,1].value)*(100+0)/100 + cN_adder1)
         z1.append(m3[0].q[n,c,'z'].value)
         vel_z1.append(m3[0].dq[n,c,'z'].value)
         x1.append(m3[0].q[n,c,'x'].value + adder) 
-        vel_x1.append(m3[0].dq[n,c,'x'].value * (100-40)/100)
+        vel_x1.append(m3[0].dq[n,c,'x'].value * (100-0)/100)
         r1.append(m3[0].q[n,c,'theta_l_R'].value*180/np.pi)
         l1.append(m3[0].q[n,c,'theta_l_L'].value*180/np.pi)
         grf_L1.append(m3[0].GRF_L[n,c,'Z','ps'].value)

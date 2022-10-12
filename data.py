@@ -30,8 +30,8 @@ vel_z1 = make_list(rows[4])
 grf_L1 = make_list(rows[5])
 grf_R1 = make_list(rows[6])
 
-# file = open('droid/src/bot_description/scripts/data/0.65data.csv')
-file = open('droid/src/bot_description/scripts/data/sim.csv')
+file = open('droid/src/bot_description/scripts/data/0.65data.csv')
+# file = open('droid/src/bot_description/scripts/data/sim.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
@@ -53,30 +53,28 @@ value = sim_time[0]
 for i in range(0, len(sim_time)):
     sim_time[i] = sim_time[i] - value
 
-sim_height = [(x+0.22) for x in sim_height]
-
-# file = open('droid/src/bot_description/scripts/data/freebod.csv')
-file = open('droid/src/bot_description/scripts/data/main_data_v2.csv')
+file = open('droid/src/bot_description/scripts/data/freebod.csv')
+# file = open('droid/src/bot_description/scripts/data/main_data_v2.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
         rows.append(row)
 file.close()
 
-r_ser = make_list(rows[97])
-l_ser = make_list(rows[99])
-enc1 = make_list(rows[101])
-enc2 = make_list(rows[103])
-enc3 = []
+# r_ser = make_list(rows[97])
+# l_ser = make_list(rows[99])
+# enc1 = make_list(rows[101])
+# enc2 = make_list(rows[103])
+# enc3 = []
 
-# r_ser = make_list(rows[1])
-# l_ser = make_list(rows[3])
-# enc1 = make_list(rows[5])
-# enc2 = make_list(rows[7])
-# enc3 = make_list(rows[9])
+r_ser = make_list(rows[1])
+l_ser = make_list(rows[3])
+enc1 = make_list(rows[5])
+enc2 = make_list(rows[7])
+enc3 = make_list(rows[9])
 
-# file = open('droid/src/bot_description/scripts/data/free_rough.csv')
-file = open('droid/src/bot_description/scripts/data/rough_data.csv')
+file = open('droid/src/bot_description/scripts/data/free_rough.csv')
+# file = open('droid/src/bot_description/scripts/data/rough_data.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
@@ -156,10 +154,10 @@ rkal_theta = kalman(renc3)
 sim_dist = kalman(sim_dist)
 sim_height = kalman(sim_height)
 
-a = 3.0; b = 7.5; c = 7.33; d = c+(b-a)
-o = 0.0; p = 5 #o+(b-a)
-# a = 5.35; b = 10.1; c = 3.05; d = c+(b-a)
+# a = 3.0; b = 7.5; c = 7.33; d = c+(b-a)
 # o = 0.0; p = 5 #o+(b-a)
+a = 5.35; b = 8.5; c = 3.05; d = c+(b-a)
+o = 0.0; p = 3.5 #o+(b-a)
 kal_r = shorten(kal_r, a, b, t)
 kal_l = shorten(kal_l, a, b, t)
 kal_z = shorten(kal_z, a, b, t)
@@ -177,7 +175,7 @@ sim_time = shorten(sim_time, o, p, sim_time)
 t = np.arange(start=0, stop=len(kal_z)*dt, step=dt)
 rt = np.arange(start=0, stop=len(rkal_z)*dt, step=dt)
 value = sim_time[0]
-
+# sim_dist = [(x*0.6) for x in sim_dist]
 vel_x = velocity(kal_x, t)
 vel_z = velocity(kal_z, t)
 vel_r = velocity(kal_r, t)
@@ -198,10 +196,10 @@ plt.xticks(np.arange(start=0, stop=len(kal_z)*dt, step=0.5), fontsize=18)
 plt.ylabel('horizontal distance (m)', fontsize=22)
 plt.xlabel('time(s)', fontsize=22)
 plt.grid()
-# plt.plot(cN_time1, x1, linewidth=1.5, label='optimiser')
-plt.plot(t, kal_x, linewidth=1.5, label='rigid surface')
-plt.plot(rt, rkal_x, linewidth=1.5, label='rough surface')
-# plt.plot(sim_time, sim_dist, linewidth=1.5, label='simulation')
+plt.plot(cN_time1, x1, linewidth=1.5, label='optimiser')
+# plt.plot(t, kal_x, linewidth=1.5, label='rigid surface')
+# plt.plot(rt, rkal_x, linewidth=1.5, label='rough surface')
+plt.plot(sim_time, sim_dist, linewidth=1.5, label='simulation')
 plt.legend(fontsize=18)
 plt.tight_layout()
 
@@ -212,12 +210,13 @@ plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time(s)', fontsize=22)
 plt.grid()
-kal_z = [((x/2.2)+0.2) for x in kal_z]
-rkal_z = [((x/2.2)+0.2) for x in rkal_z]
-# plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
-plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
-plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
-# plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
+# kal_z = [((x/1.3)+0.22) for x in kal_z]
+# rkal_z = [((x/1.3)+0.22) for x in rkal_z]
+plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
+# plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
+# plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
+sim_height = [(x+0.24) for x in sim_height]
+plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
 plt.legend(fontsize=18)
 plt.tight_layout()
 
@@ -228,10 +227,10 @@ plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 plt.ylabel('horizontal velocity (m/s)', fontsize=22)
 plt.xlabel('time(s)', fontsize=22)
 plt.grid()
-# plt.plot(cN_time1, vel_x1, linewidth=1.5, label='optimiser')
-plt.plot(t, vel_x, linewidth=1.5, label='rigid surface')
-plt.plot(rt, rvel_x, linewidth=1.5, label='rough surface')
-# plt.plot(sim_time, sim_vel_x, linewidth=1.5, label='simulation')
+plt.plot(cN_time1, vel_x1, linewidth=1.5, label='optimiser')
+# plt.plot(t, vel_x, linewidth=1.5, label='rigid surface')
+# plt.plot(rt, rvel_x, linewidth=1.5, label='rough surface')
+plt.plot(sim_time, sim_vel_x, linewidth=1.5, label='simulation')
 plt.legend(fontsize=18)
 plt.tight_layout()
 
@@ -242,10 +241,10 @@ plt.xticks(np.arange(start=0, stop=p, step=0.5), fontsize=18)
 plt.ylabel('vertical velocity (m/s)', fontsize=22)
 plt.xlabel('time(s)', fontsize=22)
 plt.grid()
-# plt.plot(cN_time1, vel_z1, linewidth=1.5, label='optimiser')
-plt.plot(t, vel_z, linewidth=1.5, label='rigid surface')
-plt.plot(rt, rvel_z, linewidth=1.5, label='rough surface')
-# plt.plot(sim_time, sim_vel_z, linewidth=1.5, label='simulation')
+plt.plot(cN_time1, vel_z1, linewidth=1.5, label='optimiser')
+# plt.plot(t, vel_z, linewidth=1.5, label='rigid surface')
+# plt.plot(rt, rvel_z, linewidth=1.5, label='rough surface')
+plt.plot(sim_time, sim_vel_z, linewidth=1.5, label='simulation')
 plt.legend(fontsize=18)
 plt.tight_layout()
 
@@ -407,7 +406,7 @@ def calculate_ss_vel(height, time, vel_z, vel_x):
     return avg_z/div, avg_x/div
 
 # print(calculate_ss_vel(sim_height, sim_time, sim_vel_z, sim_vel_x))
-print(calculate_ss_vel(kal_z, t, vel_z, vel_x))
-print(calculate_ss_vel(rkal_z, rt, rvel_z, rvel_x))
+# print(calculate_ss_vel(kal_z, t, vel_z, vel_x))
+# print(calculate_ss_vel(rkal_z, rt, rvel_z, rvel_x))
 
 plt.show()
