@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 # Insert all the data_________________________________________________________________________________________________________
 m1 = []
-with open("Optimisation_Code/Feasible_Solution/02/steady-state.pkl", "rb") as f:
+with open("Optimisation_Code/Feasible_Solution/damp_x2/steady-state.pkl", "rb") as f:
     m1.append(cloudpickle.load(f)) 
 
 N_time1 = []
@@ -35,13 +35,13 @@ cN1 = m1[0].cN[-1]
 for n in range(1, N1+1):
     N_time1.append(m1[0].tt0[n].value - m1[0].tt0[1].value + adder1)
     for c in range(1, cN1+1):
-        cN_time1.append((m1[0].tt[n,c].value - m1[0].tt[1,1].value + cN_adder1) * 1)        
+        cN_time1.append((m1[0].tt[n,c].value - m1[0].tt[1,1].value + cN_adder1) * 1.3)        
 
 for n in range(1, N1+1):
     for c in range(1, cN1+1):
         z1.append(m1[0].q[n,c,'z'].value)
         vel_z1.append(m1[0].dq[n,c,'z'].value)
-        vel_x1.append(m1[0].dq[n,c,'x'].value * (100-0)/100)
+        vel_x1.append(m1[0].dq[n,c,'x'].value * (100-48.738)/100)
         x1.append(m1[0].q[n,c,'x'].value + adder) 
         r1.append(m1[0].q[n,c,'theta_l_R'].value)
         l1.append(m1[0].q[n,c,'theta_l_L'].value)
@@ -85,9 +85,8 @@ for i in range(0, len(grf_L1)):
         Ts.append(cN_time1[i]-tmp)
         vel2.append(vel_x1[i])
 
-
-# plt.show()
-
 for i in range(len(Ts)):
     xf = (Ts[i]*vel1[i])/2
     print(xf, (Ts[i]*vel2[i])/2)
+
+plt.show()
