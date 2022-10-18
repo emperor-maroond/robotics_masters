@@ -2,6 +2,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 from re import sub
+from mpl_toolkits.mplot3d import Axes3D 
 
 # plt.style.use(['fivethirtyeight','seaborn-deep'])
 # %matplotlib inline
@@ -55,28 +56,28 @@ value = sim_time[0]
 for i in range(0, len(sim_time)):
     sim_time[i] = sim_time[i] - value
 
-file = open('droid/src/bot_description/scripts/data/freebod.csv')
-# file = open('droid/src/bot_description/scripts/data/main_data_v2.csv')
+# file = open('droid/src/bot_description/scripts/data/freebod.csv')
+file = open('droid/src/bot_description/scripts/data/main_data_v2.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
         rows.append(row)
 file.close()
 
-# r_ser = make_list(rows[97])
-# l_ser = make_list(rows[99])
-# enc1 = make_list(rows[101])
-# enc2 = make_list(rows[103])
-# enc3 = []
+r_ser = make_list(rows[97])
+l_ser = make_list(rows[99])
+enc1 = make_list(rows[101])
+enc2 = make_list(rows[103])
+enc3 = []
 
-r_ser = make_list(rows[1])
-l_ser = make_list(rows[3])
-enc1 = make_list(rows[5])
-enc2 = make_list(rows[7])
-enc3 = make_list(rows[9])
+# r_ser = make_list(rows[1])
+# l_ser = make_list(rows[3])
+# enc1 = make_list(rows[5])
+# enc2 = make_list(rows[7])
+# enc3 = make_list(rows[9])
 
-file = open('droid/src/bot_description/scripts/data/free_rough.csv')
-# file = open('droid/src/bot_description/scripts/data/rough_data.csv')
+# file = open('droid/src/bot_description/scripts/data/free_rough.csv')
+file = open('droid/src/bot_description/scripts/data/rough_data.csv')
 csvreader = csv.reader(file)
 rows = []
 for row in csvreader:
@@ -156,10 +157,10 @@ rkal_theta = kalman(renc3)
 sim_dist = kalman(sim_dist)
 sim_height = kalman(sim_height)
 
-# a = 3.0; b = 7.5; c = 7.33; d = c+(b-a)
-# o = 0.0; p = 5 #o+(b-a)
-a = 5.35; b = 8.5; c = 3.05; d = c+(b-a)
-o = 0.0; p = 3.5 #o+(b-a)
+a = 3.0; b = 7.5; c = 7.33; d = c+(b-a)
+o = 0.0; p = 5 #o+(b-a)
+# a = 5.35; b = 8.5; c = 3.05; d = c+(b-a)
+# o = 0.0; p = 3.5 #o+(b-a)
 kal_r = shorten(kal_r, a, b, t)
 kal_l = shorten(kal_l, a, b, t)
 kal_z = shorten(kal_z, a, b, t)
@@ -177,7 +178,7 @@ sim_time = shorten(sim_time, o, p, sim_time)
 t = np.arange(start=0, stop=len(kal_z)*dt, step=dt)
 rt = np.arange(start=0, stop=len(rkal_z)*dt, step=dt)
 value = sim_time[0]
-# sim_dist = [(x*0.6) for x in sim_dist]
+sim_dist = [(x*0.6) for x in sim_dist]
 vel_x = velocity(kal_x, t)
 vel_z = velocity(kal_z, t)
 vel_r = velocity(kal_r, t)
@@ -212,13 +213,15 @@ sim_vel_z = velocity(sim_height, sim_time)
 # plt.ylabel('vertical height (m)', fontsize=22)
 # plt.xlabel('time(s)', fontsize=22)
 # plt.grid()
-kal_z = [((x/1.3)+0.22) for x in kal_z]
-rkal_z = [((x/1.3)+0.22) for x in rkal_z]
-# plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
-# # plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
+# # kal_z = [((x/1.3)+0.22) for x in kal_z]
+# # rkal_z = [((x/1.3)+0.22) for x in rkal_z]
+# kal_z = [((x/2.2)+0.2) for x in kal_z]
+# rkal_z = [((x/2.2)+0.2) for x in rkal_z]
+# # plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
+# plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
 # # plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
 # sim_height = [(x+0.24) for x in sim_height]
-# plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
+# # plt.plot(sim_time, sim_height, linewidth=1.5, label='simulation')
 # plt.legend(fontsize=18)
 # plt.tight_layout()
 
@@ -290,9 +293,9 @@ ax.set_xlabel('vertical velocity (m/s)')
 ax.set_zlabel('vertical height (m)')
 ax.set_ylabel('horizontal distance (m)')
 
-# height = 0.25
-rh = 0.32
-height = 0.1/1.3+0.22
+height = 0.25/2.2+0.2
+# rh = 0.32
+# height = 0.1/1.3+0.22
 for i in range(0, len(kal_z)):
     if kal_z[i] <= height:
         grouned_z.append(kal_z[i])
@@ -301,7 +304,7 @@ for i in range(0, len(kal_z)):
         air_z.append(np.nan)
         air_x.append(np.nan)
         air_velz.append(np.nan) 
-    if rkal_z[i] <= rh:
+    if rkal_z[i] <= height:
         rgrouned_z.append(rkal_z[i])
         rgrouned_x.append(rkal_x[i])
         rgrouned_velz.append(rvel_z[i])
@@ -315,7 +318,7 @@ for i in range(0, len(kal_z)):
         grouned_z.append(np.nan)
         grouned_x.append(np.nan)
         grouned_velz.append(np.nan) 
-    if rkal_z[i] > rh:
+    if rkal_z[i] >= height:
         rair_z.append(rkal_z[i])
         rair_x.append(rkal_x[i])
         rair_velz.append(rvel_z[i])
@@ -326,9 +329,9 @@ for i in range(0, len(kal_z)):
 ax.plot(vel_z, kal_x, kal_z, linewidth=1, c='r')
 ax.plot(grouned_velz, grouned_x, grouned_z, linewidth=1, c='r')        
 ax.plot(air_velz, air_x, air_z, linewidth=1, c='b')
-# ax.plot(rvel_z, rkal_x, rkal_z, linewidth=1, c='r', linestyle='dotted')
-ax.plot(rgrouned_velz, rgrouned_x, rgrouned_z, linewidth=2, c='r', linestyle='dotted')        
-ax.plot(rair_velz, rair_x, rair_z, linewidth=2, c='b', linestyle='dotted')
+ax.plot(rvel_z, rkal_x, rkal_z, linewidth=1.2, c='r', linestyle='dotted')
+ax.plot(rgrouned_velz, rgrouned_x, rgrouned_z, linewidth=1.5, c='r', linestyle='dotted')        
+ax.plot(rair_velz, rair_x, rair_z, linewidth=1.5, c='b', linestyle='dotted')
 
 # height = 0.28
 # for i in range(0, len(z1)):
