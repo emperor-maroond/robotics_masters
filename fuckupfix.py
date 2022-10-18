@@ -96,6 +96,8 @@ file.write('{}\n'.format(list(vel_x1)))
 file.write('{}\n'.format(list(vel_z1)))
 file.write('{}\n'.format(list(grf_L1)))
 file.write('{}\n'.format(list(grf_R1)))
+file.write('{}\n'.format(list(r1)))
+file.write('{}\n'.format(list(l1)))
 file.close()
 
 # avg = 0
