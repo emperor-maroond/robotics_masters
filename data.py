@@ -212,8 +212,8 @@ sim_vel_z = velocity(sim_height, sim_time)
 # plt.ylabel('vertical height (m)', fontsize=22)
 # plt.xlabel('time(s)', fontsize=22)
 # plt.grid()
-# # kal_z = [((x/1.3)+0.22) for x in kal_z]
-# # rkal_z = [((x/1.3)+0.22) for x in rkal_z]
+kal_z = [((x/1.3)+0.22) for x in kal_z]
+rkal_z = [((x/1.3)+0.22) for x in rkal_z]
 # plt.plot(cN_time1, z1, linewidth=1.5, label='optimiser')
 # # plt.plot(t, kal_z, linewidth=1.5, label='rigid surface')
 # # plt.plot(rt, rkal_z, linewidth=1.5, label='rough surface')
@@ -290,66 +290,67 @@ ax.set_xlabel('vertical velocity (m/s)')
 ax.set_zlabel('vertical height (m)')
 ax.set_ylabel('horizontal distance (m)')
 
-# height = 0.1
 # height = 0.25
-# for i in range(0, len(kal_z)):
-#     if kal_z[i] <= height:
-#         grouned_z.append(kal_z[i])
-#         grouned_x.append(kal_x[i])
-#         grouned_velz.append(vel_z[i])
-#         air_z.append(np.nan)
-#         air_x.append(np.nan)
-#         air_velz.append(np.nan) 
-#     if rkal_z[i] <= height:
-#         rgrouned_z.append(rkal_z[i])
-#         rgrouned_x.append(rkal_x[i])
-#         rgrouned_velz.append(rvel_z[i])
-#         rair_z.append(np.nan)
-#         rair_x.append(np.nan)
-#         rair_velz.append(np.nan) 
-#     if kal_z[i] > height:
-#         air_z.append(kal_z[i])
-#         air_x.append(kal_x[i])
-#         air_velz.append(vel_z[i])
-#         grouned_z.append(np.nan)
-#         grouned_x.append(np.nan)
-#         grouned_velz.append(np.nan) 
-#     if rkal_z[i] > height:
-#         rair_z.append(rkal_z[i])
-#         rair_x.append(rkal_x[i])
-#         rair_velz.append(rvel_z[i])
-#         rgrouned_z.append(np.nan)
-#         rgrouned_x.append(np.nan)
-#         rgrouned_velz.append(np.nan) 
+rh = 0.32
+height = 0.1/1.3+0.22
+for i in range(0, len(kal_z)):
+    if kal_z[i] <= height:
+        grouned_z.append(kal_z[i])
+        grouned_x.append(kal_x[i])
+        grouned_velz.append(vel_z[i])
+        air_z.append(np.nan)
+        air_x.append(np.nan)
+        air_velz.append(np.nan) 
+    if rkal_z[i] <= rh:
+        rgrouned_z.append(rkal_z[i])
+        rgrouned_x.append(rkal_x[i])
+        rgrouned_velz.append(rvel_z[i])
+        rair_z.append(np.nan)
+        rair_x.append(np.nan)
+        rair_velz.append(np.nan) 
+    if kal_z[i] > height:
+        air_z.append(kal_z[i])
+        air_x.append(kal_x[i])
+        air_velz.append(vel_z[i])
+        grouned_z.append(np.nan)
+        grouned_x.append(np.nan)
+        grouned_velz.append(np.nan) 
+    if rkal_z[i] > rh:
+        rair_z.append(rkal_z[i])
+        rair_x.append(rkal_x[i])
+        rair_velz.append(rvel_z[i])
+        rgrouned_z.append(np.nan)
+        rgrouned_x.append(np.nan)
+        rgrouned_velz.append(np.nan) 
 
-# ax.plot(vel_z, kal_x, kal_z, linewidth=1, c='r')
-# ax.plot(grouned_velz, grouned_x, grouned_z, linewidth=1, c='r')        
-# ax.plot(air_velz, air_x, air_z, linewidth=1, c='b')
-# # ax.plot(rvel_z, rkal_x, rkal_z, linewidth=1, c='r', linestyle='dotted')
-# ax.plot(rgrouned_velz, rgrouned_x, rgrouned_z, linewidth=2, c='r', linestyle='dotted')        
-# ax.plot(rair_velz, rair_x, rair_z, linewidth=2, c='b', linestyle='dotted')
+ax.plot(vel_z, kal_x, kal_z, linewidth=1, c='r')
+ax.plot(grouned_velz, grouned_x, grouned_z, linewidth=1, c='r')        
+ax.plot(air_velz, air_x, air_z, linewidth=1, c='b')
+# ax.plot(rvel_z, rkal_x, rkal_z, linewidth=1, c='r', linestyle='dotted')
+ax.plot(rgrouned_velz, rgrouned_x, rgrouned_z, linewidth=2, c='r', linestyle='dotted')        
+ax.plot(rair_velz, rair_x, rair_z, linewidth=2, c='b', linestyle='dotted')
 
-height = 0.28
-for i in range(0, len(z1)):
-    if z1[i]<=height:
-        grouned_z1.append(z1[i])
-        grouned_x1.append(x1[i])
-        grouned_velz1.append(vel_z1[i])
-        air_z1.append(np.nan)
-        air_x1.append(np.nan)
-        air_velz1.append(np.nan) 
+# height = 0.28
+# for i in range(0, len(z1)):
+#     if z1[i]<=height:
+#         grouned_z1.append(z1[i])
+#         grouned_x1.append(x1[i])
+#         grouned_velz1.append(vel_z1[i])
+#         air_z1.append(np.nan)
+#         air_x1.append(np.nan)
+#         air_velz1.append(np.nan) 
 
-    if z1[i]>height:
-        air_z1.append(z1[i])
-        air_x1.append(x1[i])
-        air_velz1.append(vel_z1[i])
-        grouned_z1.append(np.nan)
-        grouned_x1.append(np.nan)
-        grouned_velz1.append(np.nan)
+#     if z1[i]>height:
+#         air_z1.append(z1[i])
+#         air_x1.append(x1[i])
+#         air_velz1.append(vel_z1[i])
+#         grouned_z1.append(np.nan)
+#         grouned_x1.append(np.nan)
+#         grouned_velz1.append(np.nan)
 
-ax.plot(vel_z1, x1, z1, linewidth=1, c='r')
-ax.plot(grouned_velz1, grouned_x1, grouned_z1, linewidth=1, c='r')        
-ax.plot(air_velz1, air_x1, air_z1, linewidth=1, c='b')
+# ax.plot(vel_z1, x1, z1, linewidth=1, c='r')
+# ax.plot(grouned_velz1, grouned_x1, grouned_z1, linewidth=1, c='r')        
+# ax.plot(air_velz1, air_x1, air_z1, linewidth=1, c='b')
 
 def calculate_ss_vel(height, time, vel_z, vel_x):
     tmp = 0
