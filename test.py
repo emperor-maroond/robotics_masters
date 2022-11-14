@@ -1,19 +1,59 @@
-import cloudpickle
 import numpy as np
 import matplotlib.pyplot as plt
+import cloudpickle
 
-# plt.style.use(['fivethirtyeight','seaborn-deep'])
-# %matplotlib inline
+m1 = [] # 0.7 m/s SS
+with open("Optimisation_Code/Feasible_Solution/00/steady-state.pkl", "rb") as f:
+    m1.append(cloudpickle.load(f))    
+# with open("Optimisation_Code/Feasible_Solution/02/accel.pkl", "rb") as f:
+#     m1.append(cloudpickle.load(f))  
+# with open("Optimisation_Code/Feasible_Solution/02/decel.pkl", "rb") as f:
+#     m1.append(cloudpickle.load(f)) 
 
-# Insert all the data_________________________________________________________________________________________________________
-m1 = []
-with open("Optimisation_Code/Feasible_Solution/damp_x2/steady-state.pkl", "rb") as f:
-    m1.append(cloudpickle.load(f)) 
+m2 = [] # 0.28 m/s SS
+with open("Optimisation_Code/Feasible_Solution/01/steady-state.pkl", "rb") as f:
+    m2.append(cloudpickle.load(f))    
+# with open("Optimisation_Code/Feasible_Solution/00/accel.pkl", "rb") as f:
+#     m2.append(cloudpickle.load(f)) 
+# with open("Optimisation_Code/Feasible_Solution/00/decel.pkl", "rb") as f:
+#     m2.append(cloudpickle.load(f)) 
 
+m3 = [] # 1.0 m/s SS
+with open("Optimisation_Code/Feasible_Solution/02/steady-state.pkl", "rb") as f:
+    m3.append(cloudpickle.load(f))   
+# with open("Optimisation_Code/Feasible_Solution/03/accel.pkl", "rb") as f:
+#     m3.append(cloudpickle.load(f))  
+# with open("Optimisation_Code/Feasible_Solution/03/decel.pkl", "rb") as f:
+#     m3.append(cloudpickle.load(f)) 
+
+N1 = m1[0].N[-1]
+cN1 = m1[0].cN[-1]
+
+N2 = m2[0].N[-1]
+cN2 = m2[0].cN[-1]
+
+N3 = m3[0].N[-1]
+cN3 = m3[0].cN[-1]
+dt = 1/1000
+
+# Handel the optimiser data___________________________________________________________________________________________________
 N_time1 = []
 cN_time1 = []
 cN_adder1 = 0
 adder1 = 0
+for i in range(0, len(m1)): # Add the cN node time into an array
+    if(i>0):
+        cN_adder1 += (m1[i-1].tt0[N1].value - m1[i-1].tt0[1].value)
+    for n in range(1, N1+1):
+        for c in range(1, cN1+1):
+            cN_time1.append((m1[i].tt[n,c].value - m1[i].tt[1,1].value + cN_adder1))
+
+for i in range(0, len(m1)): # Add the N node time into an array
+    if(i>0):
+        adder1 += (m1[i-1].tt0[N1].value - m1[i-1].tt0[1].value)
+    for n in range(1, N1+1):
+        N_time1.append((m1[i].tt0[n].value - m1[i].tt0[1].value + adder1)*2.2)
+
 x1 = []
 z1 = []
 r1 = []
@@ -22,71 +62,277 @@ vel_z1 = []
 vel_x1 = []
 grf_L1 = []
 grf_R1 = []
-rr = []
-lr = []
-l = m1[0].ll1
-vel_r = []
-vel_l = []
+F_pos_L1 = []
+F_neg_L1 = []
+F_pos_R1 = []
+F_neg_R1 = []
 adder = 0
+for i in range(0, len(m1)):
+    if(i>0):
+        adder += m1[i-1].q[N1,cN1,'x'].value
+    for n in range(1, N1+1):
+        for c in range(1, cN1+1):
+            z1.append(m1[i].q[n,c,'z'].value)
+            vel_z1.append(m1[i].dq[n,c,'z'].value)
+            vel_x1.append(m1[i].dq[n,c,'x'].value * (100-65)/100)
+            x1.append(m1[i].q[n,c,'x'].value + adder) 
+            r1.append(m1[i].q[n,c,'theta_l_R'].value)
+            l1.append(m1[i].q[n,c,'theta_l_L'].value)
+            grf_L1.append(m1[i].GRF_L[n,c,'Z','ps'].value)
+            grf_R1.append(m1[i].GRF_R[n,c,'Z','ps'].value)
+            F_pos_L1.append(m1[i].Fbang_pos_L[n].value)
+            F_neg_L1.append(m1[i].Fbang_neg_L[n].value)
+            F_pos_R1.append(m1[i].Fbang_pos_R[n].value)
+            F_neg_R1.append(m1[i].Fbang_neg_R[n].value)
 
-N1 = m1[0].N[-1]
-cN1 = m1[0].cN[-1]
+N_time2 = []
+cN_time2 = []
+cN_adder2 = 0
+adder2 = 0
+for i in range(0, len(m2)): # Add the cN node time into an array
+    if(i>0):
+        cN_adder2 += (m2[i-1].tt0[N2].value - m2[i-1].tt0[1].value)
+    for n in range(1, N2+1):
+        for c in range(1, cN2+1):
+            cN_time2.append((m2[i].tt[n,c].value - m2[i].tt[1,1].value + cN_adder2) * 2.2)
 
-for n in range(1, N1+1):
-    N_time1.append(m1[0].tt0[n].value - m1[0].tt0[1].value + adder1)
-    for c in range(1, cN1+1):
-        cN_time1.append((m1[0].tt[n,c].value - m1[0].tt[1,1].value + cN_adder1) * 1.3)        
+for i in range(0, len(m2)): # Add the N node time into an array
+    if(i>0):
+        adder2 += (m2[i-1].tt0[N2].value - m2[i-1].tt0[1].value)
+    for n in range(1, N2+1):
+        N_time2.append(m2[i].tt0[n].value - m2[i].tt0[1].value + adder2)
 
-for n in range(1, N1+1):
-    for c in range(1, cN1+1):
-        z1.append(m1[0].q[n,c,'z'].value)
-        vel_z1.append(m1[0].dq[n,c,'z'].value)
-        vel_x1.append(m1[0].dq[n,c,'x'].value * (100-48.738)/100)
-        x1.append(m1[0].q[n,c,'x'].value + adder) 
-        r1.append(m1[0].q[n,c,'theta_l_R'].value)
-        l1.append(m1[0].q[n,c,'theta_l_L'].value)
-        grf_L1.append(m1[0].GRF_L[n,c,'Z','ps'].value)
-        grf_R1.append(m1[0].GRF_R[n,c,'Z','ps'].value)
-        lr.append(m1[0].q[n, c,'r_L'].value)
-        rr.append(m1[0].q[n, c,'r_R'].value)
-        vel_r.append(m1[0].dq[n,c,'theta_l_R'].value)
-        vel_l.append(m1[0].dq[n,c,'theta_l_L'].value)
+x2 = []
+z2 = []
+r2 = []
+l2 = []
+vel_z2 = []
+vel_x2 = []
+grf_L2 = []
+grf_R2 = []
+F_pos_L2 = []
+F_neg_L2 = []
+F_pos_R2 = []
+F_neg_R2 = []
+adder = 0
+for i in range(0, len(m2)):
+    if(i>0):
+        adder += m2[i-1].q[N2,cN2,'x'].value
+    for n in range(1, N2+1):
+        for c in range(1, cN2+1):
+            z2.append(m2[i].q[n,c,'z'].value)
+            vel_z2.append(m2[i].dq[n,c,'z'].value)
+            x2.append(m2[i].q[n,c,'x'].value + adder) 
+            vel_x2.append(m2[i].dq[n,c,'x'].value * (100-65)/100)
+            r2.append(m2[i].q[n,c,'theta_l_R'].value)
+            l2.append(m2[i].q[n,c,'theta_l_L'].value)
+            grf_L2.append(m2[i].GRF_L[n,c,'Z','ps'].value)
+            grf_R2.append(m2[i].GRF_R[n,c,'Z','ps'].value)
+            F_pos_L2.append(m2[i].Fbang_pos_L[n].value)
+            F_neg_L2.append(m2[i].Fbang_neg_L[n].value)
+            F_pos_R2.append(m2[i].Fbang_pos_R[n].value)
+            F_neg_R2.append(m2[i].Fbang_neg_R[n].value)
 
-Ts = 250/1000
+N_time3 = []
+cN_time3 = []
+cN_adder3 = 0
+adder3 = 0
+for i in range(0, len(m3)): # Add the cN node time into an array
+    if(i>0):
+        cN_adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
+    for n in range(1, N3+1):
+        for c in range(1, cN3+1):
+            cN_time3.append((m3[i].tt[n,c].value - m3[i].tt[1,1].value + cN_adder3))
 
-plt.plot(cN_time1, z1)
-# plt.plot(cN_time1, grf_L1)
+for i in range(0, len(m3)): # Add the N node time into an array
+    if(i>0):
+        adder3 += (m3[i-1].tt0[N3].value - m3[i-1].tt0[1].value)
+    for n in range(1, N3+1):
+        N_time3.append(m3[i].tt0[n].value - m3[i].tt0[1].value + adder3)
 
-Ts = []
-vel1 = []
-vel2 = []
+x3 = []
+z3 = []
+r3 = []
+l3 = []
+vel_z3 = []
+vel_x3 = []
+grf_L3 = []
+grf_R3 = []
+F_pos_L3 = []
+F_neg_L3 = []
+F_pos_R3 = []
+F_neg_R3 = []
+adder = 0
+for i in range(0, len(m3)):
+    if(i>0):
+        adder += m3[i-1].q[N3,cN3,'x'].value
+    for n in range(1, N3+1):
+        for c in range(1, cN3+1):
+            z3.append(m3[i].q[n,c,'z'].value)
+            vel_z3.append(m3[i].dq[n,c,'z'].value)
+            x3.append(m3[i].q[n,c,'x'].value + adder)
+            vel_x3.append(m3[i].dq[n,c,'x'].value * (100-65)/100) 
+            r3.append(m3[i].q[n,c,'theta_l_R'].value)
+            l3.append(m3[i].q[n,c,'theta_l_L'].value)
+            grf_L3.append(m3[i].GRF_L[n,c,'Z','ps'].value)
+            grf_R3.append(m3[i].GRF_R[n,c,'Z','ps'].value)
+            F_pos_L3.append(m3[i].Fbang_pos_L[n].value)
+            F_neg_L3.append(m3[i].Fbang_neg_L[n].value)
+            F_pos_R3.append(m3[i].Fbang_pos_R[n].value) 
+            F_neg_R3.append(m3[i].Fbang_neg_R[n].value)
 
-yeet = True
-teet = True
+# The graphs__________________________________________________________________________________________________
+def shorten(arr, low, high, t):
+    tmp = []
+    for i in range(0, len(arr)):
+        if t[i] > low and t[i] < high:
+            tmp.append(arr[i])
+    return tmp
+
+z1 = shorten(z1, 0, 1.02, cN_time1)
+z2 = shorten(z2, 0, 1.9, cN_time2)
+z3 = shorten(z3, 0.87, 2.18, cN_time3)
+cN_time1 = shorten(cN_time1, 0, 1.02, cN_time1)
+cN_time2 = shorten(cN_time2, 0, 1.9, cN_time2)
+cN_time3 = shorten(cN_time3, 0.87, 2.18, cN_time3)
+
+plt.figure(1)
+plt.yticks(fontsize=18)
+plt.xticks(np.arange(start=0, stop=cN_time1[-1]+1, step=0.2), fontsize=18)
+plt.ylabel('vertical height (m)', fontsize=22)
+plt.xlabel('time (s)', fontsize=22)
+plt.plot(cN_time1, z1, linewidth=1.5, label='0.40 m/s')
+# plt.plot(cN_time1, F_pos_R1, linewidth=1.5, label='0.40 m/s')
+# plt.plot(cN_time1, F_neg_R1, linewidth=1.5, label='0.40 m/s')
+boom = False
+bang = False
+for i in range(0, len(cN_time1)):
+    if F_pos_L1[i]>0.7 and boom:
+        boom = False
+        plt.plot(cN_time1[i], z1[i], c='k', marker='x', markersize='14')
+    if F_neg_L1[i]>0.5 and not boom:
+        boom = True
+        plt.plot(cN_time1[i], z1[i], c='k', marker='.', markersize='12')
+    if F_pos_R1[i]>0.6 and bang:
+        bang = False
+        plt.plot(cN_time1[i], z1[i], c='r', marker='x', markersize='14')
+    if F_neg_R1[i]>0.5 and not bang:
+        bang = True
+        plt.plot(cN_time1[i], z1[i], c='r', marker='.', markersize='12')
+plt.grid()
+plt.legend(fontsize=15) 
+plt.tight_layout()
+
+plt.figure(2)
+plt.yticks(fontsize=18)
+plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.2), fontsize=18)
+plt.ylabel('vertical height (m)', fontsize=22)
+plt.xlabel('time (s)', fontsize=22)
+plt.plot(cN_time2, z2, linewidth=1.5, label='0.15 m/s')
+boom = False
+bang = True
+for i in range(0, len(cN_time2)):
+    if F_pos_L2[i]>0.6 and boom:
+        boom = False
+        plt.plot(cN_time2[i], z2[i], c='k', marker='x', markersize='14')
+    if F_neg_L2[i]>0.6 and not boom:
+        boom = True
+        plt.plot(cN_time2[i], z2[i], c='k', marker='.', markersize='12')
+    if F_pos_R2[i]>0.6 and bang:
+        bang = False
+        plt.plot(cN_time2[i], z2[i], c='r', marker='x', markersize='14')
+    if F_neg_R2[i]>0.6 and not bang:
+        bang = True
+        plt.plot(cN_time2[i], z2[i], c='r', marker='.', markersize='12')
+plt.grid()
+plt.legend(fontsize=15) 
+plt.tight_layout()
+
+plt.figure(3)
+plt.yticks(fontsize=18)
+cN_time3 = [(x-0.87) for x in cN_time3]
+plt.xticks(np.arange(start=0, stop=cN_time3[-1]+1, step=0.2), fontsize=18)
+plt.ylabel('vertical height (m)', fontsize=22)
+plt.xlabel('time (s)', fontsize=22)
+plt.plot(cN_time3, z3, linewidth=1.5, label='0.30 m/s')
+boom = True
+bang = False
+for i in range(0, len(cN_time3)):
+    if F_pos_L3[i]>0.6 and boom:
+        boom = False
+        plt.plot(cN_time3[i], z3[i], c='r', marker='x', markersize='14')
+    if F_neg_L3[i]>0.5 and not boom:
+        boom = True
+        plt.plot(cN_time3[i], z3[i], c='r', marker='.', markersize='12')
+    if F_pos_R3[i]>0.6 and bang:
+        bang = False
+        plt.plot(cN_time3[i], z3[i], c='k', marker='x', markersize='14')
+    if F_neg_R3[i]>0.6 and not bang:
+        bang = True
+        plt.plot(cN_time3[i], z3[i], c='k', marker='.', markersize='12')
+plt.grid()
+plt.legend(fontsize=15) 
+plt.tight_layout()
+
+plt.show()
+
+yeet = False
+teet = False
 for i in range(0, len(grf_L1)):
     if grf_L1[i]>0.01 and yeet:
         yeet = False
-        print('l1', cN_time1[i], (l+lr[i])*np.cos(l1[i]), 'grounded')
-        tmp = cN_time1[i]
-        vel1.append(vel_x1[i])
+        print('l1', cN_time1[i], l1[i]*180/np.pi, 'grounded')
     if grf_L1[i]<=0.01 and not yeet:
         yeet = True
-        print('l1', cN_time1[i], (l+lr[i])*np.cos(l1[i]), 'air')
-        Ts.append(cN_time1[i]-tmp)
-        vel2.append(vel_x1[i])
+        print('l1', cN_time1[i], l1[i]*180/np.pi, 'air')
     if grf_R1[i]>0.01 and teet:
         teet = False
-        print('r1', cN_time1[i], (l+rr[i])*np.cos(r1[i]), 'grounded')
-        tmp = cN_time1[i]
-        vel1.append(vel_x1[i])
+        print('r1', cN_time1[i], r1[i]*180/np.pi, 'grounded')
     if grf_R1[i]<=0.01 and not teet:
         teet = True
-        print('r1', cN_time1[i], (l+rr[i])*np.cos(r1[i]), 'air')
-        Ts.append(cN_time1[i]-tmp)
-        vel2.append(vel_x1[i])
+        print('r1', cN_time1[i], r1[i]*180/np.pi, 'air')
 
-for i in range(len(Ts)):
-    xf = (Ts[i]*vel1[i])/2
-    print(xf, (Ts[i]*vel2[i])/2)
+yeet = False
+teet = False
+for i in range(0, len(grf_L2)):
+    if grf_L2[i]>0.01 and yeet:
+        yeet = False
+        print('l2', cN_time2[i], l2[i]*180/np.pi, 'grounded')
+    if grf_L2[i]<=0.01 and not yeet:
+        yeet = True
+        print('l2', cN_time2[i], l2[i]*180/np.pi, 'air')
+    if grf_R2[i]>0.01 and teet:
+        teet = False
+        print('r2', cN_time2[i], r2[i]*180/np.pi, 'grounded')
+    if grf_R2[i]<=0.01 and not teet:
+        teet = True
+        print('r2', cN_time2[i], r2[i]*180/np.pi, 'air')
 
-plt.show()
+yeet = False
+teet = False
+for i in range(0, len(grf_L3)):
+    if grf_L3[i]>0.01 and yeet:
+        yeet = False
+        print('l3', cN_time3[i], l3[i]*180/np.pi, 'grounded')
+    if grf_L3[i]<=0.01 and not yeet:
+        yeet = True
+        print('l3', cN_time3[i], l3[i]*180/np.pi, 'air')
+    if grf_R3[i]>0.01 and teet:
+        teet = False
+        print('r3', cN_time3[i], r3[i]*180/np.pi, 'grounded')
+    if grf_R3[i]<=0.01 and not teet:
+        teet = True
+        print('r3', cN_time3[i], r3[i]*180/np.pi, 'air')
+
+# avg = 0
+# for n in range(0, len(vel_x1)):
+#     avg += vel_x1[n]
+# print(avg/len(vel_x1), cN_time1[-1], x1[-1])
+# avg = 0
+# for n in range(0, len(vel_x2)):
+#     avg += vel_x2[n]
+# print(avg/len(vel_x2), cN_time2[-1])
+# avg = 0
+# for n in range(0, len(vel_x3)):
+#     avg += vel_x3[n]
+# print(avg/len(vel_x3), cN_time3[-1])
