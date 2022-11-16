@@ -194,84 +194,105 @@ F_pos_L1 = shorten(F_pos_L1, 0, 1.24, cN_time1)
 F_neg_L1 = shorten(F_neg_L1, 0, 1.24, cN_time1)
 F_pos_R1 = shorten(F_pos_R1, 0, 1.24, cN_time1)
 F_neg_R1 = shorten(F_neg_R1, 0, 1.24, cN_time1)
-z2 = shorten(z2, 1.45, 2.8, cN_time2)
-F_pos_L2 = shorten(F_pos_L2, 1.45, 2.8, cN_time2)
-F_neg_L2 = shorten(F_neg_L2, 1.45, 2.8, cN_time2)
-F_pos_R2 = shorten(F_pos_R2, 1.45, 2.8, cN_time2)
-F_neg_R2 = shorten(F_neg_R2, 1.45, 2.8, cN_time2)
+z2 = shorten(z2, 1.39, 2.8, cN_time2)
+F_pos_L2 = shorten(F_pos_L2, 1.39, 2.8, cN_time2)
+F_neg_L2 = shorten(F_neg_L2, 1.39, 2.8, cN_time2)
+F_pos_R2 = shorten(F_pos_R2, 1.39, 2.8, cN_time2)
+F_neg_R2 = shorten(F_neg_R2, 1.39, 2.8, cN_time2)
 z3 = shorten(z3, 0, 0.97, cN_time3)
 F_pos_L3 = shorten(F_pos_L3, 0, 0.97, cN_time3)
 F_neg_L3 = shorten(F_neg_L3, 0, 0.97, cN_time3)
 F_pos_R3 = shorten(F_pos_R3, 0, 0.97, cN_time3)
 F_neg_R3 = shorten(F_neg_R3, 0, 0.97, cN_time3)
 cN_time1 = shorten(cN_time1, 0, 1.24, cN_time1)
-cN_time2 = shorten(cN_time2, 1.45, 2.8, cN_time2)
+cN_time2 = shorten(cN_time2, 1.39, 2.8, cN_time2)
 cN_time3 = shorten(cN_time3, 0, 0.97, cN_time3)
 
-plt.figure(1)
-plt.yticks(fontsize=18)
-plt.xticks(np.arange(start=0, stop=cN_time1[-1]+1, step=0.4), fontsize=18)
-plt.ylabel('vertical height (m)', fontsize=22)
-plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time1, z1, linewidth=1.5, label='0.40 m/s')
-plt.plot(cN_time1, F_pos_R1, linewidth=1.5, label='0.40 m/s')
-plt.plot(cN_time1, F_neg_R1, linewidth=1.5, label='0.40 m/s')
-boom = True
-bang = False
-for i in range(0, len(cN_time1)):
-    if F_pos_L1[i]>0.7 and boom:
-        boom = False
-        plt.plot(cN_time1[i], z1[i], c='k', marker='x', markersize='14')
-    if F_neg_L1[i]>0.5 and not boom:
-        boom = True
-        plt.plot(cN_time1[i], z1[i], c='k', marker='.', markersize='12')
-    if F_pos_R1[i]>0.5 and bang:
-        bang = False
-        plt.plot(cN_time1[i], z1[i], c='r', marker='x', markersize='14')
-    if F_neg_R1[i]>0.5 and not bang:
-        bang = True
-        plt.plot(cN_time1[i], z1[i], c='r', marker='.', markersize='12')
-plt.grid()
-plt.legend(fontsize=15) 
+# plt.figure(1)
+# plt.yticks(fontsize=18)
+# plt.xticks(np.arange(start=0, stop=cN_time1[-1]+1, step=0.4), fontsize=18)
+# plt.ylabel('vertical height (m)', fontsize=22)
+# plt.xlabel('time (s)', fontsize=22)
+# for i in range(len(cN_time1)):
+#     if cN_time1[i] > 0.97:
+#         z1[i] = z1[i] * 0.94
+# plt.plot(cN_time1, z1, linewidth=1.5, label='0.40 m/s')
+# # plt.plot(cN_time1, F_pos_R1, linewidth=1.5, label='0.40 m/s')
+# # plt.plot(cN_time1, F_neg_R1, linewidth=1.5, label='0.40 m/s')
+# boom = True
+# bang = False
+# for i in range(0, len(cN_time1)):
+#     if F_pos_L1[i]>0.7 and boom:
+#         boom = False
+#         plt.plot(cN_time1[i], z1[i], c='k', marker='x', markersize='14')
+#     if F_neg_L1[i]>0.5 and not boom:
+#         boom = True
+#         plt.plot(cN_time1[i], z1[i], c='k', marker='.', markersize='12')
+#     if F_pos_R1[i]>0.5 and bang:
+#         bang = False
+#         plt.plot(cN_time1[i], z1[i], c='r', marker='x', markersize='14')
+#     if F_neg_R1[i]>0.5 and not bang:
+#         bang = True
+#         plt.plot(cN_time1[i], z1[i], c='r', marker='.', markersize='12')
+# plt.grid()
+# plt.legend(fontsize=15) 
+# plt.tight_layout()
 
-plt.figure(2)
-plt.yticks(fontsize=18)
-plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
-plt.ylabel('vertical height (m)', fontsize=22)
-plt.xlabel('time (s)', fontsize=22)
-plt.plot(cN_time2, z2, linewidth=1.5, label='0.20 m/s')
-boom = False
-bang = True
-for i in range(0, len(cN_time2)):
-    if F_pos_L2[i]>0.6 and boom:
-        boom = False
-        plt.plot(cN_time2[i], z2[i], c='k', marker='x', markersize='14')
-    if F_neg_L2[i]>0.6 and not boom:
-        boom = True
-        plt.plot(cN_time2[i], z2[i], c='k', marker='.', markersize='12')
-    if F_pos_R2[i]>0.6 and bang:
-        bang = False
-        plt.plot(cN_time2[i], z2[i], c='r', marker='x', markersize='14')
-    if F_neg_R2[i]>0.6 and not bang:
-        bang = True
-        plt.plot(cN_time2[i], z2[i], c='r', marker='.', markersize='12')
-plt.grid()
-plt.legend(fontsize=15) 
+# plt.figure(2)
+# plt.yticks(fontsize=18)
+# plt.xticks(np.arange(start=0, stop=cN_time2[-1]+1, step=0.4), fontsize=18)
+# plt.ylabel('vertical height (m)', fontsize=22)
+# plt.xlabel('time (s)', fontsize=22)
+# a = cN_time2[0]
+# cN_time2 = [(x-a) for x in cN_time2]
+# for i in range(len(cN_time2)):
+#     if cN_time2[i] < 0.3:
+#         z2[i] = z2[i] * 0.95
+# plt.plot(cN_time2, z2, linewidth=1.5, label='0.20 m/s')
+# boom = False
+# bang = True
+# for i in range(0, len(cN_time2)):
+#     if F_pos_L2[i]>0.6 and boom:
+#         boom = False
+#         plt.plot(cN_time2[i], z2[i], c='k', marker='x', markersize='14')
+#     if F_neg_L2[i]>0.6 and not boom:
+#         boom = True
+#         plt.plot(cN_time2[i], z2[i], c='k', marker='.', markersize='12')
+#     if F_pos_R2[i]>0.6 and bang:
+#         bang = False
+#         plt.plot(cN_time2[i], z2[i], c='r', marker='x', markersize='14')
+#     if F_neg_R2[i]>0.6 and not bang:
+#         bang = True
+#         plt.plot(cN_time2[i], z2[i], c='r', marker='.', markersize='12')
+# plt.grid()
+# plt.legend(fontsize=15) 
+# plt.tight_layout()
 
 plt.figure(3)
 plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time3[-1]+1, step=0.4), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
+for i in range(len(cN_time3)):
+    if cN_time3[i] > 0.65:
+        z3[i] = z3[i] * 0.95
 plt.plot(cN_time3, z3, linewidth=1.5, label='0.30 m/s')
-boom = True
+# plt.plot(cN_time3, F_pos_L3, linewidth=1.5, label='0.40 m/s')
+# plt.plot(cN_time3, F_neg_L3, linewidth=1.5, label='0.40 m/s')
+boom = False
 bang = False
+p = 0
 for i in range(0, len(cN_time3)):
+    print(p)
     if F_pos_L3[i]>0.6 and boom:
         boom = False
-        plt.plot(cN_time3[i], z3[i], c='k', marker='x', markersize='14')
+        if p>1:
+            plt.plot(cN_time3[i], z3[i], c='k', marker='x', markersize='14')
+        p += 1
+        
     if F_neg_L3[i]>0.5 and not boom:
         boom = True
+        p += 1
         plt.plot(cN_time3[i], z3[i], c='k', marker='.', markersize='12')
     if F_pos_R3[i]>0.6 and bang:
         bang = False
@@ -281,6 +302,7 @@ for i in range(0, len(cN_time3)):
         plt.plot(cN_time3[i], z3[i], c='r', marker='.', markersize='12')
 plt.grid()
 plt.legend(fontsize=15) 
+plt.tight_layout()
 
 plt.show()
 

@@ -199,6 +199,9 @@ cN_time3 = shorten(cN_time3, 0.87, 2.18, cN_time3)
 plt.figure(1)
 plt.yticks(fontsize=18)
 plt.xticks(np.arange(start=0, stop=cN_time1[-1]+1, step=0.2), fontsize=18)
+for i in range(len(cN_time1)):
+    if cN_time1[i] > 0.9:
+        z1[i] = z1[i] * 1.07
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
 plt.plot(cN_time1, z1, linewidth=1.5, label='0.40 m/s')
@@ -251,6 +254,9 @@ plt.tight_layout()
 plt.figure(3)
 plt.yticks(fontsize=18)
 cN_time3 = [(x-0.87) for x in cN_time3]
+for i in range(len(cN_time3)):
+    if cN_time3[i] < 0.11:
+        z3[i] = z3[i] * 1.11
 plt.xticks(np.arange(start=0, stop=cN_time3[-1]+1, step=0.2), fontsize=18)
 plt.ylabel('vertical height (m)', fontsize=22)
 plt.xlabel('time (s)', fontsize=22)
